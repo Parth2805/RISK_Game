@@ -4,7 +4,8 @@
 
 ## Components
 
-1. Map Editor
+### Map Editor
+
 #### User-driven creation of map elements: country, continent, and connectivity between countries.
 - Map editor commands:
 - editcontinent -add continentname continentvalue -remove continentname
@@ -22,4 +23,4 @@ exist.
 least 3 types of incorrect maps). The validatemap command can be triggered anytime during map editing.
 - Map editor command: validatemap
 
-2. Game Play
+### Game Play
