@@ -201,22 +201,22 @@ public class Country {
 	 */
 	@Override
 	public String toString() {
-		return "Country [name=" + name +"]";
+		return "Country [name = " + name +"]";
 	}
 	
 	/* (non-Javadoc)
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */	
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(Object input_obj) {
 
-		if (!(obj instanceof Country))
+		if (!(input_obj instanceof Country))
 			return false;
 		
-		if (obj == this)
+		if (input_obj == this)
 			return true;
 
-		Country t = (Country) obj;
+		Country t = (Country) input_obj;
 		
 		return t.getName().equalsIgnoreCase(name);
 	}
