@@ -16,6 +16,7 @@ public class Continent {
 
 	private String name;
 	private int value;
+	private String color;
 	
 	private HashMap<String, Country> countryMap;
 	private List<Country> countries;
@@ -56,6 +57,22 @@ public class Continent {
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	/**
+	 * Getter method for the continent color.
+	 * @return color of continent
+	 */
+	public String getColor() {
+		return color;
+	}
+	
+	/**
+	 * Setter method for the continent color.
+	 * @param color
+	 */
+	public void setColor(String color) {
+		this.color = color;
 	}
 	
 	/**
