@@ -80,7 +80,7 @@ public class MapReader {
 				String line = mapFileReader.nextLine();
 				
 				// ignore comment lines
-				if (line.startsWith(";"))
+				if (line.startsWith(";") || line.startsWith("name"))
 					continue;
 				
 				if (!line.isEmpty()) {
@@ -115,13 +115,20 @@ public class MapReader {
 	 * @throws InvalidMapException throws InvalidMapException if map is not valid.
 	 */
 	private Hmap processFilesAttribute(Scanner scan) throws InvalidMap {
-		
+
+		// ignore blank lines
+		String line = scan.nextLine();
+		while (line.isEmpty()) {
+			line = scan.nextLine();
+		}
+
 		HashMap<String, String> filesAttributeMap = new HashMap<String, String>();
-		StringTokenizer tokensForMapAttribute = new StringTokenizer(scan.nextLine(), "#");
+		StringTokenizer tokensForMapAttribute = new StringTokenizer(line, "#");
 		
 		while (tokensForMapAttribute.hasMoreTokens()) {
 			
 			String str = tokensForMapAttribute.nextToken();
+			
 			System.out.println(str);
 			
 			if (str.equalsIgnoreCase("[files]")) {
@@ -164,8 +171,9 @@ public class MapReader {
 			} else {
 				Continent continent = new Continent();
 				String[] data = line.split(" ");
+
+				System.out.println(line);
 				continent.setName(data[0].trim().toUpperCase());
-				System.out.println(data[0]);
 				continent.setValue(Integer.parseInt(data[1]));
 				continent.setColor(data[2].trim());
 				continentList.add(continent);
