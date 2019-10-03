@@ -32,8 +32,8 @@ public class Continent {
 	}
 
 	/**
-	 * @param name - used for name of the continent
-	 * @param value - used for control value of the continent
+	 * @param name used for name of the continent
+	 * @param value used for control value of the continent
 	 */
 	public Continent(String name, int value) {
 		super();

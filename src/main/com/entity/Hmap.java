@@ -30,7 +30,7 @@ public class Hmap extends Observable {
 	
 	/**
 	 * This is parameterized constructor for map.
-	 * @param newMap - The new map object.
+	 * @param newMap The new map object.
 	 */
 	public Hmap(Hmap newMap) {
 		mapData = new HashMap<String, String>(newMap.mapData);

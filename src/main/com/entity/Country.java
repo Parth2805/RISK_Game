@@ -40,8 +40,8 @@ public class Country {
 	
 	/**
 	 * Parameterized constructor for the country.
-	 * @param adjCountries - names of adjacent countries
-	 * @param adjacentCountries - object of adjacent countries
+	 * @param adjCountries names of adjacent countries
+	 * @param adjacentCountries object of adjacent countries
 	 */
 	public Country(List<String> adjCountries, List<Country> adjacentCountries) {
 		this.neighborCountries = adjCountries;

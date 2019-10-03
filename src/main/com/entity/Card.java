@@ -22,7 +22,7 @@ public class Card {
 
 	/**
 	 * Parameterized Constructor for Card
-	 * @param cardType - reference to get cardType enum
+	 * @param cardType reference to get cardType enum
 	 */
 	
 	public Card(CardType cardType){

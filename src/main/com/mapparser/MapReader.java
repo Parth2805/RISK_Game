@@ -45,9 +45,9 @@ public class MapReader {
 	/**
 	 * This method reads the map file and verifies if the map is valid.
 	 * 
-	 * @param file - The map file to be read.
-	 * @return map - The map object returned after reading the file.
-	 * @throws InvalidMapException - Throws IOException if the map is invalid.
+	 * @param file The map file to be read.
+	 * @return map The map object returned after reading the file.
+	 * @throws InvalidMapException Throws IOException if the map is invalid.
 	 */
 	public Hmap readMapFile(final File file) throws InvalidMap {
 
@@ -60,9 +60,9 @@ public class MapReader {
 	/**
 	 * This method is used to read and process map data
 	 * 
-	 * @param file - file path
-	 * @return map - returns the map object after processing the file data
-	 * @throws InvalidMap - Throws InvalidMapException if map is not valid
+	 * @param file file path
+	 * @return map returns the map object after processing the file data
+	 * @throws InvalidMap Throws InvalidMapException if map is not valid
 	 */
 	private Hmap processMapFile(File file) throws InvalidMap {
 
@@ -96,7 +96,7 @@ public class MapReader {
 				}
 			}
 
-			System.out.println(mapString);
+			//System.out.println(mapString);
 			mapFileReader = new Scanner(mapString.toString());
 			map = processFilesAttribute(mapFileReader);
 
@@ -129,7 +129,7 @@ public class MapReader {
 			
 			String str = tokensForMapAttribute.nextToken();
 			
-			System.out.println(str);
+			//System.out.println(str);
 			
 			if (str.equalsIgnoreCase("[files]")) {
 				continue;
@@ -156,9 +156,9 @@ public class MapReader {
 	/**
 	 * This method processes the continents and call method to process Countries
 	 * and also  map Countries and continents.
-	 * @param scan - scanner object which points to line of the file which is to be processed
+	 * @param scan scanner object which points to line of the file which is to be processed
 	 * @return continentList after processing
-	 * @throws InvalidMapException - throws InvalidMapException if map is not valid
+	 * @throws InvalidMapException throws InvalidMapException if map is not valid
 	 */
 	private List<Continent> parseContinents(Scanner scan) throws InvalidMap {
 		
@@ -172,7 +172,7 @@ public class MapReader {
 				Continent continent = new Continent();
 				String[] data = line.split(" ");
 
-				System.out.println(line);
+				//System.out.println(line);
 				continent.setName(data[0].trim().toUpperCase());
 				continent.setValue(Integer.parseInt(data[1]));
 				continent.setColor(data[2].trim());
@@ -180,42 +180,42 @@ public class MapReader {
 			}
 		}
 		
-		/*
 		List<Country> countryList = new ArrayList<Country>();
-		while (scan.hasNext()) {
+		
+		if (scan.hasNext()) {
 			String countryData = scan.nextLine();
+			
+			//System.out.println(countryData);
 			// call processCountry for each line of country
-			countryList.addAll(parseCountries(countryData, continentList));
+			countryList.addAll(parseCountries(scan, countryData, continentList));
 		}
 		
-		//here you can create continent map 
-		//pass it to Country method and set there only
-		
+		// here you can create continent map 
+		// pass it to Country method and set there only
 		HashMap<String, Country> countryMap = new HashMap<String, Country>();
 		for (Country t : countryList) {
 			countryMap.put(t.getName(), t);
 		}
 		
-		//Map neighbour Country object to Country
-		for(Country country : countryList) {
-			for(String adjacentCountry : country.getAdjCountries()) {
-				if(countryMap.containsKey(adjacentCountry)){
+		// Map neighbour Country object to Country
+		for (Country country : countryList) {
+			for (String adjacentCountry : country.getAdjCountries()) {
+				if (countryMap.containsKey(adjacentCountry)){
 					if (country.getAdjacentCountries() == null) {
 						country.setAdjacentCountries(new ArrayList<Country>());
 					}
 					country.getAdjacentCountries().add(countryMap.get(adjacentCountry));
-				}else {
-					//if particular country has adjacent country defined, but actually it doesn't exist
+				} else {
+					// if particular country has adjacent country defined, but actually it doesn't exist
 					throw new InvalidMap("Country: " + adjacentCountry + " not assigned to any continent.");
 				}
 			}
-			
 		}
 		
-		//Map countries and continent
-		for(Continent continent : continentList) {
+		// Map countries and continent
+		for (Continent continent : continentList) {
 			HashMap<String, Country> continentTMap = new HashMap<String, Country>();
-			for(Country country : countryList) {
+			for (Country country : countryList) {
 				if (country.getBelongToContinent().equals(continent)) {
 					if (continent.getCountries() == null) {
 						continent.setCountries(new ArrayList<Country>());
@@ -226,8 +226,110 @@ public class MapReader {
 				}
 			}
 			continent.setCountryMap(continentTMap);
-		}		
-	*/
+		}
+	
 		return continentList;
+	}
+	
+	/**
+	 * This method processes countries and check that it should be assign to only one continent
+	 * @param scan scanner object which points to line of the file which is to be processed
+	 * @param countryLine Line from the map file for the Country
+	 * @param continentList Produces the continent list.
+	 * @return countryList After processing
+	 * @throws InvalidMapException Throws InvalidMapException if map is not valid
+	 */
+	private List<Country> parseCountries(Scanner scan, String countryLine, List<Continent> continentList) throws InvalidMap{
+		
+		List<Country> countryList = new ArrayList<Country>();
+		List<Country> countryListWithBorders = new ArrayList<Country>();
+		StringTokenizer tokenForCountry = new StringTokenizer(countryLine, "#");
+		HashMap<Integer, String> countryNamesMap = new HashMap<Integer, String>();
+		String bordercountryData = "";
+		
+		// Get borders line
+		if (scan.hasNext()) {
+			bordercountryData = scan.nextLine();
+		}
+			
+		while (tokenForCountry.hasMoreTokens()) {
+			
+			String element = tokenForCountry.nextToken();
+			
+			if (element.equalsIgnoreCase("[countries]")) {
+				continue;
+			} else {
+				
+				//System.out.println(element);
+				Country country = new Country();
+				String[] dataOfCountry = element.split(" ");
+				
+				// Map Index with name of country
+				dataOfCountry[1] = dataOfCountry[1].trim().toUpperCase();
+				countryNamesMap.put(Integer.parseInt(dataOfCountry[0]), dataOfCountry[1]);
+				
+				country.setName(dataOfCountry[1]);
+				country.setxCoordinate(Integer.parseInt(dataOfCountry[3]));
+				country.setyCoordinate(Integer.parseInt(dataOfCountry[4]));
+				
+				int indexContinent = Integer.parseInt(dataOfCountry[2]) - 1;
+				String continentOfParsedCountry = continentList.get(indexContinent).getName();
+
+				for (Continent continent : continentList) {
+					
+					if (continent.getName().equalsIgnoreCase(continentOfParsedCountry)) {
+						
+						country.setBelongToContinent(continent);
+						
+						if (countryBelongContinentCount.get(dataOfCountry[1]) == null) {
+							countryBelongContinentCount.put(dataOfCountry[1], 1);
+						} else {
+							throw new InvalidMap("A Country "+ country.getName() +" can be assigned to only one Continent.");
+						}
+					}
+				}
+				
+				if (countryBelongContinentCount.get(dataOfCountry[1]) == null)
+					throw new InvalidMap("A Country must be assigned to one Continent.");
+				
+				countryList.add(country);
+			}
+		}
+		
+		for (Country country : countryList) {
+			// Add bordering countries (neighbors)
+			StringTokenizer tokenForBorder = new StringTokenizer(bordercountryData, "#");
+				
+			while (tokenForBorder.hasMoreTokens()) {
+					
+				String elementB = tokenForBorder.nextToken();
+				if (elementB.equalsIgnoreCase("[borders]")) {
+					continue;
+				} else {
+					
+					String[] borderList = elementB.split(" ");
+					String countyName = countryNamesMap.get(Integer.parseInt(borderList[0]));
+					
+					if (countyName.equalsIgnoreCase(country.getName())) {
+						
+						List<String> adjacentCountries = new ArrayList<String>();
+
+						for (int idx = 1; idx < borderList.length; idx++) {
+							String neighborCountry = countryNamesMap.get(Integer.parseInt(borderList[idx]));
+							if (!neighborCountry.equalsIgnoreCase(countyName)) {
+								adjacentCountries.add(neighborCountry);
+							}
+						}						
+						country.setAdjCountries(adjacentCountries);
+						countryListWithBorders.add(country);
+					}
+				}
+			}
+		}
+		
+		for (Country c: countryListWithBorders)	
+			System.out.println(c.getName() + "-" + c.getAdjCountries());
+	
+		return countryListWithBorders;
 	}
 }
