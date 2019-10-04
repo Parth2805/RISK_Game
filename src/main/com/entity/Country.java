@@ -28,7 +28,7 @@ public class Country {
 	private List<Country> adjacentCountries;
 	
 	private int army;
-	private boolean isProcessed;
+	private boolean isVisited;
 
 	/**
 	 * Default constructor for the country.
@@ -152,7 +152,7 @@ public class Country {
 	 * Getter method to return the adjacent countries of country.
 	 * @return adjCountries
 	 */
-	public List<String> getAdjCountries() {
+	public List<String> getNeighborCountries() {
 		return neighborCountries;
 	}
 	
@@ -160,7 +160,7 @@ public class Country {
 	 * Setter method for the adjacent countries to the country.
 	 * @param adjCountries
 	 */
-	public void setAdjCountries(List<String> adjCountries) {
+	public void setNeighborCountries(List<String> adjCountries) {
 		this.neighborCountries = adjCountries;
 	}
 	
@@ -184,16 +184,16 @@ public class Country {
 	 * Checks whether the country is processed or not.
 	 * @return boolean value whether a country is processed or not
 	 */
-	public boolean isProcessed() {
-		return isProcessed;
+	public boolean isVisited() {
+		return isVisited;
 	}
 	
 	/**
 	 * Setter method for the country as processed.
 	 * @param isProcessed
 	 */
-	public void setProcessed(boolean isProcessed) {
-		this.isProcessed = isProcessed;
+	public void setVisited(boolean isProcessed) {
+		this.isVisited = isProcessed;
 	}
 
 	/* (non-Javadoc)

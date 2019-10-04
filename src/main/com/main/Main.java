@@ -8,11 +8,12 @@ public class Main {
 
 	public static void main(String args[])
 	{
-		MapReader mp = new MapReader();
+		MapReader mapReader = new MapReader();
 		String fpath = System.getProperty("user.dir") + "\\src\\main\\resources\\world.map";
 		File worldMap = new File(fpath);
 		try {
-			mp.readMapFile(worldMap);
+			mapReader.readMapFile(worldMap);
+			
 		} catch (InvalidMap e) {
 			e.printStackTrace();
 		}

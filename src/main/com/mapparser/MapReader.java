@@ -52,7 +52,7 @@ public class MapReader {
 	public Hmap readMapFile(final File file) throws InvalidMap {
 
 		this.map = processMapFile(file);
-		// MapVerifier.verifyMap(map);
+		MapVerifier.verifyMap(map);
 
 		return map;
 	}
@@ -184,22 +184,20 @@ public class MapReader {
 		
 		if (scan.hasNext()) {
 			String countryData = scan.nextLine();
-			
-			//System.out.println(countryData);
-			// call processCountry for each line of country
+ 			// call processCountry for each line of country
 			countryList.addAll(parseCountries(scan, countryData, continentList));
 		}
 		
-		// here you can create continent map 
+		// here we create continent map 
 		// pass it to Country method and set there only
 		HashMap<String, Country> countryMap = new HashMap<String, Country>();
 		for (Country t : countryList) {
 			countryMap.put(t.getName(), t);
 		}
 		
-		// Map neighbour Country object to Country
+		// Add neighbor countries in List
 		for (Country country : countryList) {
-			for (String adjacentCountry : country.getAdjCountries()) {
+			for (String adjacentCountry : country.getNeighborCountries()) {
 				if (countryMap.containsKey(adjacentCountry)){
 					if (country.getAdjacentCountries() == null) {
 						country.setAdjacentCountries(new ArrayList<Country>());
@@ -215,8 +213,11 @@ public class MapReader {
 		// Map countries and continent
 		for (Continent continent : continentList) {
 			HashMap<String, Country> continentTMap = new HashMap<String, Country>();
+			
 			for (Country country : countryList) {
+				
 				if (country.getBelongToContinent().equals(continent)) {
+					
 					if (continent.getCountries() == null) {
 						continent.setCountries(new ArrayList<Country>());
 						continentTMap.put(country.getName(), country);
@@ -248,9 +249,8 @@ public class MapReader {
 		String bordercountryData = "";
 		
 		// Get borders line
-		if (scan.hasNext()) {
+		if (scan.hasNext())
 			bordercountryData = scan.nextLine();
-		}
 			
 		while (tokenForCountry.hasMoreTokens()) {
 			
@@ -320,16 +320,13 @@ public class MapReader {
 								adjacentCountries.add(neighborCountry);
 							}
 						}						
-						country.setAdjCountries(adjacentCountries);
+						country.setNeighborCountries(adjacentCountries);
 						countryListWithBorders.add(country);
 					}
 				}
 			}
 		}
 		
-		for (Country c: countryListWithBorders)	
-			System.out.println(c.getName() + "-" + c.getAdjCountries());
-	
 		return countryListWithBorders;
 	}
 }
