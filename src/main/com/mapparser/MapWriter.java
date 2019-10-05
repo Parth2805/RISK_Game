@@ -17,6 +17,7 @@ import com.entity.Country;
 import com.entity.Hmap;
 
 /**
+ * @author Komal
  * This class is responsible to write the map file when user creates the map.
  * 
  */

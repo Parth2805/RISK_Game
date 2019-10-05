@@ -1,8 +1,10 @@
 package com.main;
 import java.io.File;
 
+import com.entity.Continent;
 import com.entity.Hmap;
 import com.exception.InvalidMap;
+import com.mapparser.MapOperations;
 import com.mapparser.MapReader;
 import com.mapparser.MapWriter;
 
@@ -21,6 +23,9 @@ public class Main {
 		File mWorldMap = new File(mfpath);
 		try {
 			mapReader.readMapFile(worldMap);
+			Continent cnt = MapOperations.addContinent(map, "Asia", "1", "White");
+			map.getContinents().add(cnt);
+			System.out.println("Continet: "+cnt.getName());
 	    	write.writeMapFile(map, mWorldMap);
 			
 		} catch (InvalidMap e) {
