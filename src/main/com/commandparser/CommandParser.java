@@ -37,8 +37,8 @@ public class CommandParser {
 
                         for(int i=2;i<words.length;i=i+2){
 
-                            String continentname=words[2];
-                            System.out.println("remove:"+words[2]);
+                            String continentname=words[i];
+                            System.out.println("remove:"+words[i]);
                             //Call for removing the continent name with (continentname) as parameters
 
                         }
@@ -54,23 +54,37 @@ public class CommandParser {
             case "editcountry":
                 if(words[1].equals("-add")){
 
-                    String continentname=words[2];
-                    String countryname=words[3];
-                    System.out.println("Editcountry -add:"+continentname+" "+countryname);
+                    for(int i=2;i<words.length;i=i+3){
 
-                    //Call for adding the country name with (continentname,countryname) as parameters
+                        String continentname=words[i];
+                        String countryname=words[i+1];
+                        System.out.println("Editcountry -add:"+continentname+" "+countryname);
+                        //Call for adding the country name with (continentname,countryname) as parameters
 
-                }else if(words[1].equals("-remove")){
 
-                    String countryname=words[2];
-                    System.out.println("Editcountry -remove:"+countryname);
+                    }
 
-                    //Call for removing the country name with (countryname) as parameter
 
-                }else{
 
-                    System.out.println("Wrong input!!");
-                }
+                }else
+                    if(words[1].equals("-remove")){
+
+                        for(int i=2;i<words.length;i=i+2){
+
+                            String countryname=words[i];
+                            System.out.println("Editcountry -remove:"+countryname);
+
+                            //Call for removing the country name with (countryname) as parameter
+
+
+
+                        }
+
+
+                    }else{
+
+                        System.out.println("Wrong input!!");
+                    }
                 break;
             default:
                 System.out.println("Check the input!!");
