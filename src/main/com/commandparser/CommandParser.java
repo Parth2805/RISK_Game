@@ -15,11 +15,21 @@ public class CommandParser {
             case "editcontinent":
                 if(words[1].equals("-add")){
 
-                    String continentname=words[2];
-                    String continentvalues=words[3];
-                    System.out.println("add:"+words[2]+" "+words[3]);
 
-                    //Call for adding continent with (continentname,continentvalue) as parameters
+                    for(int i=2;i<words.length;i=i+3){
+
+
+                        String continentname=words[i];
+                        String continentvalues=words[i+1];
+                        System.out.println("add:"+words[i]+" "+words[i+1]);
+
+                        //Call for adding continent with (continentname,continentvalue) as parameters
+
+
+
+
+                    }
+
 
 
                 }else if(words[1].equals("-remove")){
