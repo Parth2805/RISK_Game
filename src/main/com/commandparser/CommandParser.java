@@ -86,6 +86,33 @@ public class CommandParser {
                         System.out.println("Wrong input!!");
                     }
                 break;
+
+            case "editneighbor":
+
+                if(words[1].equals("-add")){
+
+                        for(int i=2;i<words.length;i=i+3){
+
+                            String countryname=words[i];
+                            String neighborcountryname=words[i+1];
+                            System.out.println("Edit neighbor add:"+countryname+" "+neighborcountryname);
+                            //Call for adding neighbor(countryname,neighborname)
+                        }
+
+                }else
+                    if(words[1].equals("-remove")){
+
+                        for(int i=2;i<words.length;i=i+3){
+
+                            String countryname=words[i];
+                            String neighborcountryname=words[i+1];
+                            System.out.println("Edit neighbor remove:"+countryname+" "+neighborcountryname);
+                            //Call for removing neighbor(countryname,neighborname)
+                        }
+
+
+                    }
+                break;
             default:
                 System.out.println("Check the input!!");
                 break;
