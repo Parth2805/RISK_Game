@@ -113,6 +113,30 @@ public class CommandParser {
 
                     }
                 break;
+
+            case "showmap":
+
+                System.out.println("Showmap");
+
+                //Call for showmap function
+
+
+
+
+                break;
+            case "savemap":
+
+                String filename_save=words[1];
+                System.out.println("Save File:"+filename_save);
+                //Call to save file function
+                break;
+
+            case "editmap":
+
+                String filename_edit=words[1];
+                System.out.println("Edit Map:"+filename_edit);
+                //Call for editmap(filename_edit)
+                break;
             default:
                 System.out.println("Check the input!!");
                 break;
