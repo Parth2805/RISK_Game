@@ -32,18 +32,23 @@ public class CommandParser {
 
 
 
-                }else if(words[1].equals("-remove")){
+                }else
+                    if(words[1].equals("-remove")){
+
+                        for(int i=2;i<words.length;i=i+2){
+
+                            String continentname=words[2];
+                            System.out.println("remove:"+words[2]);
+                            //Call for removing the continent name with (continentname) as parameters
+
+                        }
 
 
-                    String continentname=words[2];
-                    System.out.println("remove:"+words[2]);
-                    //Call for removing the continent name with (continentname) as parameters
+                    }else{
 
-                }else{
+                        System.out.println("Check input!!");
 
-                    System.out.println("Check input!!");
-
-                }
+                    }
                 break;
 
             case "editcountry":
