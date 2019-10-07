@@ -1,6 +1,8 @@
 package com.main;
 import java.io.File;
+import java.util.Scanner;
 
+import com.commandparser.CommandParser;
 import com.entity.Continent;
 import com.entity.Hmap;
 import com.exception.InvalidMap;
@@ -11,8 +13,14 @@ import com.mapparser.MapWriter;
 
 public class Main {
 
-	public static void main(String args[])
+	public static void main(String[] args)
 	{
+
+		Scanner sc= new Scanner(System.in);
+		String command=sc.nextLine();
+
+		CommandParser parser=new CommandParser(command);
+
 		Hmap map = new Hmap();
 		MapReader mapReader = new MapReader();
 		MapWriter write = new MapWriter();
