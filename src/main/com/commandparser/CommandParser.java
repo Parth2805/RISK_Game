@@ -137,6 +137,49 @@ public class CommandParser {
                 System.out.println("Edit Map:"+filename_edit);
                 //Call for editmap(filename_edit)
                 break;
+
+            case "validatemap":
+
+                System.out.println("Validatemap");
+                //Call for validatemap()
+                break;
+
+            case "loadmap":
+
+                System.out.println("Loadmap");
+                //Call for showmap()
+
+                break;
+
+            case "gameplayer":
+
+                if(words[1].equals("-add")){
+
+                    for(int i=2;i<words.length;i+=2){
+
+                        String playername=words[i];
+                        System.out.println("Add player:"+playername);
+                        //Call for adding player (playername)
+
+                    }
+
+
+                }else
+                    if(words[1].equals("-remove")){
+
+                        for(int i=2;i<words.length;i+=2){
+
+                            String playername=words[i];
+                            System.out.println("Remove player:"+playername);
+                            //Call for remove player (playername)
+
+                        }
+
+
+                    }
+                break;
+
+
             default:
                 System.out.println("Check the input!!");
                 break;
