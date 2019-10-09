@@ -96,7 +96,6 @@ public class MapReader {
 				}
 			}
 
-			//System.out.println(mapString);
 			mapFileReader = new Scanner(mapString.toString());
 			map = processFilesAttribute(mapFileReader);
 
@@ -128,9 +127,7 @@ public class MapReader {
 		while (tokensForMapAttribute.hasMoreTokens()) {
 			
 			String str = tokensForMapAttribute.nextToken();
-			
-			//System.out.println(str);
-			
+						
 			if (str.equalsIgnoreCase("[files]")) {
 				continue;
 			} else {
@@ -141,7 +138,7 @@ public class MapReader {
 		
 		map.setMapData(filesAttributeMap);
 		
-		List<Continent> continentList = parseContinents(scan);
+		List<Continent> continentList = parseContinents(scan, map);
 		
 		HashMap<String, Continent> continentMap = new HashMap<String, Continent>();
 		for (Continent continent : continentList) {
@@ -155,12 +152,13 @@ public class MapReader {
 
 	/**
 	 * This method processes the continents and call method to process Countries
-	 * and also  map Countries and continents.
+	 * and also map Countries and continents.
 	 * @param scan scanner object which points to line of the file which is to be processed
+	 * @param map Hmap object
 	 * @return continentList after processing
 	 * @throws InvalidMapException throws InvalidMapException if map is not valid
 	 */
-	private List<Continent> parseContinents(Scanner scan) throws InvalidMap {
+	private List<Continent> parseContinents(Scanner scan, Hmap map) throws InvalidMap {
 		
 		List<Continent> continentList = new ArrayList<Continent>();
 		StringTokenizer tokenForContinents = new StringTokenizer(scan.nextLine(), "#");
@@ -172,10 +170,12 @@ public class MapReader {
 				Continent continent = new Continent();
 				String[] data = line.split(" ");
 
-				//System.out.println(line);
-				continent.setName(data[0].trim().toUpperCase());
+				continent.setName(data[0].trim());
 				continent.setValue(Integer.parseInt(data[1]));
-				continent.setColor(data[2].trim());
+				
+				if (data.length > 2)
+					continent.setColor(data[2].trim());
+				
 				continentList.add(continent);
 			}
 		}
@@ -185,7 +185,7 @@ public class MapReader {
 		if (scan.hasNext()) {
 			String countryData = scan.nextLine();
  			// call processCountry for each line of country
-			countryList.addAll(parseCountries(scan, countryData, continentList));
+			countryList.addAll(parseCountries(scan, countryData, continentList, map));
 		}
 		
 		// here we create continent map 
@@ -236,16 +236,18 @@ public class MapReader {
 	 * This method processes countries and check that it should be assign to only one continent
 	 * @param scan scanner object which points to line of the file which is to be processed
 	 * @param countryLine Line from the map file for the Country
-	 * @param continentList Produces the continent list.
+	 * @param continentList Produces the continent list
+	 * @param Hmap map object
 	 * @return countryList After processing
 	 * @throws InvalidMapException Throws InvalidMapException if map is not valid
 	 */
-	private List<Country> parseCountries(Scanner scan, String countryLine, List<Continent> continentList) throws InvalidMap{
+	private List<Country> parseCountries(Scanner scan, String countryLine, List<Continent> continentList, Hmap map) throws InvalidMap{
 		
 		List<Country> countryList = new ArrayList<Country>();
 		List<Country> countryListWithBorders = new ArrayList<Country>();
-		StringTokenizer tokenForCountry = new StringTokenizer(countryLine, "#");
 		HashMap<Integer, String> countryNamesMap = new HashMap<Integer, String>();
+		HashMap<String, Integer> countryIdxMap = new HashMap<String, Integer>();
+		StringTokenizer tokenForCountry = new StringTokenizer(countryLine, "#");
 		String bordercountryData = "";
 		
 		// Get borders line
@@ -260,14 +262,14 @@ public class MapReader {
 				continue;
 			} else {
 				
-				//System.out.println(element);
 				Country country = new Country();
 				String[] dataOfCountry = element.split(" ");
 				
 				// Map Index with name of country
-				dataOfCountry[1] = dataOfCountry[1].trim().toUpperCase();
+				dataOfCountry[1] = dataOfCountry[1].trim();
 				countryNamesMap.put(Integer.parseInt(dataOfCountry[0]), dataOfCountry[1]);
-				
+				countryIdxMap.put(dataOfCountry[1], Integer.parseInt(dataOfCountry[0]));
+
 				country.setName(dataOfCountry[1]);
 				country.setxCoordinate(Integer.parseInt(dataOfCountry[3]));
 				country.setyCoordinate(Integer.parseInt(dataOfCountry[4]));
@@ -326,6 +328,8 @@ public class MapReader {
 				}
 			}
 		}
+		
+		map.setCountriesIdxMap(countryIdxMap);
 		
 		return countryListWithBorders;
 	}

@@ -18,6 +18,8 @@ public class Hmap extends Observable {
 	
 	private HashMap<String, String> mapData;
 	private HashMap<String, Continent> continentMap;
+	private HashMap<String, Integer> countriesIdxMap;
+
 	
 	/**
 	 * This is the default constructor of Hmap.
@@ -26,6 +28,7 @@ public class Hmap extends Observable {
 		mapData = new HashMap<String, String>();
 		continents = new ArrayList<Continent>();
 		continentMap = new HashMap<String,Continent>();
+		countriesIdxMap = new HashMap<String,Integer>();
 	}
 	
 	/**
@@ -36,6 +39,7 @@ public class Hmap extends Observable {
 		mapData = new HashMap<String, String>(newMap.mapData);
 		continents = new ArrayList<Continent>(newMap.continents);
 		continentMap = new HashMap<String,Continent>(newMap.continentMap);
+		countriesIdxMap = new HashMap<String,Integer>(newMap.countriesIdxMap);
 	}
 	
 	/**
@@ -70,6 +74,22 @@ public class Hmap extends Observable {
 		this.continents = continents;
 		setChanged();
 		notifyObservers(this);
+	}
+	
+	/**
+	 * Returns the continent maps
+	 * @return countriesIdxMap
+	 */
+	public HashMap<String, Integer> getCountriesIdxMap() {
+		return countriesIdxMap;
+	}
+	
+	/**
+	 * This sets the continent map.
+	 * @param countriesIdxMap
+	 */
+	public void setCountriesIdxMap(HashMap<String, Integer> countriesIdxMap) {
+		this.countriesIdxMap = countriesIdxMap;
 	}
 	
 	/**

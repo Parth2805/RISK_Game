@@ -1,202 +1,183 @@
 package com.commandparser;
 
+import java.io.File;
+
+import com.config.Commands;
+import com.entity.Hmap;
+import com.exception.InvalidMap;
+import com.mapparser.MapReader;
+import com.mapparser.MapVerifier;
+import com.mapparser.MapWriter;
+
+/**
+ * This class reads, parses the command line string from user input.
+ * 
+ * @author Parth
+ * @author Mehul
+ */
 public class CommandParser {
-    /**
-     * Parses the String and calls the relative function.
-     * @param command User input Command/String to be parse
-     */
-    public CommandParser(String command){
 
-        String[] words=command.split(" ");
-        String commandtype=words[0];
-        //System.out.println(words[0]);
-        switch (commandtype){
-
-            case "editcontinent":
-                if(words[1].equals("-add")){
-
-
-                    for(int i=2;i<words.length;i=i+3){
-
-
-                        String continentname=words[i];
-                        String continentvalues=words[i+1];
-                        System.out.println("add:"+words[i]+" "+words[i+1]);
-
-                        //Call for adding continent with (continentname,continentvalue) as parameters
-
-
-
-
-                    }
-
-
-
-                }else
-                    if(words[1].equals("-remove")){
-
-                        for(int i=2;i<words.length;i=i+2){
-
-                            String continentname=words[i];
-                            System.out.println("remove:"+words[i]);
-                            //Call for removing the continent name with (continentname) as parameters
-
-                        }
-
-
-                    }else{
-
-                        System.out.println("Check input!!");
-
-                    }
-                break;
-
-            case "editcountry":
-                if(words[1].equals("-add")){
-
-                    for(int i=2;i<words.length;i=i+3){
-
-                        String continentname=words[i];
-                        String countryname=words[i+1];
-                        System.out.println("Editcountry -add:"+continentname+" "+countryname);
-                        //Call for adding the country name with (continentname,countryname) as parameters
-
-
-                    }
-
-
-
-                }else
-                    if(words[1].equals("-remove")){
-
-                        for(int i=2;i<words.length;i=i+2){
-
-                            String countryname=words[i];
-                            System.out.println("Editcountry -remove:"+countryname);
-
-                            //Call for removing the country name with (countryname) as parameter
-
-
-
-                        }
-
-
-                    }else{
-
-                        System.out.println("Wrong input!!");
-                    }
-                break;
-
-            case "editneighbor":
-
-                if(words[1].equals("-add")){
-
-                        for(int i=2;i<words.length;i=i+3){
-
-                            String countryname=words[i];
-                            String neighborcountryname=words[i+1];
-                            System.out.println("Edit neighbor add:"+countryname+" "+neighborcountryname);
-                            //Call for adding neighbor(countryname,neighborname)
-                        }
-
-                }else
-                    if(words[1].equals("-remove")){
-
-                        for(int i=2;i<words.length;i=i+3){
-
-                            String countryname=words[i];
-                            String neighborcountryname=words[i+1];
-                            System.out.println("Edit neighbor remove:"+countryname+" "+neighborcountryname);
-                            //Call for removing neighbor(countryname,neighborname)
-                        }
-
-
-                    }
-                break;
-
-            case "showmap":
-
-                System.out.println("Showmap");
-
-                //Call for showmap function
-
-
-
-
-                break;
-            case "savemap":
-
-                String filename_save=words[1];
-                System.out.println("Save File:"+filename_save);
-                //Call to save file function
-                break;
-
-            case "editmap":
-
-                String filename_edit=words[1];
-                System.out.println("Edit Map:"+filename_edit);
-                //Call for editmap(filename_edit)
-                break;
-
-            case "validatemap":
-
-                System.out.println("Validatemap");
-                //Call for validatemap()
-                break;
-
-            case "loadmap":
-
-                System.out.println("Loadmap");
-                //Call for showmap()
-
-                break;
-
-            case "gameplayer":
-
-                if(words[1].equals("-add")){
-
-                    for(int i=2;i<words.length;i+=2){
-
-                        String playername=words[i];
-                        System.out.println("Add player:"+playername);
-                        //Call for adding player (playername)
-
-                    }
-
-
-                }else
-                    if(words[1].equals("-remove")){
-
-                        for(int i=2;i<words.length;i+=2){
-
-                            String playername=words[i];
-                            System.out.println("Remove player:"+playername);
-                            //Call for remove player (playername)
-
-                        }
-
-
-                    }
-                break;
-
-
-            default:
-                System.out.println("Check the input!!");
-                break;
-
-
-
-
-
-
-
-
-        }
-
-
-
-
-
-    }
-
+	Hmap rootMap;
+	MapWriter mapWriter;
+
+	// default constructor to initialize members
+	public CommandParser() {
+		this.mapWriter = new MapWriter();
+	}
+
+	/**
+	 * Setter method for the map object.
+	 * 
+	 * @param map object
+	 */
+	private Hmap setMap(Hmap map) {
+		return this.rootMap = map;
+	}
+
+	/**
+	 * Get map object
+	 * 
+	 * @return the map
+	 */
+	private Hmap getMap() {
+		return rootMap;
+	}
+
+	/**
+	 * Parses the String and calls the relative function.
+	 * 
+	 * @param command User input Command/String to be parse
+	 */
+	public void processCommands(String command) {
+
+		String[] words = command.split(" ");
+		String commandType = words[0], filePath = "";
+
+		switch (commandType) {
+
+		case Commands.MAP_COMMAND_EDIT_CONTINENT:
+
+			for (int idx = 1; idx < words.length; idx++) {
+
+				if (words[idx].equals(Commands.MAP_COMMAND_OPTION_ADD)) {
+					String continentName = words[idx + 1];
+					String continentValue = words[idx + 2];
+					System.out.println("add:" + words[idx + 1] + " " + words[idx + 2]);
+					// Call for adding continent with (continentName,continentvalue) as parameters
+					idx = idx + 2;
+
+				} else if (words[idx].equals(Commands.MAP_COMMAND_OPTION_REMOVE)) {
+					String continentName = words[idx + 1];
+					System.out.println("remove:" + words[idx + 1]);
+					// Call for removing the continent name with (continentName) as parameters
+					idx = idx + 1;
+
+				} else {
+					System.out.println("Check input!!");
+				}
+			}
+			break;
+
+		case Commands.MAP_COMMAND_EDIT_COUNTRY:
+
+			for (int idx = 1; idx < words.length; idx++) {
+
+				if (words[idx].equals(Commands.MAP_COMMAND_OPTION_ADD)) {
+					String countryName = words[idx + 1];
+					String continentName = words[idx + 2];
+					System.out.println("Editcountry -add:" + continentName + " " + countryName);
+					// Call for adding the country name with (continentName,countryName) as
+					// parameters
+					idx = idx + 2;
+
+				} else if (words[idx].equals(Commands.MAP_COMMAND_OPTION_REMOVE)) {
+					String countryName = words[idx + 1];
+					System.out.println("Editcountry -remove:" + countryName);
+					// Call for removing the country name with (countryName) as parameter
+					idx = idx + 1;
+
+				} else {
+					System.out.println("Wrong input!!");
+				}
+			}
+			break;
+
+		case Commands.MAP_COMMAND_EDIT_NEIGHBOR:
+
+			for (int idx = 1; idx < words.length; idx++) {
+
+				if (words[idx].equals(Commands.MAP_COMMAND_OPTION_ADD)) {
+					String countryName = words[idx + 1];
+					String nighborCountryName = words[idx + 2];
+					System.out.println("add: " + words[idx + 1] + " " + words[idx + 2]);
+					// Call for adding continent with (continentName,continentvalue) as parameters
+					idx = idx + 2;
+
+				} else if (words[idx].equals(Commands.MAP_COMMAND_OPTION_REMOVE)) {
+					String countryName = words[idx + 1];
+					String nighborCountryName = words[idx + 2];
+					System.out.println("remove: " + words[idx + 1] + " " + words[idx + 2]);
+					// Call for removing the continent name with (continentName) as parameters
+					idx = idx + 2;
+
+				} else {
+					System.out.println("Check input!!");
+				}
+			}
+			break;
+
+		case Commands.MAP_COMMAND_SHOWMAP:
+
+			System.out.println("Showmap");
+
+			// Call for showmap functionW
+			break;
+
+		case Commands.MAP_COMMAND_SAVEMAP:
+
+			filePath = System.getProperty("user.dir") + "\\src\\main\\resources\\" + words[1];
+			System.out.println("Save File: " + filePath);
+			File outputMapFile = new File(filePath);
+			mapWriter.writeMapFile(getMap(), outputMapFile);
+			break;
+
+		case Commands.MAP_COMMAND_EDITMAP:
+
+			filePath = words[1];
+			System.out.println("Edit Map:" + filePath);
+			// Call for editmap(filename_edit)
+			break;
+
+		case Commands.MAP_COMMAND_VALIDATEMAP:
+
+			System.out.println("Validatemap");
+			try {
+				MapVerifier.verifyMap(getMap());
+			} catch (InvalidMap e1) {
+				e1.printStackTrace();
+			}
+			break;
+
+		case Commands.MAP_COMMAND_LOADMAP:
+
+			filePath = System.getProperty("user.dir") + "\\src\\main\\resources\\" + words[1];
+			File inputMapFile = new File(filePath);
+			MapReader mapReader = new MapReader();
+
+			if (inputMapFile.exists()) {
+				try {
+					setMap(mapReader.readMapFile(inputMapFile));
+				} catch (InvalidMap e) {
+					e.printStackTrace();
+				}
+			} else {
+				System.out.println("File does not exist: " + words[1]);
+			}
+			break;
+
+		default:
+			System.out.println("Check the input!!");
+			break;
+		}
+	}
 }

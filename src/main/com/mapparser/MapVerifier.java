@@ -41,7 +41,7 @@ public class MapVerifier {
 				if (!isMapConnectedGraph(map))
 					throw new InvalidMap("A Continent should be a subgraph in the map. A Hmap should be connected graph formed by continents.");
 				else
-					System.out.println("Given Map is a connected graph");
+					System.out.println("Given Map verified successfully. It is a connected graph");
 				
 				checkCountryBelongToOnlyOneContinent(map);
 			}
@@ -85,7 +85,6 @@ public class MapVerifier {
 		for (Country t : continent.getCountries()) {
 			
 			if (t.isVisited() == false) {
-				//t.setVisited(false);
 				message = t.getName() + " is not forming connected graph inside continent " + continent.getName() + ".";
 				returnValue = false;
 				break;
@@ -132,7 +131,6 @@ public class MapVerifier {
 		else  {
 			for (Country adjCoun : adjCounList) {
 				if (!adjCoun.getAdjacentCountries().contains(country))
-					// TODO: Whether to throw Exception here or not?
 					adjCoun.getAdjacentCountries().add(country);
 			}
 		}
@@ -179,7 +177,6 @@ public class MapVerifier {
 
 		continent.setVisited(true);
 
-		//System.out.println("Continent DFS - " + continent.getName());
 		for (Continent c : getAdjacentContinents(continent, map)) {
 						
 			if (c.isVisited() == false)
@@ -199,9 +196,7 @@ public class MapVerifier {
 		
 		for (Country country : continent.getCountries())
 			adjCounMasterSet.addAll(country.getAdjacentCountries());
-		
-		//System.out.println(adjCounMasterSet);
-		
+				
 		for (Continent otherCont : map.getContinents()) {
 			
 			if (!continent.equals(otherCont)) {
@@ -210,7 +205,6 @@ public class MapVerifier {
 				// there is some country which is common between two continents
 				if (!Collections.disjoint(adjCounMasterSet, otherCont.getCountries())) {
 					
-					//System.out.println("Inside disjoint");
 					// some countries are common
 					adjacentContinents.add(otherCont);
 				}
