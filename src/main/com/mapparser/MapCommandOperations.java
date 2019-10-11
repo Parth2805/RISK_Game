@@ -97,11 +97,11 @@ public class MapCommandOperations {
 	/**
 	 * This method updates the continent details if the user selects the continent.
 	 * @param continent The continent whose details must be updated.
-	 * @param map map object {@link Map}
+	 * @param map map object {@link Hmap}
 	 * @param name name of the continent to be updated
 	 * @param ctrlValue The control value of the continent.
 	 * @return The current continent.
-	 * @throws InvalidMapException  InvalidMapException if any error occurs
+	 * @throws InvalidMap  InvalidMapException if any error occurs
 	 */
 	public static Continent updateContinent(Continent continent, Hmap map, String name, String ctrlValue) throws InvalidMap {
 		
@@ -130,13 +130,13 @@ public class MapCommandOperations {
 	/**
 	 * This method updates the continent details when the user selects the country.
 	 * @param country The country whose values must be updated.
-	 * @param map Map Object {@link Map}
+	 * @param map Map Object {@link Hmap}
 	 * @param name name for the Country to be updated - new name for the Country
 	 * @param xCo X-Co-ordinate of the Country.
 	 * @param yCo Y-Co-ordinate of the Country.
 	 * @param adjCoun The adjacent Countries list. 
 	 * @return The object to the newly updated Country.
-	 * @throws InvalidHmap InvalidHmap if any error occurs
+	 * @throws InvalidMap InvalidHmap if any error occurs
 	 */
 	public static Country updateCountry(Country country, Hmap map, String name,String xCo, String yCo, 
 			Country adjCoun) throws InvalidMap {

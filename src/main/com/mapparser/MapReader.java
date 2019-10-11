@@ -47,7 +47,7 @@ public class MapReader {
 	 * 
 	 * @param file The map file to be read.
 	 * @return map The map object returned after reading the file.
-	 * @throws InvalidMapException Throws IOException if the map is invalid.
+	 * @throws InvalidMap Throws IOException if the map is invalid.
 	 */
 	public Hmap readMapFile(final File file) throws InvalidMap {
 
@@ -110,8 +110,8 @@ public class MapReader {
 	/**
 	 * This method process map attributes and call method for processing continents.
 	 * @param scan of type {@link Scanner}
-	 * @return Map of type {@link Map}
-	 * @throws InvalidMapException throws InvalidMapException if map is not valid.
+	 * @return Map of type {@link Hmap}
+	 * @throws InvalidMap throws InvalidMapException if map is not valid.
 	 */
 	private Hmap processFilesAttribute(Scanner scan) throws InvalidMap {
 
@@ -156,7 +156,7 @@ public class MapReader {
 	 * @param scan scanner object which points to line of the file which is to be processed
 	 * @param map Hmap object
 	 * @return continentList after processing
-	 * @throws InvalidMapException throws InvalidMapException if map is not valid
+	 * @throws InvalidMap throws InvalidMapException if map is not valid
 	 */
 	private List<Continent> parseContinents(Scanner scan, Hmap map) throws InvalidMap {
 		
@@ -237,9 +237,9 @@ public class MapReader {
 	 * @param scan scanner object which points to line of the file which is to be processed
 	 * @param countryLine Line from the map file for the Country
 	 * @param continentList Produces the continent list
-	 * @param Hmap map object
+	 * @param map map object
 	 * @return countryList After processing
-	 * @throws InvalidMapException Throws InvalidMapException if map is not valid
+	 * @throws InvalidMap Throws InvalidMapException if map is not valid
 	 */
 	private List<Country> parseCountries(Scanner scan, String countryLine, List<Continent> continentList, Hmap map) throws InvalidMap{
 		
