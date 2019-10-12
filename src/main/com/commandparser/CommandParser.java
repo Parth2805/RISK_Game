@@ -1,9 +1,11 @@
 package com.commandparser;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import com.config.Commands;
 import com.entity.Hmap;
+import com.entity.Player;
 import com.exception.InvalidMap;
 import com.mapparser.MapReader;
 import com.mapparser.MapVerifier;
@@ -19,7 +21,7 @@ public class CommandParser {
 
 	Hmap rootMap;
 	MapWriter mapWriter;
-
+	ArrayList<Player> playersList=new ArrayList<>();
 	// default constructor to initialize members
 	public CommandParser() {
 		this.mapWriter = new MapWriter();
@@ -174,6 +176,62 @@ public class CommandParser {
 				System.out.println("File does not exist: " + words[1]);
 			}
 			break;
+
+			case Commands.MAP_COMMAND_GAMEPLAYER:
+
+				for(int idx=1;idx<words.length;idx++){
+
+					if(words[idx].equals(Commands.MAP_COMMAND_OPTION_ADD)){
+
+						String playerName=words[idx+1];
+						int id=playersList.size();
+						Player newPlayer=new Player(id+1,playerName);
+						playersList.add(newPlayer);
+						idx=idx+1;
+
+
+					}else if(words[idx].equals(Commands.MAP_COMMAND_OPTION_REMOVE)){
+
+						System.out.println("Playerlist Before:--------");
+						for(Player player:playersList){
+							System.out.println(player.getName());
+						}
+
+
+						String playerName=words[idx+1];
+						for (Player player:playersList) {
+
+							if(player.getName().equals(playerName)){
+
+								playersList.remove(player);
+							}
+
+						}
+
+
+						System.out.println("PlayerList After:---------");
+						for(Player player:playersList){
+							System.out.println(player.getName());
+						}
+
+						idx=idx+1;
+
+					}
+
+
+
+
+
+				}
+
+				break;
+
+
+
+
+
+
+
 
 		default:
 			System.out.println("Check the input!!");
