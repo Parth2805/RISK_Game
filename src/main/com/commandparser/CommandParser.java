@@ -1,8 +1,11 @@
 package com.commandparser;
 
 import java.io.File;
+import java.util.List;
 
 import com.config.Commands;
+import com.entity.Continent;
+import com.entity.Country;
 import com.entity.Hmap;
 import com.exception.InvalidMap;
 import com.mapparser.MapReader;
@@ -128,9 +131,25 @@ public class CommandParser {
 
 		case Commands.MAP_COMMAND_SHOWMAP:
 
-			System.out.println("Showmap");
-
-			// Call for showmap functionW
+			List<Continent> cont = getMap().getContinents();
+			for (Continent c: cont) {
+				System.out.println("--------------------------------------------------------");
+				System.out.println("Continent: " + c.getName());
+				
+				for (Country con: c.getCountries()) {
+					System.out.print(con.getName() + " : ");
+					List<String> adjCountries = con.getNeighborCountries();
+					
+					for (int i = 0; i <adjCountries.size(); i++) {
+						System.out.print(adjCountries.get(i) );
+						
+						if (i != adjCountries.size() - 1) {
+							System.out.print(", ");
+						}
+					}
+					System.out.println();
+				}				
+			}
 			break;
 
 		case Commands.MAP_COMMAND_SAVEMAP:
