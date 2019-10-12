@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import com.config.Commands;
+import com.config.Config;
 import com.entity.Hmap;
 import com.entity.Player;
 import com.exception.InvalidMap;
@@ -13,229 +14,269 @@ import com.mapparser.MapWriter;
 
 /**
  * This class reads, parses the command line string from user input.
- * 
+ *
  * @author Parth
  * @author Mehul
  */
 public class CommandParser {
 
-	Hmap rootMap;
-	MapWriter mapWriter;
-	ArrayList<Player> playersList=new ArrayList<>();
-	// default constructor to initialize members
-	public CommandParser() {
-		this.mapWriter = new MapWriter();
-	}
+    Hmap rootMap;
+    MapWriter mapWriter;
+    ArrayList<Player> playersList = new ArrayList<>();
 
-	/**
-	 * Setter method for the map object.
-	 * 
-	 * @param map object
-	 */
-	private Hmap setMap(Hmap map) {
-		return this.rootMap = map;
-	}
+    // default constructor to initialize members
+    public CommandParser() {
+        this.mapWriter = new MapWriter();
+    }
 
-	/**
-	 * Get map object
-	 * 
-	 * @return the map
-	 */
-	private Hmap getMap() {
-		return rootMap;
-	}
+    /**
+     * Setter method for the map object.
+     *
+     * @param map object
+     */
+    private Hmap setMap(Hmap map) {
+        return this.rootMap = map;
+    }
 
-	/**
-	 * Parses the String and calls the relative function.
-	 * 
-	 * @param command User input Command/String to be parse
-	 */
-	public void processCommands(String command) {
+    /**
+     * Get map object
+     *
+     * @return the map
+     */
+    private Hmap getMap() {
+        return rootMap;
+    }
 
-		String[] words = command.split(" ");
-		String commandType = words[0], filePath = "";
+    /**
+     * Parses the String and calls the relative function.
+     *
+     * @param command User input Command/String to be parse
+     */
+    public void processCommands(String command) {
 
-		switch (commandType) {
+        String[] words = command.split(" ");
+        String commandType = words[0], filePath = "";
 
-		case Commands.MAP_COMMAND_EDIT_CONTINENT:
+        switch (commandType) {
 
-			for (int idx = 1; idx < words.length; idx++) {
+            case Commands.MAP_COMMAND_EDIT_CONTINENT:
 
-				if (words[idx].equals(Commands.MAP_COMMAND_OPTION_ADD)) {
-					String continentName = words[idx + 1];
-					String continentValue = words[idx + 2];
-					System.out.println("add:" + words[idx + 1] + " " + words[idx + 2]);
-					// Call for adding continent with (continentName,continentvalue) as parameters
-					idx = idx + 2;
+                for (int idx = 1; idx < words.length; idx++) {
 
-				} else if (words[idx].equals(Commands.MAP_COMMAND_OPTION_REMOVE)) {
-					String continentName = words[idx + 1];
-					System.out.println("remove:" + words[idx + 1]);
-					// Call for removing the continent name with (continentName) as parameters
-					idx = idx + 1;
+                    if (words[idx].equals(Commands.MAP_COMMAND_OPTION_ADD)) {
+                        String continentName = words[idx + 1];
+                        String continentValue = words[idx + 2];
+                        System.out.println("add:" + words[idx + 1] + " " + words[idx + 2]);
+                        // Call for adding continent with (continentName,continentvalue) as parameters
+                        idx = idx + 2;
 
-				} else {
-					System.out.println("Check input!!");
-				}
-			}
-			break;
+                    } else if (words[idx].equals(Commands.MAP_COMMAND_OPTION_REMOVE)) {
+                        String continentName = words[idx + 1];
+                        System.out.println("remove:" + words[idx + 1]);
+                        // Call for removing the continent name with (continentName) as parameters
+                        idx = idx + 1;
 
-		case Commands.MAP_COMMAND_EDIT_COUNTRY:
+                    } else {
+                        System.out.println("Check input!!");
+                    }
+                }
+                break;
 
-			for (int idx = 1; idx < words.length; idx++) {
+            case Commands.MAP_COMMAND_EDIT_COUNTRY:
 
-				if (words[idx].equals(Commands.MAP_COMMAND_OPTION_ADD)) {
-					String countryName = words[idx + 1];
-					String continentName = words[idx + 2];
-					System.out.println("Editcountry -add:" + continentName + " " + countryName);
-					// Call for adding the country name with (continentName,countryName) as
-					// parameters
-					idx = idx + 2;
+                for (int idx = 1; idx < words.length; idx++) {
 
-				} else if (words[idx].equals(Commands.MAP_COMMAND_OPTION_REMOVE)) {
-					String countryName = words[idx + 1];
-					System.out.println("Editcountry -remove:" + countryName);
-					// Call for removing the country name with (countryName) as parameter
-					idx = idx + 1;
+                    if (words[idx].equals(Commands.MAP_COMMAND_OPTION_ADD)) {
+                        String countryName = words[idx + 1];
+                        String continentName = words[idx + 2];
+                        System.out.println("Editcountry -add:" + continentName + " " + countryName);
+                        // Call for adding the country name with (continentName,countryName) as
+                        // parameters
+                        idx = idx + 2;
 
-				} else {
-					System.out.println("Wrong input!!");
-				}
-			}
-			break;
+                    } else if (words[idx].equals(Commands.MAP_COMMAND_OPTION_REMOVE)) {
+                        String countryName = words[idx + 1];
+                        System.out.println("Editcountry -remove:" + countryName);
+                        // Call for removing the country name with (countryName) as parameter
+                        idx = idx + 1;
 
-		case Commands.MAP_COMMAND_EDIT_NEIGHBOR:
+                    } else {
+                        System.out.println("Wrong input!!");
+                    }
+                }
+                break;
 
-			for (int idx = 1; idx < words.length; idx++) {
+            case Commands.MAP_COMMAND_EDIT_NEIGHBOR:
 
-				if (words[idx].equals(Commands.MAP_COMMAND_OPTION_ADD)) {
-					String countryName = words[idx + 1];
-					String nighborCountryName = words[idx + 2];
-					System.out.println("add: " + words[idx + 1] + " " + words[idx + 2]);
-					// Call for adding continent with (continentName,continentvalue) as parameters
-					idx = idx + 2;
+                for (int idx = 1; idx < words.length; idx++) {
 
-				} else if (words[idx].equals(Commands.MAP_COMMAND_OPTION_REMOVE)) {
-					String countryName = words[idx + 1];
-					String nighborCountryName = words[idx + 2];
-					System.out.println("remove: " + words[idx + 1] + " " + words[idx + 2]);
-					// Call for removing the continent name with (continentName) as parameters
-					idx = idx + 2;
+                    if (words[idx].equals(Commands.MAP_COMMAND_OPTION_ADD)) {
+                        String countryName = words[idx + 1];
+                        String nighborCountryName = words[idx + 2];
+                        System.out.println("add: " + words[idx + 1] + " " + words[idx + 2]);
+                        // Call for adding continent with (continentName,continentvalue) as parameters
+                        idx = idx + 2;
 
-				} else {
-					System.out.println("Check input!!");
-				}
-			}
-			break;
+                    } else if (words[idx].equals(Commands.MAP_COMMAND_OPTION_REMOVE)) {
+                        String countryName = words[idx + 1];
+                        String nighborCountryName = words[idx + 2];
+                        System.out.println("remove: " + words[idx + 1] + " " + words[idx + 2]);
+                        // Call for removing the continent name with (continentName) as parameters
+                        idx = idx + 2;
 
-		case Commands.MAP_COMMAND_SHOWMAP:
+                    } else {
+                        System.out.println("Check input!!");
+                    }
+                }
+                break;
 
-			System.out.println("Showmap");
+            case Commands.MAP_COMMAND_SHOWMAP:
 
-			// Call for showmap functionW
-			break;
+                System.out.println("Showmap");
 
-		case Commands.MAP_COMMAND_SAVEMAP:
+                // Call for showmap functionW
+                break;
 
-			filePath = System.getProperty("user.dir") + "\\src\\main\\resources\\" + words[1];
-			System.out.println("Save File: " + filePath);
-			File outputMapFile = new File(filePath);
-			mapWriter.writeMapFile(getMap(), outputMapFile);
-			break;
+            case Commands.MAP_COMMAND_SAVEMAP:
 
-		case Commands.MAP_COMMAND_EDITMAP:
+                filePath = System.getProperty("user.dir") + "\\src\\main\\resources\\" + words[1];
+                System.out.println("Save File: " + filePath);
+                File outputMapFile = new File(filePath);
+                mapWriter.writeMapFile(getMap(), outputMapFile);
+                break;
 
-			filePath = words[1];
-			System.out.println("Edit Map:" + filePath);
-			// Call for editmap(filename_edit)
-			break;
+            case Commands.MAP_COMMAND_EDITMAP:
 
-		case Commands.MAP_COMMAND_VALIDATEMAP:
+                filePath = words[1];
+                System.out.println("Edit Map:" + filePath);
+                // Call for editmap(filename_edit)
+                break;
 
-			System.out.println("Validatemap");
-			try {
-				MapVerifier.verifyMap(getMap());
-			} catch (InvalidMap e1) {
-				e1.printStackTrace();
-			}
-			break;
+            case Commands.MAP_COMMAND_VALIDATEMAP:
 
-		case Commands.MAP_COMMAND_LOADMAP:
+                System.out.println("Validatemap");
+                try {
+                    MapVerifier.verifyMap(getMap());
+                } catch (InvalidMap e1) {
+                    e1.printStackTrace();
+                }
+                break;
 
-			filePath = System.getProperty("user.dir") + "\\src\\main\\resources\\" + words[1];
-			File inputMapFile = new File(filePath);
-			MapReader mapReader = new MapReader();
+            case Commands.MAP_COMMAND_LOADMAP:
 
-			if (inputMapFile.exists()) {
-				try {
-					setMap(mapReader.readMapFile(inputMapFile));
-				} catch (InvalidMap e) {
-					e.printStackTrace();
-				}
-			} else {
-				System.out.println("File does not exist: " + words[1]);
-			}
-			break;
+                filePath = System.getProperty("user.dir") + "\\src\\main\\resources\\" + words[1];
+                File inputMapFile = new File(filePath);
+                MapReader mapReader = new MapReader();
 
-			case Commands.MAP_COMMAND_GAMEPLAYER:
+                if (inputMapFile.exists()) {
+                    try {
+                        setMap(mapReader.readMapFile(inputMapFile));
+                    } catch (InvalidMap e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    System.out.println("File does not exist: " + words[1]);
+                }
+                break;
 
-				for(int idx=1;idx<words.length;idx++){
+            case Commands.MAP_COMMAND_GAMEPLAYER:
 
-					if(words[idx].equals(Commands.MAP_COMMAND_OPTION_ADD)){
+                for (int idx = 1; idx < words.length; idx++) {
 
-						String playerName=words[idx+1];
-						int id=playersList.size();
-						Player newPlayer=new Player(id+1,playerName);
-						playersList.add(newPlayer);
-						idx=idx+1;
+                    if (words[idx].equals(Commands.MAP_COMMAND_OPTION_ADD)) {
 
-
-					}else if(words[idx].equals(Commands.MAP_COMMAND_OPTION_REMOVE)){
-
-						System.out.println("Playerlist Before:--------");
-						for(Player player:playersList){
-							System.out.println(player.getName());
-						}
+                        String playerName = words[idx + 1];
+                        int id = playersList.size();
+                        Player newPlayer = new Player(id + 1, playerName);
+                        playersList.add(newPlayer);
+                        idx = idx + 1;
 
 
-						String playerName=words[idx+1];
-						for (Player player:playersList) {
+                    } else if (words[idx].equals(Commands.MAP_COMMAND_OPTION_REMOVE)) {
 
-							if(player.getName().equals(playerName)){
-
-								playersList.remove(player);
-							}
-
-						}
+                        System.out.println("Playerlist Before:--------");
+                        for (Player player : playersList) {
+                            System.out.println(player.getName());
+                        }
 
 
-						System.out.println("PlayerList After:---------");
-						for(Player player:playersList){
-							System.out.println(player.getName());
-						}
+                        String playerName = words[idx + 1];
+                        for (Player player : playersList) {
 
-						idx=idx+1;
+                            if (player.getName().equals(playerName)) {
 
-					}
+                                playersList.remove(player);
+                            }
 
-
-
+                        }
 
 
-				}
+                        System.out.println("PlayerList After:---------");
+                        for (Player player : playersList) {
+                            System.out.println(player.getName());
+                        }
 
-				break;
+                        idx = idx + 1;
+
+                    }
 
 
+                }
+
+                break;
+            case Commands.MAP_COMMAND_POPULATE_COUNTRIES:
+
+                if (playersList.size() == 2) {
+
+                    for (Player player : playersList) {
+
+                        player.setArmies(Config.CONFIG_ARMIES_TWO_PLAYER);
+
+                    }
 
 
+                }
+                if (playersList.size() == 3) {
+
+                    for (Player player : playersList) {
+
+                        player.setArmies(Config.CONFIG_ARMIES_THREE_PLAYER);
+
+                    }
+                }
+                if (playersList.size() == 4) {
+
+                    for (Player player : playersList) {
+
+                        player.setArmies(Config.CONFIG_ARMIES_FOUR_PLAYER);
+
+                    }
+                }
+                if (playersList.size() == 5) {
+
+                    for (Player player : playersList) {
+
+                        player.setArmies(Config.CONFIG_ARMIES_FIVE_PLAYER);
+
+                    }
+                }
+                if (playersList.size() == 6) {
+
+                    for (Player player : playersList) {
+
+                        player.setArmies(Config.CONFIG_ARMIES_SIX_PLAYER);
+
+                    }
+                }
 
 
+                break;
 
-
-		default:
-			System.out.println("Check the input!!");
-			break;
-		}
-	}
+            case Commands.MAP_COMMAND_PLACE_ARMY:
+                break;
+            default:
+                System.out.println("Check the input!!");
+                break;
+        }
+    }
 }
