@@ -8,6 +8,7 @@ import com.entity.Continent;
 import com.entity.Country;
 import com.entity.Hmap;
 import com.exception.InvalidMap;
+import com.mapparser.MapCommandOperations;
 import com.mapparser.MapReader;
 import com.mapparser.MapVerifier;
 import com.mapparser.MapWriter;
@@ -25,6 +26,7 @@ public class CommandParser {
 
 	// default constructor to initialize members
 	public CommandParser() {
+		this.rootMap = new Hmap();
 		this.mapWriter = new MapWriter();
 	}
 
@@ -65,14 +67,18 @@ public class CommandParser {
 				if (words[idx].equals(Commands.MAP_COMMAND_OPTION_ADD)) {
 					String continentName = words[idx + 1];
 					String continentValue = words[idx + 2];
-					System.out.println("add:" + words[idx + 1] + " " + words[idx + 2]);
-					// Call for adding continent with (continentName,continentvalue) as parameters
+					System.out.println("add continent: " + words[idx + 1] + " " + words[idx + 2]);
+					try {
+						MapCommandOperations.addContinent(getMap(), continentName, continentValue, "");
+					} catch (InvalidMap e) {
+						System.out.println("Exception: " + e.toString());
+					}
 					idx = idx + 2;
 
 				} else if (words[idx].equals(Commands.MAP_COMMAND_OPTION_REMOVE)) {
 					String continentName = words[idx + 1];
 					System.out.println("remove:" + words[idx + 1]);
-					// Call for removing the continent name with (continentName) as parameters
+					MapCommandOperations.removeContinent(getMap(), continentName);
 					idx = idx + 1;
 
 				} else {
@@ -173,7 +179,7 @@ public class CommandParser {
 			try {
 				MapVerifier.verifyMap(getMap());
 			} catch (InvalidMap e1) {
-				e1.printStackTrace();
+				System.out.println("Exception: " + e1.toString());
 			}
 			break;
 
@@ -187,7 +193,7 @@ public class CommandParser {
 				try {
 					setMap(mapReader.readMapFile(inputMapFile));
 				} catch (InvalidMap e) {
-					e.printStackTrace();
+					System.out.println("Exception: " + e.toString());
 				}
 			} else {
 				System.out.println("File does not exist: " + words[1]);

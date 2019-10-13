@@ -100,8 +100,7 @@ public class MapReader {
 			map = processFilesAttribute(mapFileReader);
 
 		} catch (IOException e) {
-			System.out.println("Map File is not selected");
-			System.out.println(e.getMessage());
+			System.out.println("Exception: " + e.toString() + " Map File is not selected");
 		}
 		
 		return map;

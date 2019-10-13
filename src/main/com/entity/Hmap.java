@@ -12,7 +12,7 @@ import com.entity.Hmap;
  * @see Country
  * @see Continent
  */
-public class Hmap extends Observable {
+public class Hmap {
 
 	private List<Continent> continents;
 	
@@ -72,8 +72,6 @@ public class Hmap extends Observable {
 	 */
 	public void setContinents(List<Continent> continents) {
 		this.continents = continents;
-		setChanged();
-		notifyObservers(this);
 	}
 	
 	/**
@@ -112,8 +110,6 @@ public class Hmap extends Observable {
 	 * The update change method is used for observers.
 	 */
 	public void setChangedForMap() {
-		setChanged();
-		notifyObservers(this);
 	}
 	
 	/* (non-Javadoc)
@@ -144,14 +140,14 @@ public class Hmap extends Observable {
 			input_obj = new ObjectInputStream(bin);
 			clonedMap = (Hmap) input_obj.readObject();
 		} catch (Exception e) {
-			System.out.println("Exception in ObjectCloner = " + e);
+			System.out.println("Exception in ObjectCloner = " + e.toString());
 		} finally {
 			try {
 				output_obj.close();
 				input_obj.close();
 			} catch (IOException e) {
 				// Auto-generated catch block
-				e.printStackTrace();
+				System.out.println("Exception: " + e.toString());
 			}
 		}
 		
