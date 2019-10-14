@@ -53,23 +53,23 @@ public class CommandParser {
     public void placeArmies() {
 
         Scanner sc = new Scanner(System.in);
-        int flag=0;
-        while(flag==0){
+        int flag = 0;
+        while (flag == 0) {
 
             for (Player player : playersList) {
 
                 String command = sc.nextLine();
-                String words[]=command.split(" ");
+                String words[] = command.split(" ");
 
-                if(words[0].equals(Commands.MAP_COMMAND_PLACE_ARMY)){
+                if (words[0].equals(Commands.MAP_COMMAND_PLACE_ARMY)) {
 
-                    String countryName=words[1];
+                    String countryName = words[1];
                     //Call to function for placing army in respective Country
 
-                }else if(words[0].equals(Commands.MAP_COMMAND_PLACE_ALL)){
+                } else if (words[0].equals(Commands.MAP_COMMAND_PLACE_ALL)) {
 
                     //Randomly place all countries
-                    flag=1;
+                    flag = 1;
                     System.out.println("End of Startup phase");
                     break;
 
@@ -80,10 +80,7 @@ public class CommandParser {
             }
 
 
-
-
         }
-
 
 
     }
@@ -261,7 +258,7 @@ public class CommandParser {
 
                         idx = idx + 1;
 
-                    }else{
+                    } else {
 
                         System.out.println("Wrong Input!!");
                         break;
