@@ -37,13 +37,13 @@ public class CommandParser {
 	public CommandParser() {
 		this.mapWriter = new MapWriter();
 		this.playerModel = new PlayerModel();
+		this.rootMap = new Hmap();
 	}
 
 	/**
 	 * Setter method for the map object.
 	 *
-	 * @param map
-	 *            object
+	 * @param map object
 	 */
 	private Hmap setMap(Hmap map) {
 		return this.rootMap = map;
@@ -59,10 +59,9 @@ public class CommandParser {
 	}
 
 	/**
-	 * Parses the String and calls the related map edit commands.
+	 * Parses the String and calls the related game play commands.
 	 * 
-	 * @param command
-	 *            User input Command/String to be parse
+	 * @param command User input Command/String to be parse
 	 */
 	public boolean processGamePlayCommands(String command) {
 
@@ -71,6 +70,10 @@ public class CommandParser {
 
 		switch (commandType) {
 
+		case Commands.MAP_COMMAND_SHOWMAP:
+			MapCommands.mapEditorShowmap(getMap());
+			break;
+		
 		case Commands.MAP_COMMAND_GAMEPLAYER:
 
 			for (int idx = 1; idx < words.length; idx++) {
@@ -93,8 +96,9 @@ public class CommandParser {
 
 		case Commands.MAP_COMMAND_POPULATE_COUNTRIES:
 
-			playerModel.assignArmiesToPlayers();
-			playerModel.placeArmies();
+			if (playerModel.assignArmiesToPlayers()) {
+				playerModel.placeArmies();
+			}
 			return true;
 
 		default:
@@ -108,8 +112,7 @@ public class CommandParser {
 	/**
 	 * Parses the String and calls the related map edit commands.
 	 * 
-	 * @param command
-	 *            User input Command/String to be parse
+	 * @param command User input Command/String to be parse
 	 */
 	public boolean processMapEditCommands(String command) {
 
@@ -181,25 +184,7 @@ public class CommandParser {
 			break;
 
 		case Commands.MAP_COMMAND_SHOWMAP:
-
-			for (Continent c : getMap().getContinents()) {
-				System.out.println("--------------------------------");
-				System.out.println("Continent: " + c.getName() + " having following countries");
-
-				for (Country con : c.getCountries()) {
-					System.out.print(con.getName() + ": ");
-					List<String> adjCountries = con.getNeighborCountries();
-
-					for (int i = 0; i < adjCountries.size(); i++) {
-						System.out.print(adjCountries.get(i));
-
-						if (i != adjCountries.size() - 1)
-							System.out.print(", ");
-					}
-					System.out.println();
-				}
-			}
-			System.out.println("--------------------------------");
+			MapCommands.mapEditorShowmap(getMap());
 			break;
 
 		case Commands.MAP_COMMAND_SAVEMAP:

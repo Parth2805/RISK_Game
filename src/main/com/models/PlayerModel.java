@@ -85,16 +85,24 @@ public class PlayerModel {
 	/**
 	 * This method allocates armies to players.
 	 */
-	public void assignArmiesToPlayers() {
+	public boolean assignArmiesToPlayers() {
 		int armiesCount = 0;
 		int numPlayers = playersList.size();
 
-		armiesCount = numOfArmies[numPlayers - 2];
-
-		for (Player player : playersList) {
-			player.setArmies(armiesCount);
+		if (numPlayers >= 2) {
+			
+			armiesCount = numOfArmies[numPlayers - 2];
+			for (Player player : playersList)
+				player.setArmies(armiesCount);
+	
+			System.out.println("Assigned " + numOfArmies + " armies to " + numPlayers + " players");
+			return true;
 		}
-		System.out.println("Assigned " + numOfArmies + " armies to " + numPlayers + " players");
+		else {
+			System.out.println("Please create atleast 2 players to play the game.");
+		}
+		
+		return false;
 	}
 
 	/**
