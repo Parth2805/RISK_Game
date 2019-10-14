@@ -44,7 +44,7 @@ public class Card {
 	}
 
 	/**
-	 * @param countryToWhichCardBelong
+	 * @param countryToWhichCardBelong country name which card belongs
 	 */
 	public void setCountryToWhichCardBelong(Country countryToWhichCardBelong) {
 		this.countryToWhichCardBelong = countryToWhichCardBelong;

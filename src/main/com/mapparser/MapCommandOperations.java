@@ -17,48 +17,25 @@ import com.exception.InvalidMap;
 public class MapCommandOperations {
 	
 	/**
-	 * Adds country to the map and the continent with its respective details.
+	 * Removes continent from the map.
 	 * @param map Current map object.
-	 * @param name Name of the Country.
-	 * @param xCo X Co-ordinate of the Country.
-	 * @param yCo Y Co-ordinate of the Country.
-	 * @param adjCoun Adjacent countries of the current country.
-	 * @param continent Continent to which the country belongs to.
-	 * @return The newly created Country. 
-	 * @throws InvalidMap Throws IOException if there is an issue while reading a map file.
+	 * @param name Name of the continent.
+	 * @return true if continent got removed successfully, otherwise false
 	 */
-	public static Country addCountry(Hmap map, String name, String xCo, String yCo, Country adjCoun,
-			Continent continent) throws InvalidMap {
+	public static boolean removeContinent(Hmap map, String continentName) {
 		
-		Country country = new Country();
-		
-		country.setxCoordinate(Integer.parseInt(xCo));
-		country.setyCoordinate(Integer.parseInt(yCo));
-		country.setBelongToContinent(continent);
-		country.setName(name);
-		
-		ArrayList<Country> countryList = new ArrayList<Country>();
-		
-		if (adjCoun != null) {
-			countryList.add(adjCoun);
-		}
-		country.setAdjacentCountries(countryList);
-		
-		System.out.println(map.getContinents());
-		
-		// check if country with same name exist or not
-		for (Continent allCont : map.getContinents()) {
-			
-			if (allCont.getCountries().contains(country)) {
-				throw new InvalidMap("Country with same name " + name + " already exist in continent "
-						+ allCont.getName() +".");
+		Continent continent = new Continent();
+		continent.setName(continentName);
+	
+		for (Continent c: map.getContinents()) {
+			if (c.getName().equalsIgnoreCase(continentName)) {
+				System.out.println("Successfully removed continent: " + continentName + " from map");
+				map.getContinents().remove(c);
+				return true;
 			}
 		}
 		
-		if (adjCoun != null)
-			adjCoun.getAdjacentCountries().add(country);
-		
-		return country;
+		return false;
 	}
 	
 	/**
@@ -67,10 +44,10 @@ public class MapCommandOperations {
 	 * @param name Name of the continent.
 	 * @param ctrlValue Control value of the continent.
 	 * @param color Color of the continent.
-	 * @return Returns the newly created continent.
+	 * @return true if continent gets added to map.
 	 * @throws InvalidMap Throws IOException if there is an issue while reading a map file.
 	 */
-	public static Continent addContinent(Hmap map, String name, String ctrlValue, String color) throws InvalidMap {
+	public static boolean addContinent(Hmap map, String name, String ctrlValue, String color) throws InvalidMap {
 		Continent continent = new Continent();
 		
 		continent.setName(name);
@@ -81,7 +58,9 @@ public class MapCommandOperations {
 			throw new InvalidMap("The Continent with name " + name + " already exist.");
 		}
 		
-		return continent;
+		map.getContinents().add(continent);
+		
+		return true;
 	}
 	
 	/**
@@ -125,6 +104,51 @@ public class MapCommandOperations {
 	 */
 	public static boolean containsCountryName(final ArrayList<Country> list, final String name){
 	    return list.stream().filter(z -> z.getName().equals(name)).findFirst().isPresent();
+	}
+	
+	/**
+	 * Adds country to the map and the continent with its respective details.
+	 * @param map Current map object.
+	 * @param name Name of the Country.
+	 * @param xCo X Co-ordinate of the Country.
+	 * @param yCo Y Co-ordinate of the Country.
+	 * @param adjCoun Adjacent countries of the current country.
+	 * @param continent Continent to which the country belongs to.
+	 * @return The newly created Country. 
+	 * @throws InvalidMap Throws IOException if there is an issue while reading a map file.
+	 */
+	public static Country addCountry(Hmap map, String name, String xCo, String yCo, Country adjCoun,
+			Continent continent) throws InvalidMap {
+		
+		Country country = new Country();
+		
+		country.setxCoordinate(Integer.parseInt(xCo));
+		country.setyCoordinate(Integer.parseInt(yCo));
+		country.setBelongToContinent(continent);
+		country.setName(name);
+		
+		ArrayList<Country> countryList = new ArrayList<Country>();
+		
+		if (adjCoun != null) {
+			countryList.add(adjCoun);
+		}
+		country.setAdjacentCountries(countryList);
+		
+		System.out.println(map.getContinents());
+		
+		// check if country with same name exist or not
+		for (Continent allCont : map.getContinents()) {
+			
+			if (allCont.getCountries().contains(country)) {
+				throw new InvalidMap("Country with same name " + name + " already exist in continent "
+						+ allCont.getName() +".");
+			}
+		}
+		
+		if (adjCoun != null)
+			adjCoun.getAdjacentCountries().add(country);
+		
+		return country;
 	}
 	
 	/**
