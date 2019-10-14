@@ -16,16 +16,17 @@ public class Hmap {
 
 	private List<Continent> continents;
 	
-	private HashMap<String, String> mapData;
 	private HashMap<String, Continent> continentMap;
 	private HashMap<String, Integer> countriesIdxMap;
 
+	private HashMap<String, String> filesAttribute;
+	
 	
 	/**
 	 * This is the default constructor of Hmap.
 	 */
 	public Hmap() {
-		mapData = new HashMap<String, String>();
+		filesAttribute = new HashMap<String, String>();
 		continents = new ArrayList<Continent>();
 		continentMap = new HashMap<String,Continent>();
 		countriesIdxMap = new HashMap<String,Integer>();
@@ -36,7 +37,7 @@ public class Hmap {
 	 * @param newMap The new map object.
 	 */
 	public Hmap(Hmap newMap) {
-		mapData = new HashMap<String, String>(newMap.mapData);
+		filesAttribute = new HashMap<String, String>(newMap.filesAttribute);
 		continents = new ArrayList<Continent>(newMap.continents);
 		continentMap = new HashMap<String,Continent>(newMap.continentMap);
 		countriesIdxMap = new HashMap<String,Integer>(newMap.countriesIdxMap);
@@ -47,7 +48,7 @@ public class Hmap {
 	 * @return mapData
 	 */
 	public HashMap<String, String> getMapData() {
-		return mapData;
+		return filesAttribute;
 	}
 	
 	/**
@@ -55,7 +56,7 @@ public class Hmap {
 	 * @param mapData
 	 */
 	public void setMapData(HashMap<String, String> mapData) {
-		this.mapData = mapData;
+		this.filesAttribute = mapData;
 	}
 	
 	/**
@@ -75,7 +76,7 @@ public class Hmap {
 	}
 	
 	/**
-	 * Returns the continent maps
+	 * Returns the continent index map
 	 * @return countriesIdxMap
 	 */
 	public HashMap<String, Integer> getCountriesIdxMap() {
@@ -83,7 +84,7 @@ public class Hmap {
 	}
 	
 	/**
-	 * This sets the continent map.
+	 * This sets the continent index map.
 	 * @param countriesIdxMap
 	 */
 	public void setCountriesIdxMap(HashMap<String, Integer> countriesIdxMap) {
@@ -117,7 +118,7 @@ public class Hmap {
 	 */
 	@Override
 	public String toString() {
-		return "Hmap [ mapData = " + mapData + ", continents = " + continents + ", continentMap = " + continentMap + "]";
+		return "Hmap [ mapData = " + filesAttribute + ", continents = " + continents + ", continentMap = " + continentMap + "]";
 	}
 
 	/* (non-Javadoc)

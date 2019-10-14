@@ -15,6 +15,7 @@ import com.entity.Hmap;
 
 /**
  * @author Komal
+ * @author Mehul
  * This class is responsible to write the map file when user creates the map.
  * 
  */
@@ -128,6 +129,7 @@ public class MapWriter {
 			if (countriesList != null) {
 				for (Country country : countriesList) {
 					int continentIdx = map.getContinents().indexOf(country.getBelongToContinent()) + 1;
+					
 					countryData.append(map.getCountriesIdxMap().get(country.getName()) + " " + country.getName() + " "
 							+ continentIdx  + " " + country.getxCoordinate()
 							+ " " + country.getyCoordinate());
