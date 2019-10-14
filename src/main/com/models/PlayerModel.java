@@ -2,6 +2,7 @@ package com.models;
 
 import java.util.*;
 
+import com.entity.Continent;
 import com.entity.Country;
 import com.entity.Hmap;
 import com.entity.Player;
@@ -11,14 +12,28 @@ import com.config.Config;
 
 public class PlayerModel {
 
+	private ArrayList<Country> countryList;
 	private ArrayList<Player> playersList;
 	private static int[] numOfArmies = { Config.CONFIG_ARMIES_TWO_PLAYER, Config.CONFIG_ARMIES_THREE_PLAYER,
 			Config.CONFIG_ARMIES_FOUR_PLAYER, Config.CONFIG_ARMIES_FIVE_PLAYER, Config.CONFIG_ARMIES_SIX_PLAYER };
+	
 	/**
 	 * This is the default constructor of Player Model.
 	 */
 	public PlayerModel() {
 		playersList = new ArrayList<Player>();
+		countryList = new ArrayList<Country>();
+	}
+	
+	public ArrayList<Country> getCountryList(Hmap map) {
+		
+		for (Continent c: map.getContinents()) {
+			for (Country country: c.getCountries()) {
+				countryList.add(country);
+			}
+		}
+		
+		return countryList;
 	}
 	
 	/**
