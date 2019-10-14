@@ -1,9 +1,9 @@
 package com.models;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
+import com.entity.Country;
+import com.entity.Hmap;
 import com.entity.Player;
 import com.config.Commands;
 import com.config.Config;
@@ -95,7 +95,7 @@ public class PlayerModel {
 			for (Player player : playersList)
 				player.setArmies(armiesCount);
 	
-			System.out.println("Assigned " + numOfArmies + " armies to " + numPlayers + " players");
+			System.out.println("Assigned " + armiesCount + " armies to " + numPlayers + " players");
 			return true;
 		}
 		else {
@@ -108,7 +108,6 @@ public class PlayerModel {
 	/**
 	 * This method places armies.
 	 * 
-	 * @param playerName name of the player
 	 * @return true if player gets created, false otherwise
 	 */
 	public void placeArmies() {
@@ -126,6 +125,7 @@ public class PlayerModel {
 				if (words[0].equals(Commands.MAP_COMMAND_PLACE_ARMY)) {
 
 					String countryName = words[1];
+
 					// Call to function for placing army in respective Country
 
 				} else if (words[0].equals(Commands.MAP_COMMAND_PLACE_ALL)) {
@@ -137,5 +137,36 @@ public class PlayerModel {
 				}
 			}
 		}
+	}
+
+	public void assignCountries(Hmap rootmap) {
+
+		String temp[]= rootmap.getCountriesIdxMap().keySet().toArray(new String[0]);
+		List<String> countriesList=Arrays.asList(temp);
+		System.out.println(countriesList.toString());
+
+		int playernumber=0;
+		while(countriesList.size()!=0){
+
+			int chooseCountry = new Random().nextInt(countriesList.size());
+			String countryAssigned=countriesList.get(chooseCountry);
+			Country country=new Country();
+			country.setName(countryAssigned);
+			playersList.get(playernumber).setAssignedCountry(country);
+			playernumber=(playernumber+1)%playersList.size();
+
+			//countriesList.remove();
+
+
+		}
+		for(Player players:playersList){
+
+			System.out.println(players.getAssignedCountry());
+
+
+		}
+
+
+
 	}
 }

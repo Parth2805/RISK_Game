@@ -16,27 +16,27 @@ public class Config {
 	/**
 	 * The CONFIG_ARMIES_TWO_PLAYER Constant assigns 40 armies to 2 player in the game 
 	 */
-	public static final Integer CONFIG_ARMIES_TWO_PLAYER = 40;
+	public static final int CONFIG_ARMIES_TWO_PLAYER = 40;
 	
 	/**
 	 * The CONFIG_ARMIES_THREE_PLAYER Constant assigns 35 armies to 3 player in the game 
 	 */
-	public static final Integer CONFIG_ARMIES_THREE_PLAYER = 35;
+	public static final int CONFIG_ARMIES_THREE_PLAYER = 35;
 	
 	/**
 	 * The CONFIG_ARMIES_FOUR_PLAYER Constant assigns 30 armies to 4 player in the game 
 	 */
-	public static final Integer CONFIG_ARMIES_FOUR_PLAYER = 30;
+	public static final int CONFIG_ARMIES_FOUR_PLAYER = 30;
 	
 	/**
 	 * The CONFIG_ARMIES_FIVE_PLAYER Constant assigns 25 armies to 5 player in the game 
 	 */
-	public static final Integer CONFIG_ARMIES_FIVE_PLAYER = 25;
+	public static final int CONFIG_ARMIES_FIVE_PLAYER = 25;
 	
 	/**
 	 * The CONFIG_ARMIES_SIX_PLAYER Constant assigns 20 armies to 6 player in the game 
 	 */
-	public static final Integer CONFIG_ARMIES_SIX_PLAYER = 20;
+	public static final int CONFIG_ARMIES_SIX_PLAYER = 20;
 	
 	public static boolean isGameOver = false;
 	public static boolean isAllComputerPlayer = true;

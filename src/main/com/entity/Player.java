@@ -114,8 +114,8 @@ public class Player {
 	 * Setter method to assign country to the player.
 	 * @param assignedCountry
 	 */
-	public void setAssignedCountry(List<Country> assignedCountry) {
-		this.assignedCountry = assignedCountry;
+	public void setAssignedCountry(Country assignedCountry) {
+		this.assignedCountry.add(assignedCountry);
 	}
 	
 	/**

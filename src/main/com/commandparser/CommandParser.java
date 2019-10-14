@@ -97,7 +97,10 @@ public class CommandParser {
 		case Commands.MAP_COMMAND_POPULATE_COUNTRIES:
 
 			if (playerModel.assignArmiesToPlayers()) {
+
+				playerModel.assignCountries(rootMap);
 				playerModel.placeArmies();
+
 			}
 			return true;
 
