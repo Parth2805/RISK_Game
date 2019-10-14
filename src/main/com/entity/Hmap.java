@@ -12,20 +12,21 @@ import com.entity.Hmap;
  * @see Country
  * @see Continent
  */
-public class Hmap extends Observable {
+public class Hmap {
 
 	private List<Continent> continents;
 	
-	private HashMap<String, String> mapData;
 	private HashMap<String, Continent> continentMap;
 	private HashMap<String, Integer> countriesIdxMap;
 
+	private HashMap<String, String> filesAttribute;
+	
 	
 	/**
 	 * This is the default constructor of Hmap.
 	 */
 	public Hmap() {
-		mapData = new HashMap<String, String>();
+		filesAttribute = new HashMap<String, String>();
 		continents = new ArrayList<Continent>();
 		continentMap = new HashMap<String,Continent>();
 		countriesIdxMap = new HashMap<String,Integer>();
@@ -36,7 +37,7 @@ public class Hmap extends Observable {
 	 * @param newMap The new map object.
 	 */
 	public Hmap(Hmap newMap) {
-		mapData = new HashMap<String, String>(newMap.mapData);
+		filesAttribute = new HashMap<String, String>(newMap.filesAttribute);
 		continents = new ArrayList<Continent>(newMap.continents);
 		continentMap = new HashMap<String,Continent>(newMap.continentMap);
 		countriesIdxMap = new HashMap<String,Integer>(newMap.countriesIdxMap);
@@ -47,7 +48,7 @@ public class Hmap extends Observable {
 	 * @return mapData
 	 */
 	public HashMap<String, String> getMapData() {
-		return mapData;
+		return filesAttribute;
 	}
 	
 	/**
@@ -55,7 +56,7 @@ public class Hmap extends Observable {
 	 * @param mapData
 	 */
 	public void setMapData(HashMap<String, String> mapData) {
-		this.mapData = mapData;
+		this.filesAttribute = mapData;
 	}
 	
 	/**
@@ -72,12 +73,10 @@ public class Hmap extends Observable {
 	 */
 	public void setContinents(List<Continent> continents) {
 		this.continents = continents;
-		setChanged();
-		notifyObservers(this);
 	}
 	
 	/**
-	 * Returns the continent maps
+	 * Returns the continent index map
 	 * @return countriesIdxMap
 	 */
 	public HashMap<String, Integer> getCountriesIdxMap() {
@@ -85,7 +84,7 @@ public class Hmap extends Observable {
 	}
 	
 	/**
-	 * This sets the continent map.
+	 * This sets the continent index map.
 	 * @param countriesIdxMap
 	 */
 	public void setCountriesIdxMap(HashMap<String, Integer> countriesIdxMap) {
@@ -112,8 +111,6 @@ public class Hmap extends Observable {
 	 * The update change method is used for observers.
 	 */
 	public void setChangedForMap() {
-		setChanged();
-		notifyObservers(this);
 	}
 	
 	/* (non-Javadoc)
@@ -121,7 +118,7 @@ public class Hmap extends Observable {
 	 */
 	@Override
 	public String toString() {
-		return "Hmap [ mapData = " + mapData + ", continents = " + continents + ", continentMap = " + continentMap + "]";
+		return "Hmap [ mapData = " + filesAttribute + ", continents = " + continents + ", continentMap = " + continentMap + "]";
 	}
 
 	/* (non-Javadoc)
@@ -144,14 +141,14 @@ public class Hmap extends Observable {
 			input_obj = new ObjectInputStream(bin);
 			clonedMap = (Hmap) input_obj.readObject();
 		} catch (Exception e) {
-			System.out.println("Exception in ObjectCloner = " + e);
+			System.out.println("Exception in ObjectCloner = " + e.toString());
 		} finally {
 			try {
 				output_obj.close();
 				input_obj.close();
 			} catch (IOException e) {
 				// Auto-generated catch block
-				e.printStackTrace();
+				System.out.println("Exception: " + e.toString());
 			}
 		}
 		

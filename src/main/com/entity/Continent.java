@@ -19,7 +19,7 @@ public class Continent {
 	private String color;
 	
 	private HashMap<String, Country> countryMap;
-	private List<Country> countries;
+	private List<Country> countriesList;
 	
 	private boolean isVisited = false;
 
@@ -27,7 +27,7 @@ public class Continent {
 	 * Default constructor of Continent
 	 */
 	public Continent() {
-		this.countries = new ArrayList<>();
+		this.countriesList = new ArrayList<>();
 		this.countryMap = new HashMap<>();
 	}
 
@@ -40,7 +40,7 @@ public class Continent {
 		this.name = name;
 		this.value = value;
 		this.countryMap = new HashMap<String, Country>();
-		this.countries = new ArrayList<Country>();
+		this.countriesList = new ArrayList<Country>();
 	}
 
 	/**
@@ -53,7 +53,7 @@ public class Continent {
 	
 	/**
 	 * Setter method for the continent name.
-	 * @param continent name
+	 * @param name continent name
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -69,7 +69,7 @@ public class Continent {
 	
 	/**
 	 * Setter method for the continent color.
-	 * @param color
+	 * @param color color string of the continent
 	 */
 	public void setColor(String color) {
 		this.color = color;
@@ -80,7 +80,7 @@ public class Continent {
 	 * @return countries list
 	 */
 	public List<Country> getCountries() {
-		return countries;
+		return countriesList;
 	}
 	
 	/**
@@ -88,7 +88,7 @@ public class Continent {
 	 * @param countries set the countries
 	 */
 	public void setCountries(List<Country> countries) {
-		this.countries = countries;
+		this.countriesList = countries;
 	}
 	
 	/**
@@ -117,7 +117,7 @@ public class Continent {
 	
 	/**
 	 * Setter method for the continent countries.
-	 * @param countryMap
+	 * @param countryMap map of the country
 	 */
 	public void setCountryMap(HashMap<String, Country> countryMap) {
 		this.countryMap = countryMap;
@@ -133,7 +133,7 @@ public class Continent {
 
 	/**
 	 * This sets the continent to have been visited.
-	 * @param isVisited
+	 * @param isVisited boolean value
 	 */
 	public void setVisited(boolean isVisited) {
 		this.isVisited = isVisited;
@@ -144,7 +144,7 @@ public class Continent {
 	 */
 	@Override
 	public String toString() {
-		return "Continent [name = " + name + ", value = " + value + ", countries = " + countries + "]";
+		return "Continent [name = " + name + ", value = " + value + ", countries = " + countriesList + "]";
 	}
 	
 	/* (non-Javadoc)

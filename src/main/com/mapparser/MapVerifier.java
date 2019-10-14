@@ -39,7 +39,7 @@ public class MapVerifier {
 				  
 				// check if map is a subgraph of continents i.e. connected graph
 				if (!isMapConnectedGraph(map))
-					throw new InvalidMap("A Continent should be a subgraph in the map. A Hmap should be connected graph formed by continents.");
+					throw new InvalidMap("Given map is not a connected graph formed by continents.");
 				else
 					System.out.println("Given Map verified successfully. It is a connected graph");
 				
@@ -144,8 +144,10 @@ public class MapVerifier {
 	 */
 	public static boolean isMapConnectedGraph(Hmap map) {
 				
-		if (map.getContinents().size() < 2)
+		if (map.getContinents().size() < 2) {
+			System.out.println("There is only one continent in given map");
 			return false;
+		}
 		
 		runDfsContinent(map.getContinents().get(0), map);
 		

@@ -1,17 +1,29 @@
 package com.commandparser;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 import com.config.Commands;
+import com.config.Config;
+import com.config.GameState;
+
+import java.util.List;
+
+import com.entity.Continent;
+import com.entity.Country;
 import com.entity.Hmap;
+import com.entity.Player;
 import com.exception.InvalidMap;
+import com.mapparser.MapCommands;
 import com.mapparser.MapReader;
 import com.mapparser.MapVerifier;
 import com.mapparser.MapWriter;
+import com.models.PlayerModel;
 
 /**
  * This class reads, parses the command line string from user input.
- * 
+ *
  * @author Parth
  * @author Mehul
  */
@@ -19,16 +31,19 @@ public class CommandParser {
 
 	Hmap rootMap;
 	MapWriter mapWriter;
+	PlayerModel playerModel;
 
 	// default constructor to initialize members
 	public CommandParser() {
 		this.mapWriter = new MapWriter();
+		this.playerModel = new PlayerModel();
 	}
 
 	/**
 	 * Setter method for the map object.
-	 * 
-	 * @param map object
+	 *
+	 * @param map
+	 *            object
 	 */
 	private Hmap setMap(Hmap map) {
 		return this.rootMap = map;
@@ -36,7 +51,7 @@ public class CommandParser {
 
 	/**
 	 * Get map object
-	 * 
+	 *
 	 * @return the map
 	 */
 	private Hmap getMap() {
@@ -44,11 +59,59 @@ public class CommandParser {
 	}
 
 	/**
-	 * Parses the String and calls the relative function.
+	 * Parses the String and calls the related map edit commands.
 	 * 
-	 * @param command User input Command/String to be parse
+	 * @param command
+	 *            User input Command/String to be parse
 	 */
-	public void processCommands(String command) {
+	public boolean processGamePlayCommands(String command) {
+
+		String[] words = command.split(" ");
+		String commandType = words[0];
+
+		switch (commandType) {
+
+		case Commands.MAP_COMMAND_GAMEPLAYER:
+
+			for (int idx = 1; idx < words.length; idx++) {
+				if (words[idx].equals(Commands.MAP_COMMAND_OPTION_ADD)) {
+					String playerName = words[idx + 1];
+					playerModel.createPlayer(playerName);
+					idx = idx + 1;
+
+				} else if (words[idx].equals(Commands.MAP_COMMAND_OPTION_REMOVE)) {
+					String playerName = words[idx + 1];
+					playerModel.removePlayer(playerName);
+					idx = idx + 1;
+
+				} else {
+					System.out.println("Invalid command, Try again !!!");
+					break;
+				}
+			}
+			break;
+
+		case Commands.MAP_COMMAND_POPULATE_COUNTRIES:
+
+			playerModel.assignArmiesToPlayers();
+			playerModel.placeArmies();
+			return true;
+
+		default:
+			System.out.println("Invalid command, Try again !!!");
+			break;			
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Parses the String and calls the related map edit commands.
+	 * 
+	 * @param command
+	 *            User input Command/String to be parse
+	 */
+	public boolean processMapEditCommands(String command) {
 
 		String[] words = command.split(" ");
 		String commandType = words[0], filePath = "";
@@ -62,18 +125,16 @@ public class CommandParser {
 				if (words[idx].equals(Commands.MAP_COMMAND_OPTION_ADD)) {
 					String continentName = words[idx + 1];
 					String continentValue = words[idx + 2];
-					System.out.println("add:" + words[idx + 1] + " " + words[idx + 2]);
-					// Call for adding continent with (continentName,continentvalue) as parameters
+					MapCommands.addContinent(getMap(), continentName, continentValue, "");
 					idx = idx + 2;
 
 				} else if (words[idx].equals(Commands.MAP_COMMAND_OPTION_REMOVE)) {
 					String continentName = words[idx + 1];
-					System.out.println("remove:" + words[idx + 1]);
-					// Call for removing the continent name with (continentName) as parameters
+					MapCommands.removeContinent(getMap(), continentName);
 					idx = idx + 1;
 
 				} else {
-					System.out.println("Check input!!");
+					System.out.println("Invalid command, Try again !!!");
 				}
 			}
 			break;
@@ -85,15 +146,12 @@ public class CommandParser {
 				if (words[idx].equals(Commands.MAP_COMMAND_OPTION_ADD)) {
 					String countryName = words[idx + 1];
 					String continentName = words[idx + 2];
-					System.out.println("Editcountry -add:" + continentName + " " + countryName);
-					// Call for adding the country name with (continentName,countryName) as
-					// parameters
+					MapCommands.addCountry(getMap(), countryName, continentName);
 					idx = idx + 2;
 
 				} else if (words[idx].equals(Commands.MAP_COMMAND_OPTION_REMOVE)) {
 					String countryName = words[idx + 1];
-					System.out.println("Editcountry -remove:" + countryName);
-					// Call for removing the country name with (countryName) as parameter
+					MapCommands.removeCountry(getMap(), countryName);
 					idx = idx + 1;
 
 				} else {
@@ -107,30 +165,41 @@ public class CommandParser {
 			for (int idx = 1; idx < words.length; idx++) {
 
 				if (words[idx].equals(Commands.MAP_COMMAND_OPTION_ADD)) {
-					String countryName = words[idx + 1];
-					String nighborCountryName = words[idx + 2];
-					System.out.println("add: " + words[idx + 1] + " " + words[idx + 2]);
-					// Call for adding continent with (continentName,continentvalue) as parameters
+					MapCommands.addNeighborCountry(getMap(), words[idx + 1], words[idx + 2]);
 					idx = idx + 2;
 
 				} else if (words[idx].equals(Commands.MAP_COMMAND_OPTION_REMOVE)) {
 					String countryName = words[idx + 1];
-					String nighborCountryName = words[idx + 2];
-					System.out.println("remove: " + words[idx + 1] + " " + words[idx + 2]);
-					// Call for removing the continent name with (continentName) as parameters
+					String nbrCountryName = words[idx + 2];
+					MapCommands.removeNeighborCountry(getMap(), countryName, nbrCountryName);
 					idx = idx + 2;
 
 				} else {
-					System.out.println("Check input!!");
+					System.out.println("Invalid command, Try again !!!");
 				}
 			}
 			break;
 
 		case Commands.MAP_COMMAND_SHOWMAP:
 
-			System.out.println("Showmap");
+			for (Continent c : getMap().getContinents()) {
+				System.out.println("--------------------------------");
+				System.out.println("Continent: " + c.getName() + " having following countries");
 
-			// Call for showmap functionW
+				for (Country con : c.getCountries()) {
+					System.out.print(con.getName() + ": ");
+					List<String> adjCountries = con.getNeighborCountries();
+
+					for (int i = 0; i < adjCountries.size(); i++) {
+						System.out.print(adjCountries.get(i));
+
+						if (i != adjCountries.size() - 1)
+							System.out.print(", ");
+					}
+					System.out.println();
+				}
+			}
+			System.out.println("--------------------------------");
 			break;
 
 		case Commands.MAP_COMMAND_SAVEMAP:
@@ -150,11 +219,10 @@ public class CommandParser {
 
 		case Commands.MAP_COMMAND_VALIDATEMAP:
 
-			System.out.println("Validatemap");
 			try {
 				MapVerifier.verifyMap(getMap());
 			} catch (InvalidMap e1) {
-				e1.printStackTrace();
+				System.out.println("Exception: " + e1.toString());
 			}
 			break;
 
@@ -167,17 +235,19 @@ public class CommandParser {
 			if (inputMapFile.exists()) {
 				try {
 					setMap(mapReader.readMapFile(inputMapFile));
+					return true;
 				} catch (InvalidMap e) {
-					e.printStackTrace();
+					System.out.println("Exception: " + e.toString());
 				}
 			} else {
-				System.out.println("File does not exist: " + words[1]);
+				System.out.println("Exception: File does not exist: " + words[1]);
 			}
 			break;
-
+			
 		default:
-			System.out.println("Check the input!!");
+			System.out.println("Invalid command, Try again !!!");
 			break;
 		}
+		return false;
 	}
 }
