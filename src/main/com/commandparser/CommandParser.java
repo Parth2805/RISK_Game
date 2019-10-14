@@ -2,6 +2,7 @@ package com.commandparser;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import com.config.Commands;
 import com.config.Config;
@@ -11,6 +12,8 @@ import com.exception.InvalidMap;
 import com.mapparser.MapReader;
 import com.mapparser.MapVerifier;
 import com.mapparser.MapWriter;
+
+import static java.lang.System.exit;
 
 /**
  * This class reads, parses the command line string from user input.
@@ -45,6 +48,44 @@ public class CommandParser {
      */
     private Hmap getMap() {
         return rootMap;
+    }
+
+    public void placeArmies() {
+
+        Scanner sc = new Scanner(System.in);
+        int flag=0;
+        while(flag==0){
+
+            for (Player player : playersList) {
+
+                String command = sc.nextLine();
+                String words[]=command.split(" ");
+
+                if(words[0].equals(Commands.MAP_COMMAND_PLACE_ARMY)){
+
+                    String countryName=words[1];
+                    //Call to function for placing army in respective Country
+
+                }else if(words[0].equals(Commands.MAP_COMMAND_PLACE_ALL)){
+
+                    //Randomly place all countries
+                    flag=1;
+                    System.out.println("End of Startup phase");
+                    break;
+
+
+                }
+
+
+            }
+
+
+
+
+        }
+
+
+
     }
 
     /**
@@ -102,6 +143,7 @@ public class CommandParser {
 
                     } else {
                         System.out.println("Wrong input!!");
+                        break;
                     }
                 }
                 break;
@@ -126,6 +168,7 @@ public class CommandParser {
 
                     } else {
                         System.out.println("Check input!!");
+                        break;
                     }
                 }
                 break;
@@ -218,6 +261,10 @@ public class CommandParser {
 
                         idx = idx + 1;
 
+                    }else{
+
+                        System.out.println("Wrong Input!!");
+                        break;
                     }
 
 
@@ -225,6 +272,7 @@ public class CommandParser {
 
                 break;
             case Commands.MAP_COMMAND_POPULATE_COUNTRIES:
+
 
                 if (playersList.size() == 2) {
 
@@ -268,12 +316,11 @@ public class CommandParser {
 
                     }
                 }
-
+                System.out.println("Assigned armies to each player");
+                placeArmies();
 
                 break;
 
-            case Commands.MAP_COMMAND_PLACE_ARMY:
-                break;
             default:
                 System.out.println("Check the input!!");
                 break;
