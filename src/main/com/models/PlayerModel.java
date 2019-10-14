@@ -16,6 +16,24 @@ public class PlayerModel {
 	private ArrayList<Player> playersList;
 	private static int[] numOfArmies = { Config.CONFIG_ARMIES_TWO_PLAYER, Config.CONFIG_ARMIES_THREE_PLAYER,
 			Config.CONFIG_ARMIES_FOUR_PLAYER, Config.CONFIG_ARMIES_FIVE_PLAYER, Config.CONFIG_ARMIES_SIX_PLAYER };
+	Player currentPlayer;
+
+	/**
+	 * Get the current player.
+	 * @return player playing
+	 */
+	public Player getCurrentPlayer() {
+		return currentPlayer;
+	}
+
+	/**
+	 * This method is to set the current player.
+	 * 
+	 * @param player Current player.
+	 */
+	public void setCurrentPlayer(Player player) {
+		currentPlayer = player;
+	}
 	
 	/**
 	 * This is the default constructor of Player Model.
@@ -54,7 +72,7 @@ public class PlayerModel {
 		this.playersList = playersList;
 	}
 	
-	/*
+	/**
 	 * This method removes the player from game.
 	 * 
 	 * @param playerName name of the player
@@ -125,33 +143,47 @@ public class PlayerModel {
 	 * 
 	 * @return true if player gets created, false otherwise
 	 */
-	public void placeArmies() {
+	public boolean placeAll() {
 
-		Scanner sc = new Scanner(System.in);
-		int flag = 0;
+		return false;
+	}
+	
+	/**
+	 * This method places armies.
+	 * 
+	 * @param playerName name of the player
+	 * @return true if player gets created, false otherwise
+	 */
+	public boolean placeArmies(Hmap map, String countryName) {
+
+		int playerArmies = currentPlayer.getArmies();
+
+		if (playerArmies > 0) {
 		
-		while (flag == 0) {
+		} else {
+			System.out.println("The player: " + currentPlayer.getName() + " does not have any army left");
+		}
+		
+		if (isAllPlayersArmiesExhausted(getPlayersList())) {
+			return true;
+		}
+		
+		return false;
+	}
 
-			for (Player player : playersList) {
-
-				String command = sc.nextLine();
-				String words[] = command.split(" ");
-
-				if (words[0].equals(Commands.MAP_COMMAND_PLACE_ARMY)) {
-
-					String countryName = words[1];
-
-					// Call to function for placing army in respective Country
-
-				} else if (words[0].equals(Commands.MAP_COMMAND_PLACE_ALL)) {
-
-					// Randomly place all countries
-					flag = 1;
-					System.out.println("End of Startup phase");
-					break;
-				}
+	/**
+	 * This method checks if players armies is exhausted.
+	 * 
+	 * @param players object of player
+	 * @return returns true if player has exhausted the armies
+	 */
+	public static boolean isAllPlayersArmiesExhausted(ArrayList<Player> players) {
+		for (Player p : players) {
+			if (p.getArmies() != 0) {
+				return false;
 			}
 		}
+		return true;
 	}
 
 	public void assignCountries(Hmap rootmap) {

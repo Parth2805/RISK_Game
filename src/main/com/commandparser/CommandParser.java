@@ -59,6 +59,60 @@ public class CommandParser {
 	}
 
 	/**
+	 * Parses the String and calls the related game play reinforcement commands.
+	 * 
+	 * @param command User input Command/String to be parse
+	 */
+	public boolean processGamePlayReinforcementCommands(String command) {
+		
+		
+		return false;
+	}
+	
+	/**
+	 * Parses the String and calls the related game play startup commands.
+	 * 
+	 * @param command User input Command/String to be parse
+	 */
+	public boolean processGamePlayStartupCommands(Scanner sc) {
+
+		System.out.println("Current state: Gameplay startup phase (placearmy, placeall");
+		System.out.println("Current Player: " + playerModel.getCurrentPlayer().getName());
+		
+		String command = sc.nextLine();
+		String[] words = command.split(" ");
+		String commandType = words[0];
+
+		switch (commandType) {
+
+		case Commands.MAP_COMMAND_PLACE_ARMY:
+			String countryName = words[1];
+			
+			if (playerModel.placeArmies(getMap(), countryName)) {
+				return true;
+			}
+
+			// TODO skip player if there are no more armies for his
+			int currentPlayerIdx = playerModel.getPlayersList().indexOf(playerModel.getCurrentPlayer());
+			int totalPlayers = playerModel.getPlayersList().size();
+			
+			playerModel.setCurrentPlayer(playerModel.getPlayersList().get((currentPlayerIdx + 1) % totalPlayers));
+			break;	
+			
+		case Commands.MAP_COMMAND_PLACE_ALL:
+			if (playerModel.placeAll()) {
+				return true;
+			}	
+			break;	
+			
+		default:
+			break;
+		}
+		
+		return false;
+	}	
+	
+	/**
 	 * Parses the String and calls the related game play commands.
 	 * 
 	 * @param command User input Command/String to be parse
@@ -98,11 +152,11 @@ public class CommandParser {
 
 			if (playerModel.assignArmiesToPlayers()) {
 
-				playerModel.assignCountries(rootMap);
-				playerModel.placeArmies();
-
+				playerModel.setCurrentPlayer(playerModel.getPlayersList().get(0));
+				return true;
 			}
-			return true;
+			
+			break;
 
 		default:
 			System.out.println("Invalid command, Try again !!!");
