@@ -1,4 +1,4 @@
-package test;
+package com.entity;
 
 import org.junit.AfterClass;
 import org.junit.Before;
