@@ -1,19 +1,10 @@
 package com.commandparser;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 import com.config.Commands;
-import com.config.Config;
-import com.config.GameState;
-
-import java.util.List;
-
-import com.entity.Continent;
-import com.entity.Country;
 import com.entity.Hmap;
-import com.entity.Player;
 import com.exception.InvalidMap;
 import com.mapparser.MapCommands;
 import com.mapparser.MapReader;
@@ -37,13 +28,13 @@ public class CommandParser {
 	public CommandParser() {
 		this.mapWriter = new MapWriter();
 		this.playerModel = new PlayerModel();
+		this.rootMap = new Hmap();
 	}
-
+	
 	/**
 	 * Setter method for the map object.
 	 *
-	 * @param map
-	 *            object
+	 * @param map object
 	 */
 	private Hmap setMap(Hmap map) {
 		return this.rootMap = map;
@@ -57,12 +48,65 @@ public class CommandParser {
 	private Hmap getMap() {
 		return rootMap;
 	}
-
+	
 	/**
-	 * Parses the String and calls the related map edit commands.
+	 * Parses the String and calls the related game play reinforcement commands.
 	 * 
-	 * @param command
-	 *            User input Command/String to be parse
+	 * @param command User input Command/String to be parse
+	 */
+	public boolean processGamePlayReinforcementCommands(String command) {
+		
+		
+		return false;
+	}
+	
+	/**
+	 * Parses the String and calls the related game play startup commands.
+	 * 
+	 * @param command User input Command/String to be parse
+	 */
+	public boolean processGamePlayStartupCommands(Scanner sc) {
+
+		System.out.println("Current state: Gameplay startup phase (placearmy, placeall");
+		System.out.println("Current Player: " + playerModel.getCurrentPlayer().getName());
+		
+		String command = sc.nextLine();
+		String[] words = command.split(" ");
+		String commandType = words[0];
+
+		switch (commandType) {
+
+		case Commands.MAP_COMMAND_PLACE_ARMY:
+			String countryName = words[1];
+			
+			if (playerModel.placeArmies(getMap(), countryName)) {
+				return true;
+			}
+
+			// TODO skip player if there are no more armies for his
+			int currentPlayerIdx = playerModel.getPlayersList().indexOf(playerModel.getCurrentPlayer());
+			int totalPlayers = playerModel.getPlayersList().size();
+			
+			playerModel.setCurrentPlayer(playerModel.getPlayersList().get((currentPlayerIdx + 1) % totalPlayers));
+			break;	
+			
+		case Commands.MAP_COMMAND_PLACE_ALL:
+			if (playerModel.placeAll()) {
+				return true;
+			}	
+			break;	
+			
+		default:
+			break;
+		}
+		
+		return false;
+	}	
+	
+	/**
+	 * Parses the String and calls the related game play commands.
+	 * 
+	 * @param command User input Command/String to be parse
 	 */
 	public boolean processGamePlayCommands(String command) {
 
@@ -71,6 +115,10 @@ public class CommandParser {
 
 		switch (commandType) {
 
+		case Commands.MAP_COMMAND_SHOWMAP:
+			MapCommands.mapEditorShowmap(getMap());
+			break;
+		
 		case Commands.MAP_COMMAND_GAMEPLAYER:
 
 			for (int idx = 1; idx < words.length; idx++) {
@@ -92,10 +140,15 @@ public class CommandParser {
 			break;
 
 		case Commands.MAP_COMMAND_POPULATE_COUNTRIES:
+			playerModel.setCountryList(playerModel.getCountryListFromMap(getMap()));
+		
+			if (playerModel.assignArmiesToPlayers()) {
 
-			playerModel.assignArmiesToPlayers();
-			playerModel.placeArmies();
-			return true;
+				playerModel.setCurrentPlayer(playerModel.getPlayersList().get(0));
+				return true;
+			}
+			
+			break;
 
 		default:
 			System.out.println("Invalid command, Try again !!!");
@@ -108,8 +161,7 @@ public class CommandParser {
 	/**
 	 * Parses the String and calls the related map edit commands.
 	 * 
-	 * @param command
-	 *            User input Command/String to be parse
+	 * @param command User input Command/String to be parse
 	 */
 	public boolean processMapEditCommands(String command) {
 
@@ -181,25 +233,7 @@ public class CommandParser {
 			break;
 
 		case Commands.MAP_COMMAND_SHOWMAP:
-
-			for (Continent c : getMap().getContinents()) {
-				System.out.println("--------------------------------");
-				System.out.println("Continent: " + c.getName() + " having following countries");
-
-				for (Country con : c.getCountries()) {
-					System.out.print(con.getName() + ": ");
-					List<String> adjCountries = con.getNeighborCountries();
-
-					for (int i = 0; i < adjCountries.size(); i++) {
-						System.out.print(adjCountries.get(i));
-
-						if (i != adjCountries.size() - 1)
-							System.out.print(", ");
-					}
-					System.out.println();
-				}
-			}
-			System.out.println("--------------------------------");
+			MapCommands.mapEditorShowmap(getMap());
 			break;
 
 		case Commands.MAP_COMMAND_SAVEMAP:
@@ -250,4 +284,5 @@ public class CommandParser {
 		}
 		return false;
 	}
+
 }

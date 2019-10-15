@@ -63,13 +63,16 @@ public class Main {
 				break;
 				
 			case RISK_STATE_GAMEPLAY_STARTUP_PHASE:
-				System.out.println("Current state: Gameplay startup phase");
-				command = sc.nextLine();
+				if (parser.processGamePlayStartupCommands(sc)) {
+					setGameState(GameState.RISK_STATE_GAMEPLAY_REINFORCEMENT_PHASE);
+					System.out.println("----------------------------------");
+				}
 				break;
 				
 			case RISK_STATE_GAMEPLAY_REINFORCEMENT_PHASE:
-				System.out.println("Current state: Gameplay reinforcement phase");
+				System.out.println("Current state: Gameplay reinforcement phase (reinforce, fortify)");
 				command = sc.nextLine();
+				parser.processGamePlayReinforcementCommands(command);
 				break;
 
 			default:
