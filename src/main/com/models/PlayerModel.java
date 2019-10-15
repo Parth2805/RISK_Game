@@ -254,4 +254,12 @@ public class PlayerModel {
 		
 		return countryListfromMap;
 	}
+
+	void reinforcementArmies(){
+
+
+
+
+
+	}
 }
