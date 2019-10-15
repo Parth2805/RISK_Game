@@ -1,4 +1,4 @@
-package com.models;
+package com.playerparser;
 
 import java.util.*;
 
@@ -9,7 +9,7 @@ import com.entity.Player;
 import com.config.Config;
 
 
-public class PlayerModel {
+public class PlayerCommands {
 
 	private ArrayList<Country> countryList;
 	private ArrayList<Player> playersList;
@@ -20,7 +20,7 @@ public class PlayerModel {
 	/**
 	 * This is the default constructor of Player Model.
 	 */
-	public PlayerModel() {
+	public PlayerCommands() {
 		this.playersList = new ArrayList<Player>();
 		this.countryList = new ArrayList<Country>();
 	}
@@ -191,25 +191,28 @@ public class PlayerModel {
 	 */
 	public boolean placeArmy(Hmap map, String countryName) {
 
-		int playerArmies = currentPlayer.getArmies();
-
+		int playerArmies = currentPlayer.getArmies();		
+		boolean isArmySet = false;
+		
 		if (playerArmies > 0) {
 			for (Country c: currentPlayer.getAssignedCountry()) {
 				if (c.getName().equalsIgnoreCase(countryName)) {
 					c.setArmy(c.getArmy() + 1);
 					currentPlayer.setArmies(playerArmies - 1);
+					isArmySet = true;
 					System.out.println(currentPlayer.getName() + ": assigned 1 Army to " + c.getName());
 				}
 			}
+			
+			if (!isArmySet)
+				System.out.println("Exception: This country is not assigned to player: " + getCurrentPlayer().getName());
+			
 		} else {
 			System.out.println("The player: " + currentPlayer.getName() + " does not have any army left");
+			isArmySet = true;
 		}
 		
-		if (isAllPlayersArmiesExhausted(getPlayersList())) {
-			return true;
-		}
-		
-		return false;
+		return isArmySet;
 	}
 
 	/**
@@ -218,7 +221,7 @@ public class PlayerModel {
 	 * @param players object of player
 	 * @return returns true if player has exhausted the armies
 	 */
-	public static boolean isAllPlayersArmiesExhausted(ArrayList<Player> players) {
+	public boolean isAllPlayersArmiesExhausted(ArrayList<Player> players) {
 		for (Player p : players) {
 			if (p.getArmies() != 0) {
 				return false;
@@ -281,7 +284,7 @@ public class PlayerModel {
 		for (Country c: getCountryList()) {
 			System.out.println(c.getBelongToContinent().getName() + ": " +
 					c.getName() + ": Army count: " + c.getArmy() + ", Player: " +
-					c.getPlayer().getName() + ", Adjacent Countries - " + c.getAdjacentCountries());
+					c.getPlayer().getName() + ", Adjacent Countries: " + c.getAdjacentCountries());
 		}
 		System.out.println("----------------------------------");
 	}

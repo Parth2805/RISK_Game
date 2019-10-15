@@ -55,7 +55,7 @@ public class Main {
 
 			case RISK_STATE_GAMEPLAY_CREATE_PLAYERS:
 				
-				System.out.println("Current state: Gameplay create players (gameplayer -add playername -remove playername, populatecountries)");
+				System.out.println("Current state: Gameplay create players (gameplayer -add playername -remove playername, populatecountries, showmap)");
 				System.out.println("Use \"populatecountries\" command to allocate initial armies to players");
 				System.out.println("Please enter any commands to continue ...");
 				
