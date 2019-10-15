@@ -70,8 +70,6 @@ public class PlayerModel {
 	}
 	
 	/**
-=======
->>>>>>> added get set country methods
 	 * Get players list
 	 *
 	 * @return list of players
@@ -203,33 +201,42 @@ public class PlayerModel {
 		return true;
 	}
 
-	public void assignCountries(Hmap rootmap) {
+	/**
+	 * This method populates all countries.
+	 * 
+	 * @param map map object
+	 */
+	public void populateCountries(Hmap map) {
 
-		String temp[]= rootmap.getCountriesIdxMap().keySet().toArray(new String[0]);
-		List<String> countriesList=Arrays.asList(temp);
-		System.out.println(countriesList.toString());
-
-		int playernumber=0;
-		while(countriesList.size()!=0){
-
+		ArrayList<Country>countriesList = getCountryListFromMap(map);
+		int playernumber = 0;
+		
+		while (countriesList.size()!= 0) {
+			
 			int chooseCountry = new Random().nextInt(countriesList.size());
-			String countryAssigned=countriesList.get(chooseCountry);
-			Country country=new Country();
-			country.setName(countryAssigned);
-			playersList.get(playernumber).setAssignedCountry(country);
-			playernumber=(playernumber+1)%playersList.size();
+			Country countryAssigned = countriesList.get(chooseCountry);
 
-			//countriesList.remove();
+			currentPlayer = playersList.get(playernumber);
+			currentPlayer.setAssignedCountry(countryAssigned);
+			playernumber = (playernumber + 1) % playersList.size();
 
-
+			countriesList.remove(chooseCountry);
+			
+			for (Country c:countryList){
+				if (c.getName().equalsIgnoreCase(countryAssigned.getName())){
+					c.setPlayer(currentPlayer);
+				}
+			}
 		}
-		for(Player players:playersList){
-
+		
+		for (Player players : playersList){
 			System.out.println(players.getAssignedCountry());
-
-
 		}
-	}
+		
+		for (Country country : countryList){
+			System.out.println(country.getName()+" "+country.getPlayer().getName());
+		}
+	}	
 	
 	/**
 	 * Parses the map and gets country list

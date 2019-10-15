@@ -143,11 +143,10 @@ public class CommandParser {
 			playerModel.setCountryList(playerModel.getCountryListFromMap(getMap()));
 		
 			if (playerModel.assignArmiesToPlayers()) {
-
+				playerModel.populateCountries(getMap());
 				playerModel.setCurrentPlayer(playerModel.getPlayersList().get(0));
 				return true;
-			}
-			
+			}			
 			break;
 
 		default:
