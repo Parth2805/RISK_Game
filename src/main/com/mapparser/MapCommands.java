@@ -21,7 +21,7 @@ public class MapCommands {
 	/**
 	 * Removes continent from the map.
 	 * @param map Current map object.
-	 * @param name Name of the continent.
+	 * @param continentName Name of the continent.
 	 * @return true if continent got removed successfully, otherwise false
 	 */
 	public static boolean removeContinent(Hmap map, String continentName) {

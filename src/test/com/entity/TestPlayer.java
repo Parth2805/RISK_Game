@@ -1,10 +1,10 @@
-package com.test;
-import static org.junit.Assert.*;
-import org.junit.*;
+package com.entity;
 
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
-import com.entity.Country;
-import com.entity.Player;
+import static org.junit.Assert.assertEquals;
 
 public class TestPlayer {
 	/**
