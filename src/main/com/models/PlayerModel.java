@@ -6,7 +6,6 @@ import com.entity.Continent;
 import com.entity.Country;
 import com.entity.Hmap;
 import com.entity.Player;
-import com.config.Commands;
 import com.config.Config;
 
 
@@ -18,6 +17,30 @@ public class PlayerModel {
 			Config.CONFIG_ARMIES_FOUR_PLAYER, Config.CONFIG_ARMIES_FIVE_PLAYER, Config.CONFIG_ARMIES_SIX_PLAYER };
 	Player currentPlayer;
 
+	/**
+	 * This is the default constructor of Player Model.
+	 */
+	public PlayerModel() {
+		this.playersList = new ArrayList<Player>();
+		this.countryList = new ArrayList<Country>();
+	}
+	
+	/**
+	 * Get method for country list.
+	 */
+	public ArrayList<Country> getCountryList() {
+		return countryList;
+	}
+
+	/**
+	 * Setter method for the map object.
+	 *
+	 * @param countryList list of country
+	 */
+	public void setCountryList(ArrayList<Country> countryList) {
+		this.countryList = countryList;
+	}
+	
 	/**
 	 * Get the current player.
 	 * @return player playing
@@ -34,15 +57,7 @@ public class PlayerModel {
 	public void setCurrentPlayer(Player player) {
 		currentPlayer = player;
 	}
-	
-	/**
-	 * This is the default constructor of Player Model.
-	 */
-	public PlayerModel() {
-		playersList = new ArrayList<Player>();
-		countryList = new ArrayList<Country>();
-	}
-	
+		
 	public ArrayList<Country> getCountryList(Hmap map) {
 		
 		for (Continent c: map.getContinents()) {
@@ -55,6 +70,8 @@ public class PlayerModel {
 	}
 	
 	/**
+=======
+>>>>>>> added get set country methods
 	 * Get players list
 	 *
 	 * @return list of players
@@ -212,8 +229,22 @@ public class PlayerModel {
 
 
 		}
-
-
-
+	}
+	
+	/**
+	 * Parses the map and gets country list
+	 * 
+	 * @param map map object
+	 */
+	public ArrayList<Country> getCountryListFromMap(Hmap map) {
+		ArrayList<Country> countryListfromMap = new ArrayList<Country>();
+		
+		for (Continent c: map.getContinents()) {
+			for (Country cont: c.getCountries()) {
+				countryListfromMap.add(cont);
+			}
+		}
+		
+		return countryListfromMap;
 	}
 }

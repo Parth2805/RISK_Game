@@ -1,19 +1,10 @@
 package com.commandparser;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 import com.config.Commands;
-import com.config.Config;
-import com.config.GameState;
-
-import java.util.List;
-
-import com.entity.Continent;
-import com.entity.Country;
 import com.entity.Hmap;
-import com.entity.Player;
 import com.exception.InvalidMap;
 import com.mapparser.MapCommands;
 import com.mapparser.MapReader;
@@ -39,7 +30,7 @@ public class CommandParser {
 		this.playerModel = new PlayerModel();
 		this.rootMap = new Hmap();
 	}
-
+	
 	/**
 	 * Setter method for the map object.
 	 *
@@ -57,7 +48,7 @@ public class CommandParser {
 	private Hmap getMap() {
 		return rootMap;
 	}
-
+	
 	/**
 	 * Parses the String and calls the related game play reinforcement commands.
 	 * 
@@ -149,7 +140,8 @@ public class CommandParser {
 			break;
 
 		case Commands.MAP_COMMAND_POPULATE_COUNTRIES:
-
+			playerModel.setCountryList(playerModel.getCountryListFromMap(getMap()));
+		
 			if (playerModel.assignArmiesToPlayers()) {
 
 				playerModel.setCurrentPlayer(playerModel.getPlayersList().get(0));
@@ -292,4 +284,5 @@ public class CommandParser {
 		}
 		return false;
 	}
+
 }
