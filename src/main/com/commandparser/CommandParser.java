@@ -17,8 +17,7 @@ import com.mapparser.MapWriter;
 import com.playerparser.PlayerCommands;
 
 /**
- * This class reads, parses the command line string from user input.
- *
+ * This class reads, parses the command lines string from user input.
  * @author Parth
  * @author Mehul
  */
@@ -29,7 +28,9 @@ public class CommandParser {
 	PlayerCommands playerModel;
 	String editFilePath = "";
 
-	// default constructor to initialize members
+	/**
+	 * default constructor to initialize members
+	 */
 	public CommandParser() {
 		this.mapWriter = new MapWriter();
 		this.playerModel = new PlayerCommands();
@@ -38,8 +39,8 @@ public class CommandParser {
 	
 	/**
 	 * Setter method for the map object.
-	 *
 	 * @param map object
+	 * @return map
 	 */
 	private Hmap setMap(Hmap map) {
 		return this.rootMap = map;
@@ -47,8 +48,7 @@ public class CommandParser {
 
 	/**
 	 * Get map object
-	 *
-	 * @return the map
+	 * @return map
 	 */
 	private Hmap getMap() {
 		return rootMap;
@@ -86,13 +86,9 @@ public class CommandParser {
 			break;
 
 		case Commands.MAP_COMMAND_EDIT_COUNTRY:
-
-			for (int idx = 1; idx < words.length; idx++) {
-
 				if (words[idx].equals(Commands.MAP_COMMAND_OPTION_ADD)) {
 					MapCommands.addCountry(getMap(), words[idx + 1], words[idx + 2]);
 					idx = idx + 2;
-
 				} else if (words[idx].equals(Commands.MAP_COMMAND_OPTION_REMOVE)) {
 					MapCommands.removeCountry(getMap(), words[idx + 1]);
 					idx = idx + 1;
@@ -199,8 +195,8 @@ public class CommandParser {
 	
 	/**
 	 * Parses the String and calls the related game play commands.
-	 * 
 	 * @param command User input Command/String to be parse
+	 * @return false
 	 */
 	public boolean processGamePlayCreatePlayerCommands(String command) {
 
