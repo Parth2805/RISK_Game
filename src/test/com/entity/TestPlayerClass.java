@@ -9,23 +9,42 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class TestPlayerClass {
-	 Player ply = null;
+	/**
+	 * This is a Test Class for testing card
+	 * @author Maryam
+	 * @author Mahmoudreza
+	 * @version 0.0.1
+	 */
+		public class TestPlayerClass {
+			Player ply = null;
 
+	 	/**
+	     * This method runs before all test methods only one times
+	     */
 	    @BeforeClass
 	    public static void beforeAllTesting() {
 	        System.out.println("This is for testing Player Class");
 	    }
+	    
+	    /**
+	     * This Method runs before test methods 
+	     */
 	    @Before
 	    public void beforeTest() {
 	        ply = new Player(10,"Player");
 	    }
 
+	    /**
+	     * This method run after all test methods only one time.
+	     */
 	    @AfterClass
 	    public static void afterPerformingTests() {
 	        System.out.println("The test is done");
 	    }
 
+	    /**
+	     * This method test Id for player.
+	     */
 	    @Test
 	    public void testGetId() {
 	        assertEquals( 10,ply.getId());
