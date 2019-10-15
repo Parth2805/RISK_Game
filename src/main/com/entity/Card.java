@@ -14,6 +14,7 @@ public class Card {
 	private Country countryToWhichCardBelong;
 
 	/**
+	 * This method gets Card Kind.
 	 * @return the type of the card
 	 */
 	public CardType getCardKind() {
@@ -24,12 +25,12 @@ public class Card {
 	 * Parameterized Constructor for Card
 	 * @param cardType reference to get cardType enum
 	 */
-	
 	public Card(CardType cardType){
 		this.cardType = cardType;
 	}
 	
 	/**
+	 * This method sets Cad Type.
 	 * @param cardType sets the kind of card
 	 */
 	public void setCardKind(CardType cardType) {
@@ -37,6 +38,7 @@ public class Card {
 	}
 
 	/**
+	 * This method gets Country names which card belongs.
 	 * @return countryToWhichCardBelong
 	 */
 	public Country getCountryToWhichCardBelong() {
@@ -44,13 +46,14 @@ public class Card {
 	}
 
 	/**
+	 * This method sets Country names which card belongs.
 	 * @param countryToWhichCardBelong country name which card belongs
 	 */
 	public void setCountryToWhichCardBelong(Country countryToWhichCardBelong) {
 		this.countryToWhichCardBelong = countryToWhichCardBelong;
 	}
 
-	/* (non-Javadoc)
+	/*(non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

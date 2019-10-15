@@ -21,14 +21,14 @@ public class Player {
 	private int armies;
 	private int numeberOfCardsExchanged;
 
-	private List<Country> assignedCountry;
-	private List<Card> cardList;
+	private List <Country> assignedCountry;
+	private List <Card> cardList;
 	
 	/**
 	 * get cards of player
 	 * @return the cardList
 	 */
-	public List<Card> getCardList() {
+	public List <Card> getCardList() {
 		return cardList;
 	}
 
@@ -36,27 +36,27 @@ public class Player {
 	 * set cards of the player
 	 * @param cardList
 	 */
-	public void setCardList(List<Card> cardList) {
+	public void setCardList(List <Card> cardList) {
 		this.cardList = cardList;
 	}
 	
 	/**
 	 * Player parameterized constructor.
-	 * @param player id
-	 * @param player name
+	 * @param id of Player
+	 * @param name of Player
 	 */
 	public Player(int id, String name) {
 		super();
 		this.id = id;
 		this.name = name;
-		this.assignedCountry = new ArrayList<Country>();
+		this.assignedCountry = new ArrayList <Country>();
 		this.cardList = new ArrayList<>();
 		this.numeberOfCardsExchanged = 0;
 	}
 
 	/**
 	 * Getter method for the player ID.
-	 * @return player id
+	 * @return id of Player
 	 */
 	public int getId() {
 		return id;
@@ -64,7 +64,7 @@ public class Player {
 	
 	/**
 	 * Setter method for the player ID.
-	 * @param player id
+	 * @param id of Player
 	 */
 	public void setId(int id) {
 		this.id = id;
@@ -72,7 +72,7 @@ public class Player {
 	
 	/**
 	 * Getter method for the player name.
-	 * @return player name
+	 * @return name of Player
 	 */
 	public String getName() {
 		return name;
@@ -80,7 +80,7 @@ public class Player {
 	
 	/**
 	 * Setter method for the player name.
-	 * @param player name
+	 * @param name of Player
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -88,7 +88,7 @@ public class Player {
 	
 	/**
 	 * Getter method for the player armies.
-	 * @return player armies
+	 * @return armies of Player
 	 */
 	public int getArmies() {
 		return armies;
@@ -96,7 +96,7 @@ public class Player {
 	
 	/**
 	 * Setter method for the player armies.
-	 * @param player armies
+	 * @param armies of Player
 	 */
 	public void setArmies(int armies) {
 		this.armies = armies;
@@ -104,7 +104,7 @@ public class Player {
 	
 	/**
 	 * Getter method for the assigned country of the player.
-	 * @return the assignedCountry
+	 * @return assignedCountry
 	 */
 	public List<Country> getAssignedCountry() {
 		return assignedCountry;
