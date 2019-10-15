@@ -29,7 +29,7 @@ public class MapVerifierTest {
 	MapVerifier mapverifier;
 	static Continent continent;
 	static Country country;
-	static Hmap map;
+	static Hmap map; 
 	ClassLoader loader;
 	String continentName = "North America";
 	int controlValue = 10;
