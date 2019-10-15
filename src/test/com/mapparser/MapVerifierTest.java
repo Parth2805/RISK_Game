@@ -2,7 +2,6 @@ package com.mapparser;
 import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.Before;
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
@@ -20,6 +19,7 @@ import com.mapparser.MapReader;
 
 /**
  * This is the test class for MapVerifier. {@link MapVerifier}
+ * @author Mahmoudreza
  * @author Maryam
  * @version 0.0.1
  */
@@ -37,7 +37,7 @@ public class MapVerifierTest {
 	String mapScroll = "horizontal";
 	String mapWarn = "yes";
 	
-	String continentName = "North America";
+	String continentName = "North-America";
 	int controlValue = 10;
 	
 	static HashMap<String, String> mapData = new HashMap<>();
@@ -69,7 +69,7 @@ public class MapVerifierTest {
 		continent.setName(continentName);
 		continent.setValue(controlValue);
 		
-		country.setName("Canada");
+		country.setName("Quebec");
 		country.setxCoordinate(1);
 		country.setyCoordinate(2);
 		
@@ -82,7 +82,7 @@ public class MapVerifierTest {
 	*/
     @AfterClass
     public static void afterPerformingTests() {
-        System.out.println("The test is done");
+        System.out.println("All tests for MapVerifier Class are done");
     }
 
 	
@@ -92,8 +92,8 @@ public class MapVerifierTest {
 	 */
 	@Test (expected = InvalidMap.class)
 	public void verifyNullMapTest() throws InvalidMap {
-		System.out.println("This is a test for verifyNullMap");
 		mapverifier.verifyMap(null);
+		System.out.println("This is a test for verifyNullMap");
 	}
 	
 	
@@ -103,20 +103,20 @@ public class MapVerifierTest {
 	 */
 	@Test (expected = InvalidMap.class)
 	public void verifyMap() throws InvalidMap {
-		System.out.println("This is a test for verifyMap");
 		mapverifier.verifyMap(new Hmap());
+		System.out.println("The Unit Test for verifying Map is performed");
 	}
 	
 	
 	/**
 	 * This method is used to verify that continent is null or not.
-	 * @throws InvalidMapException invalid map exception.
+	// * @throws InvalidMapException invalid map exception.
 	 */
 	@Test (expected = InvalidMap.class)
 	public void verifyContinentsTest() throws InvalidMap {
-		System.out.println("This is a test for verifyContinents");
 		map.setContinents(continentList);
-		mapverifier.verifyContinents(map);	
+		mapverifier.verifyContinents(map);
+		System.out.println("The Unit Test for verifying Continents is performed");
 	}
 	
 	
@@ -125,13 +125,12 @@ public class MapVerifierTest {
 	 * @throws InvalidMap invalid map exception.
 	 */
 	@Test
-	public void isMapConnectedGraphTest() throws InvalidMap {	
-		System.out.println("This is a test for Map Connected Graph");
+	public void isMapConnectedGraphTest() throws InvalidMap {
 		assertFalse(mapverifier.isMapConnectedGraph(map));
+		System.out.println("This Unit Test for Map_Connected_Graph is performed");
 	}
 	@Test
 	public void isContinentConnectedGraphTest() {
-		System.out.println("This is a test for Continent Connected Graph");
 		List<Country> counList = new ArrayList<>();
 		counList.add(country);
 		Country country2 =  new Country();
@@ -141,8 +140,7 @@ public class MapVerifierTest {
 		counList.add(country);
 		continent.setCountries(counList);
 		assertEquals(MapVerifier.isContinentConnectedGraph(continent, map), true);
-		
-		
+		System.out.println("The Unit Test for Continent_Connected_Graph is performed");
 	}
 
 }

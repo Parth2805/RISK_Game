@@ -16,8 +16,7 @@ import com.mapparser.MapWriter;
 import com.models.PlayerModel;
 
 /**
- * This class reads, parses the command line string from user input.
- *
+ * This class reads, parses the command lines string from user input.
  * @author Parth
  * @author Mehul
  */
@@ -27,7 +26,9 @@ public class CommandParser {
 	MapWriter mapWriter;
 	PlayerModel playerModel;
 
-	// default constructor to initialize members
+	/**
+	 * default constructor to initialize members
+	 */
 	public CommandParser() {
 		this.mapWriter = new MapWriter();
 		this.playerModel = new PlayerModel();
@@ -36,8 +37,8 @@ public class CommandParser {
 	
 	/**
 	 * Setter method for the map object.
-	 *
 	 * @param map object
+	 * @return map
 	 */
 	private Hmap setMap(Hmap map) {
 		return this.rootMap = map;
@@ -45,8 +46,7 @@ public class CommandParser {
 
 	/**
 	 * Get map object
-	 *
-	 * @return the map
+	 * @return map
 	 */
 	private Hmap getMap() {
 		return rootMap;
@@ -54,70 +54,52 @@ public class CommandParser {
 	
 	/**
 	 * Parses the String and calls the related game play reinforcement commands.
-	 * 
-	 * @param command User input Command/String to be parse
+	 * @param command User input Command/String to be parse.
+	 * @return false
 	 */
 	public boolean processGamePlayReinforcementCommands(String command) {
 
-		String words[]=command.split(" ");
+		String words[] = command.split(" ");
 
-		if(words[0].equalsIgnoreCase(Commands.MAP_COMMAND_REINFORCE)){
+		if (words[0].equalsIgnoreCase(Commands.MAP_COMMAND_REINFORCE)) {
 
-			String countryName=words[1];
+			String countryName = words[1];
 			int numberOfArmies=Integer.parseInt(words[2]);
-			for(Player p:playerModel.getPlayersList()){
-				Player currentPlayer=p;
+			for (Player p:playerModel.getPlayersList()) {
+				Player currentPlayer = p;
 
 				while(currentPlayer.getArmies()!=0){
 
 					//showmap
-
-					if(currentPlayer.getArmies()<numberOfArmies){
+					if (currentPlayer.getArmies() < numberOfArmies) {
 						//formula
 						System.out.println("You dont have enough army");
 
-
-
-					}else{
+					} else {
 
 						currentPlayer.setArmies(currentPlayer.getArmies()-numberOfArmies);
-						List<Country> countryList=currentPlayer.getAssignedCountry();
-						for(Country c:countryList){
+						List<Country> countryList = currentPlayer.getAssignedCountry();
+						for (Country c:countryList) {
 
-							if(c.getName().equalsIgnoreCase(countryName)){
+							if (c.getName().equalsIgnoreCase(countryName)) {
 
 							//	currentPlayer.getAssignedCountry().
 
 							}
-
-
 						}
 					}
-
-
-
-
 				}
-
-
-
+			}
 
 		}
 
-
-
-
-
-		}
-		
-		
 		return false;
 	}
 	
 	/**
 	 * Parses the String and calls the related game play startup commands.
-	 * 
-	 * @param command User input Command/String to be parse
+	 * @param sc User input Command/String to be parse.
+	 * @return false
 	 */
 	public boolean processGamePlayStartupCommands(Scanner sc) {
 
@@ -159,8 +141,8 @@ public class CommandParser {
 	
 	/**
 	 * Parses the String and calls the related game play commands.
-	 * 
 	 * @param command User input Command/String to be parse
+	 * @return false
 	 */
 	public boolean processGamePlayCommands(String command) {
 
@@ -213,8 +195,8 @@ public class CommandParser {
 	
 	/**
 	 * Parses the String and calls the related map edit commands.
-	 * 
-	 * @param command User input Command/String to be parse
+	 * @param command User input Command/String to be parse.
+	 * @return false
 	 */
 	public boolean processMapEditCommands(String command) {
 

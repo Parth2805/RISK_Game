@@ -11,8 +11,7 @@ public class Main {
 
 	/**
 	 * Get game phase
-	 *
-	 * @return game state
+	 * @return gameState
 	 */
 	public GameState getGameState() {
 		return gameState;
@@ -20,7 +19,6 @@ public class Main {
 
 	/**
 	 * Setter method for the game state.
-	 *
 	 * @param gamePhase current phase
 	 */
 	public static void setGameState(GameState gamePhase) {
