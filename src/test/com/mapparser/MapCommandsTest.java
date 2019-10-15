@@ -2,6 +2,8 @@ package com.mapparser;
 import static org.junit.Assert.*;
 
 import java.util.HashMap;
+
+import com.mapparser.MapCommands;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.AfterClass;

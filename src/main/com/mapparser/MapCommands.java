@@ -10,9 +10,9 @@ import com.exception.InvalidMap;
 
 
 /**
+ * This Class for checking Map Commands
  * @author Mehul
  * @author Komal
- *
  */
 public class MapCommands {
 	
@@ -198,7 +198,7 @@ public class MapCommands {
 	 * @param yCo Y-Co-ordinate of the Country.
 	 * @param adjCoun The adjacent Countries list. 
 	 * @return The object to the newly updated Country.
-	 * @throws InvalidMap InvalidHmap if any error occurs
+	 * @throws InvalidMap if any error occurs
 	 */
 	public static Country updateCountry(Country country, Hmap map, String name,String xCo, String yCo, 
 			Country adjCoun) throws InvalidMap {

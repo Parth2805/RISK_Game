@@ -10,11 +10,11 @@ import com.entity.Player;
 public class Country {
 
 	/**
-	 * @author Mehul
 	 * This class defines properties of country like its coordinates, 
 	 * the continent to which country belongs, its adjacent countries 
 	 * and whether its been assigned to any player or not.
-	 * @see Continent 
+	 * @see Continent
+	 * @author Mehul
 	 */
 	private String name;
 	
@@ -24,8 +24,8 @@ public class Country {
 	private Player player;
 	private Continent belongToContinent;
 	
-	private List<String> neighborCountries;
-	private List<Country> adjacentCountries;
+	private List <String> neighborCountries;
+	private List <Country> adjacentCountries;
 	
 	private int army;
 	private boolean isVisited;
@@ -43,7 +43,7 @@ public class Country {
 	 * @param adjCountries names of adjacent countries
 	 * @param adjacentCountries object of adjacent countries
 	 */
-	public Country(List<String> adjCountries, List<Country> adjacentCountries) {
+	public Country(List <String> adjCountries, List <Country> adjacentCountries) {
 		this.neighborCountries = adjCountries;
 		this.adjacentCountries = adjacentCountries;
 	}
@@ -160,7 +160,7 @@ public class Country {
 	 * Setter method for the adjacent countries to the country.
 	 * @param adjCountries
 	 */
-	public void setNeighborCountries(List<String> adjCountries) {
+	public void setNeighborCountries(List <String> adjCountries) {
 		this.neighborCountries = adjCountries;
 	}
 	
@@ -176,7 +176,7 @@ public class Country {
 	 * Setter method for the adjacent countries to the countries.
 	 * @param adjacentCountries
 	 */
-	public void setAdjacentCountries(List<Country> adjacentCountries) {
+	public void setAdjacentCountries(List <Country> adjacentCountries) {
 		this.adjacentCountries = adjacentCountries;
 	}
 	
@@ -210,12 +210,12 @@ public class Country {
 	@Override
 	public boolean equals(Object input_obj) {
 
-		if (!(input_obj instanceof Country))
+		if (!(input_obj instanceof Country)) {
 			return false;
-		
-		if (input_obj == this)
+		}
+		if (input_obj == this) {
 			return true;
-
+		}
 		Country t = (Country) input_obj;
 		
 		return t.getName().equalsIgnoreCase(name);

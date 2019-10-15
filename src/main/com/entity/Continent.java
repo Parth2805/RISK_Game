@@ -18,8 +18,8 @@ public class Continent {
 	private int value;
 	private String color;
 	
-	private HashMap<String, Country> countryMap;
-	private List<Country> countriesList;
+	private HashMap <String, Country> countryMap;
+	private List <Country> countriesList;
 	
 	private boolean isVisited = false;
 
@@ -32,6 +32,7 @@ public class Continent {
 	}
 
 	/**
+	 * Constructor of continent
 	 * @param name used for name of the continent
 	 * @param value used for control value of the continent
 	 */
@@ -79,7 +80,7 @@ public class Continent {
 	 * Getter method for the continent countries.
 	 * @return countries list
 	 */
-	public List<Country> getCountries() {
+	public List <Country> getCountries() {
 		return countriesList;
 	}
 	
@@ -87,7 +88,7 @@ public class Continent {
 	 * Setter method for the continent countries.
 	 * @param countries set the countries
 	 */
-	public void setCountries(List<Country> countries) {
+	public void setCountries(List <Country> countries) {
 		this.countriesList = countries;
 	}
 	
@@ -111,7 +112,7 @@ public class Continent {
 	 * Getter method for the continent countryMap.
 	 * @return continent countryMap
 	 */
-	public HashMap<String, Country> getCountryMap() {
+	public HashMap <String, Country> getCountryMap() {
 		return countryMap;
 	}
 	
@@ -119,7 +120,7 @@ public class Continent {
 	 * Setter method for the continent countries.
 	 * @param countryMap map of the country
 	 */
-	public void setCountryMap(HashMap<String, Country> countryMap) {
+	public void setCountryMap(HashMap <String, Country> countryMap) {
 		this.countryMap = countryMap;
 	}
 	
@@ -153,14 +154,14 @@ public class Continent {
 	@Override
 	public boolean equals(Object input_obj) {
 
-		if (!(input_obj instanceof Continent))
+		if (!(input_obj instanceof Continent)) {
 			return false;
-		
-		if (input_obj == this)
+		}
+		if (input_obj == this) {
 			return true;
-
+		}
 		Continent continent = (Continent) input_obj;
-		
+
 		return continent.getName().equalsIgnoreCase(name);
 	}	
 }
