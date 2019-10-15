@@ -121,7 +121,7 @@ public class CommandParser {
 	 */
 	public boolean processGamePlayStartupCommands(Scanner sc) {
 
-		System.out.println("Current state: Gameplay startup phase (placearmy, placeall");
+		System.out.println("Current state: Gameplay startup phase (placearmy, placeall, showmap)");
 		System.out.println("Current Player: " + playerModel.getCurrentPlayer().getName());
 		
 		String command = sc.nextLine();
@@ -130,25 +130,25 @@ public class CommandParser {
 
 		switch (commandType) {
 
+		case Commands.MAP_COMMAND_SHOWMAP:
+			playerModel.gamePlayShowmap();
+			break;
+		
 		case Commands.MAP_COMMAND_PLACE_ARMY:
-			String countryName = words[1];
 			
-			if (playerModel.placeArmies(getMap(), countryName)) {
+			if (playerModel.placeArmy(getMap(), words[1])) {
 				return true;
 			}
 
 			// TODO skip player if there are no more armies for his
 			int currentPlayerIdx = playerModel.getPlayersList().indexOf(playerModel.getCurrentPlayer());
 			int totalPlayers = playerModel.getPlayersList().size();
-			
 			playerModel.setCurrentPlayer(playerModel.getPlayersList().get((currentPlayerIdx + 1) % totalPlayers));
 			break;	
 			
 		case Commands.MAP_COMMAND_PLACE_ALL:
-			if (playerModel.placeAll()) {
-				return true;
-			}	
-			break;	
+			playerModel.placeAll();
+			return false;
 			
 		default:
 			break;
@@ -162,7 +162,7 @@ public class CommandParser {
 	 * 
 	 * @param command User input Command/String to be parse
 	 */
-	public boolean processGamePlayCommands(String command) {
+	public boolean processGamePlayCreatePlayerCommands(String command) {
 
 		String[] words = command.split(" ");
 		String commandType = words[0];
@@ -170,7 +170,7 @@ public class CommandParser {
 		switch (commandType) {
 
 		case Commands.MAP_COMMAND_SHOWMAP:
-			MapCommands.mapEditorShowmap(getMap());
+			playerModel.gamePlayShowmap();
 			break;
 		
 		case Commands.MAP_COMMAND_GAMEPLAYER:
@@ -198,6 +198,7 @@ public class CommandParser {
 		
 			if (playerModel.assignArmiesToPlayers()) {
 				playerModel.populateCountries(getMap());
+				playerModel.intitializeArmiesForAllCountries();
 				playerModel.setCurrentPlayer(playerModel.getPlayersList().get(0));
 				return true;
 			}			
