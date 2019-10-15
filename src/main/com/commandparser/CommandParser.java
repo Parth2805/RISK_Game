@@ -1,10 +1,13 @@
 package com.commandparser;
 
 import java.io.File;
+import java.util.List;
 import java.util.Scanner;
 
 import com.config.Commands;
+import com.entity.Country;
 import com.entity.Hmap;
+import com.entity.Player;
 import com.exception.InvalidMap;
 import com.mapparser.MapCommands;
 import com.mapparser.MapReader;
@@ -55,6 +58,57 @@ public class CommandParser {
 	 * @param command User input Command/String to be parse
 	 */
 	public boolean processGamePlayReinforcementCommands(String command) {
+
+		String words[]=command.split(" ");
+
+		if(words[0].equalsIgnoreCase(Commands.MAP_COMMAND_REINFORCE)){
+
+			String countryName=words[1];
+			int numberOfArmies=Integer.parseInt(words[2]);
+			for(Player p:playerModel.getPlayersList()){
+				Player currentPlayer=p;
+
+				while(currentPlayer.getArmies()!=0){
+
+					//showmap
+
+					if(currentPlayer.getArmies()<numberOfArmies){
+						//formula
+						System.out.println("You dont have enough army");
+
+
+
+					}else{
+
+						currentPlayer.setArmies(currentPlayer.getArmies()-numberOfArmies);
+						List<Country> countryList=currentPlayer.getAssignedCountry();
+						for(Country c:countryList){
+
+							if(c.getName().equalsIgnoreCase(countryName)){
+
+							//	currentPlayer.getAssignedCountry().
+
+							}
+
+
+						}
+					}
+
+
+
+
+				}
+
+
+
+
+		}
+
+
+
+
+
+		}
 		
 		
 		return false;
