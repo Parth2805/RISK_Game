@@ -58,7 +58,7 @@ public class MapReaderTest {
      */
     @Test
     public void testMapValidation() throws InvalidMap {
-        file = new File(clLoader.getResource("world.map").getFile());
+        file = new File(clLoader.getResource("world.map").getFile().replace("%20", " "));
         hmp = mpReader.readMapFile(file);
         assertEquals(hmp.getContinents().size(),6);
     }
@@ -69,7 +69,7 @@ public class MapReaderTest {
      */
     @Test (expected=InvalidMap.class)
     public void testCountriesInTheSameContinent() throws InvalidMap {
-        file = new File(clLoader.getResource(invalidFiles[4]).getFile());
+        file = new File(clLoader.getResource(invalidFiles[4]).getFile().replace("%20", " "));
         mpReader.readMapFile(file);
     }
 
@@ -79,7 +79,7 @@ public class MapReaderTest {
      */
     @Test (expected=InvalidMap.class)
     public void testCountriesWithoutBorder() throws InvalidMap {
-        file = new File(clLoader.getResource(invalidFiles[2]).getFile());
+        file = new File(clLoader.getResource(invalidFiles[2]).getFile().replace("%20", " "));
         mpReader.readMapFile(file);
     }
 
@@ -89,7 +89,7 @@ public class MapReaderTest {
      */
     @Test (expected=InvalidMap.class)
     public void testCountriesWithTwoContinents() throws InvalidMap {
-        file = new File(clLoader.getResource(invalidFiles[1]).getFile());
+        file = new File(clLoader.getResource(invalidFiles[1]).getFile().replace("%20", " "));
         mpReader.readMapFile(file);
     }
 
@@ -99,7 +99,7 @@ public class MapReaderTest {
      */
     @Test (expected=InvalidMap.class)
     public void testCountriesWithoutContinents() throws InvalidMap {
-        file = new File(clLoader.getResource(invalidFiles[3]).getFile());
+        file = new File(clLoader.getResource(invalidFiles[3]).getFile().replace("%20", " "));
         mpReader.readMapFile(file);
     }
 

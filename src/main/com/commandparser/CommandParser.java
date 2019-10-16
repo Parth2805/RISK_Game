@@ -180,9 +180,9 @@ public class CommandParser {
 		case Commands.MAP_COMMAND_LOADMAP:
 
 			mapReader = new MapReader();
-			filePath = System.getProperty("user.dir") + "\\src\\main\\resources\\" + words[1];
-			File inputMapFile = new File(filePath);
-
+			ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+			File inputMapFile = new File(classloader.getResource(words[1]).getFile().replace("%20", " "));
+ 
 			if (inputMapFile.exists()) {
 				try {
 					setMap(mapReader.readMapFile(inputMapFile));
@@ -191,7 +191,7 @@ public class CommandParser {
 					System.out.println("Exception: " + e.toString());
 				}
 			} else {
-				System.out.println("Exception: File does not exist: " + words[1]);
+				System.out.println("Exception: File does not exist: " + inputMapFile.getAbsolutePath());
 			}
 			break;
 
