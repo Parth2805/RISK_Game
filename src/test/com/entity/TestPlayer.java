@@ -22,7 +22,7 @@ public class TestPlayer {
 
 	    @AfterClass
 	    public static void afterPerformingTests() {
-	        System.out.println("The test is done");
+	        System.out.println("The tests are done");
 	    }
 
 	    @Test

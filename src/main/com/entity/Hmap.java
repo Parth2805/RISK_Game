@@ -16,19 +16,20 @@ public class Hmap {
 
 	private List<Continent> continents;
 	
-	private HashMap<String, String> mapData;
 	private HashMap<String, Continent> continentMap;
 	private HashMap<String, Integer> countriesIdxMap;
 
+	private HashMap<String, String> filesAttribute;
+	
 	
 	/**
 	 * This is the default constructor of Hmap.
 	 */
 	public Hmap() {
-		mapData = new HashMap<String, String>();
-		continents = new ArrayList<Continent>();
-		continentMap = new HashMap<String,Continent>();
-		countriesIdxMap = new HashMap<String,Integer>();
+		filesAttribute = new HashMap <String, String>();
+		continents = new ArrayList <Continent>();
+		continentMap = new HashMap <String,Continent>();
+		countriesIdxMap = new HashMap <String,Integer>();
 	}
 	
 	/**
@@ -36,33 +37,33 @@ public class Hmap {
 	 * @param newMap The new map object.
 	 */
 	public Hmap(Hmap newMap) {
-		mapData = new HashMap<String, String>(newMap.mapData);
-		continents = new ArrayList<Continent>(newMap.continents);
-		continentMap = new HashMap<String,Continent>(newMap.continentMap);
-		countriesIdxMap = new HashMap<String,Integer>(newMap.countriesIdxMap);
+		filesAttribute = new HashMap <String, String>(newMap.filesAttribute);
+		continents = new ArrayList <Continent>(newMap.continents);
+		continentMap = new HashMap <String,Continent>(newMap.continentMap);
+		countriesIdxMap = new HashMap <String,Integer>(newMap.countriesIdxMap);
 	}
 	
 	/**
 	 * Returns the map data.
-	 * @return mapData
+	 * @return filesAttribute
 	 */
-	public HashMap<String, String> getMapData() {
-		return mapData;
+	public HashMap <String, String> getMapData() {
+		return filesAttribute;
 	}
 	
 	/**
 	 * This sets the map data.
 	 * @param mapData
 	 */
-	public void setMapData(HashMap<String, String> mapData) {
-		this.mapData = mapData;
+	public void setMapData(HashMap <String, String> mapData) {
+		this.filesAttribute = mapData;
 	}
 	
 	/**
 	 * It returns list of continents.
-	 * @return the continents
+	 * @return continents
 	 */
-	public List<Continent> getContinents() {
+	public List <Continent> getContinents() {
 		return continents;
 	}
 	
@@ -70,31 +71,31 @@ public class Hmap {
 	 * This sets the continents.
 	 * @param continents
 	 */
-	public void setContinents(List<Continent> continents) {
+	public void setContinents(List <Continent> continents) {
 		this.continents = continents;
 	}
 	
 	/**
-	 * Returns the continent maps
+	 * Returns the continent index map
 	 * @return countriesIdxMap
 	 */
-	public HashMap<String, Integer> getCountriesIdxMap() {
+	public HashMap <String, Integer> getCountriesIdxMap() {
 		return countriesIdxMap;
 	}
 	
 	/**
-	 * This sets the continent map.
+	 * This sets the continent index map.
 	 * @param countriesIdxMap
 	 */
-	public void setCountriesIdxMap(HashMap<String, Integer> countriesIdxMap) {
+	public void setCountriesIdxMap(HashMap <String, Integer> countriesIdxMap) {
 		this.countriesIdxMap = countriesIdxMap;
 	}
 	
 	/**
 	 * Returns the continent maps
-	 * @return scontinentMap
+	 * @return continentMap
 	 */
-	public HashMap<String, Continent> getContinentMap() {
+	public HashMap <String, Continent> getContinentMap() {
 		return continentMap;
 	}
 	
@@ -102,7 +103,7 @@ public class Hmap {
 	 * This sets the continent map.
 	 * @param continentMap
 	 */
-	public void setContinentMap(HashMap<String, Continent> continentMap) {
+	public void setContinentMap(HashMap <String, Continent> continentMap) {
 		this.continentMap = continentMap;
 	}
 
@@ -117,7 +118,7 @@ public class Hmap {
 	 */
 	@Override
 	public String toString() {
-		return "Hmap [ mapData = " + mapData + ", continents = " + continents + ", continentMap = " + continentMap + "]";
+		return "Hmap [ mapData = " + filesAttribute + ", continents = " + continents + ", continentMap = " + continentMap + "]";
 	}
 
 	/* (non-Javadoc)

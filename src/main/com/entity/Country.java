@@ -201,7 +201,7 @@ public class Country {
 	 */
 	@Override
 	public String toString() {
-		return name;
+		return "Country [name = " + name +"]";
 	}
 	
 	/* (non-Javadoc)
