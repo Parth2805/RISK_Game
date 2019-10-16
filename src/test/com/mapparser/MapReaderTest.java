@@ -3,54 +3,104 @@ package com.mapparser;
 import static org.junit.Assert.*;
 
 import com.exception.InvalidMap;
+import org.junit.AfterClass;
 import org.junit.Test;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.*;
-//import com.mapparser.MapReader;
 import java.io.*;
 import com.entity.Hmap;
 
+/**
+ * This class tests all functions for validating Map and Continent.
+ * @author Mahmoudreza
+ * @author Maryam
+ * @version 0.0.1
+ */
 public class MapReaderTest {
-    File file = null;
-    MapReader mpreader = null;
+
+    static File file = null;
+    MapReader mpReader = null;
     Hmap hmp = null;
     ClassLoader clLoader = null;
-    //String[] invalidFiles = {"test.map","world.map","world_without_colors.map"};
+    static String[] invalidFiles = {"world.map", "country_with_two_continents.map",
+            "country_without_border.map", "country_without_continent.map",
+            "countries_in_same_continent.map"};
 
-   @BeforeClass
-    public static void beforecl(){
-       String[] invalidFiles = {"test.map","world.map","world_without_colors.map"};
-   }
+    /**
+     * This method runs before running all methods in the class.
+     */
+    @BeforeClass
+    public static void beforeClass() {
+        System.out.println("The tests are started");
+    }
 
+    /**
+     * This method runs before running each test methods.
+     //* @throws IOException
+     */
     @Before
-    public void beforeMethod() {
-        mpreader = new MapReader();
+    public void beforeMethods() throws IOException{
+        mpReader = new MapReader();
         hmp = new Hmap();
         clLoader = getClass().getClassLoader();
     }
-/*
-   @Test
-    public void bbdA() throws InvalidMap {
-       //assertEquals(mprdr.readMapFile(file));
-       file = new File(loader.getResource("world.map").getFile());
-       map = mprdr.readMapFile(file);
-       assertNull(mprdr.readMapFile(file));
 
-   }
-
-    @Test (expected=InvalidMap.class)
-    public void checkForCountryNotMappedMutually() throws InvalidMap {
-        String[] invalidFiles = new String[2];
-        file = new File(loader.getResource(invalidFiles[1]).getFile());
-        mprdr.readMapFile(file);
+    /**
+     * This method runs after all testing methods.
+     */
+    @AfterClass
+    public static void afterAllTests() {
+        System.out.println("All tests are done");
     }
-*/
-
-@Test
-    public void testValidMap() throws InvalidMap {
+    /**
+     * This method tests map validation
+     // * @throws InvalidMap
+     */
+    @Test
+    public void testMapValidation() throws InvalidMap {
         file = new File(clLoader.getResource("world.map").getFile());
-        hmp = mpreader.readMapFile(file);
+        hmp = mpReader.readMapFile(file);
         assertEquals(hmp.getContinents().size(),6);
     }
+
+    /**
+     * This method tests countries which are in the same continent
+     //* @throws InvalidMap (Exception)
+     */
+    @Test (expected=InvalidMap.class)
+    public void testCountriesInTheSameContinent() throws InvalidMap {
+        file = new File(clLoader.getResource(invalidFiles[4]).getFile());
+        mpReader.readMapFile(file);
+    }
+
+    /**
+     * This method tests Countries which not have border
+     * @throws InvalidMap (Exception)
+     */
+    @Test (expected=InvalidMap.class)
+    public void testCountriesWithoutBorder() throws InvalidMap {
+        file = new File(clLoader.getResource(invalidFiles[2]).getFile());
+        mpReader.readMapFile(file);
+    }
+
+    /**
+     * This method tests countries which are have two continents
+     * @throws InvalidMap (Exception)
+     */
+    @Test (expected=InvalidMap.class)
+    public void testCountriesWithTwoContinents() throws InvalidMap {
+        file = new File(clLoader.getResource(invalidFiles[1]).getFile());
+        mpReader.readMapFile(file);
+    }
+
+    /**
+     * This method tests countries which not have continent.
+     * @throws InvalidMap (Exception)
+     */
+    @Test (expected=InvalidMap.class)
+    public void testCountriesWithoutContinents() throws InvalidMap {
+        file = new File(clLoader.getResource(invalidFiles[3]).getFile());
+        mpReader.readMapFile(file);
+    }
+
 }
