@@ -1,4 +1,4 @@
-package com.models;
+package com.playerparser;
 
 import java.util.*;
 
@@ -9,7 +9,7 @@ import com.entity.Player;
 import com.config.Config;
 
 
-public class PlayerModel {
+public class PlayerCommands {
 
 	private ArrayList<Country> countryList;
 	private ArrayList<Player> playersList;
@@ -20,7 +20,7 @@ public class PlayerModel {
 	/**
 	 * This is the default constructor of Player Model.
 	 */
-	public PlayerModel() {
+	public PlayerCommands() {
 		this.playersList = new ArrayList<Player>();
 		this.countryList = new ArrayList<Country>();
 	}
@@ -140,13 +140,14 @@ public class PlayerModel {
 		if (numPlayers >= 2) {
 			
 			armiesCount = numOfArmies[numPlayers - 2];
+			
 			for (Player player : playersList)
 				player.setArmies(armiesCount);
 	
 			System.out.println("Assigned " + armiesCount + " armies to " + numPlayers + " players");
+			
 			return true;
-		}
-		else {
+		} else {
 			System.out.println("Please create atleast 2 players to play the game.");
 		}
 		
@@ -158,9 +159,28 @@ public class PlayerModel {
 	 * 
 	 * @return true if player gets created, false otherwise
 	 */
-	public boolean placeAll() {
+	public void placeAll() {
 
-		return false;
+		for (Player p: getPlayersList()) {
+
+			System.out.println("Placing armies for player: " + p.getName());
+			while (p.getArmies() > 0) {
+				
+				Country con = p.getAssignedCountry()
+						.get(getRandomNumber(p.getAssignedCountry().size() - 1));
+				con.setArmy(con.getArmy() + 1);
+				p.setArmies(p.getArmies() - 1);
+			}
+		}		
+	}
+	
+	/**
+	 * This method generates random number from 0 to number.
+	 * @param number number up to which find random numbers to be generated, from 0 to number
+	 * @return random number from 0 to number, including number
+	 */
+	public static int getRandomNumber(int number) {
+		return new Random().nextInt(number+1);
 	}
 	
 	/**
@@ -169,21 +189,30 @@ public class PlayerModel {
 	 * @param playerName name of the player
 	 * @return true if player gets created, false otherwise
 	 */
-	public boolean placeArmies(Hmap map, String countryName) {
+	public boolean placeArmy(Hmap map, String countryName) {
 
-		int playerArmies = currentPlayer.getArmies();
-
-		if (playerArmies > 0) {
+		int playerArmies = currentPlayer.getArmies();		
+		boolean isArmySet = false;
 		
+		if (playerArmies > 0) {
+			for (Country c: currentPlayer.getAssignedCountry()) {
+				if (c.getName().equalsIgnoreCase(countryName)) {
+					c.setArmy(c.getArmy() + 1);
+					currentPlayer.setArmies(playerArmies - 1);
+					isArmySet = true;
+					System.out.println(currentPlayer.getName() + ": assigned 1 Army to " + c.getName());
+				}
+			}
+			
+			if (!isArmySet)
+				System.out.println("Exception: This country is not assigned to player: " + getCurrentPlayer().getName());
+			
 		} else {
 			System.out.println("The player: " + currentPlayer.getName() + " does not have any army left");
+			isArmySet = true;
 		}
 		
-		if (isAllPlayersArmiesExhausted(getPlayersList())) {
-			return true;
-		}
-		
-		return false;
+		return isArmySet;
 	}
 
 	/**
@@ -192,7 +221,7 @@ public class PlayerModel {
 	 * @param players object of player
 	 * @return returns true if player has exhausted the armies
 	 */
-	public static boolean isAllPlayersArmiesExhausted(ArrayList<Player> players) {
+	public boolean isAllPlayersArmiesExhausted(ArrayList<Player> players) {
 		for (Player p : players) {
 			if (p.getArmies() != 0) {
 				return false;
@@ -209,32 +238,23 @@ public class PlayerModel {
 	public void populateCountries(Hmap map) {
 
 		ArrayList<Country>countriesList = getCountryListFromMap(map);
-		int playernumber = 0;
+		int playerNum = 0;
 		
-		while (countriesList.size()!= 0) {
+		while (countriesList.size() != 0) {
 			
 			int chooseCountry = new Random().nextInt(countriesList.size());
 			Country countryAssigned = countriesList.get(chooseCountry);
 
-			currentPlayer = playersList.get(playernumber);
+			currentPlayer = getPlayersList().get(playerNum);
 			currentPlayer.setAssignedCountry(countryAssigned);
-			playernumber = (playernumber + 1) % playersList.size();
+			playerNum = (playerNum + 1) % getPlayersList().size();
 
 			countriesList.remove(chooseCountry);
 			
-			for (Country c:countryList){
-				if (c.getName().equalsIgnoreCase(countryAssigned.getName())){
+			for (Country c: getCountryList()) {
+				if (c.getName().equalsIgnoreCase(countryAssigned.getName()))
 					c.setPlayer(currentPlayer);
-				}
 			}
-		}
-		
-		for (Player players : playersList){
-			System.out.println(players.getAssignedCountry());
-		}
-		
-		for (Country country : countryList){
-			System.out.println(country.getName()+" "+country.getPlayer().getName());
 		}
 	}	
 	
@@ -255,11 +275,28 @@ public class PlayerModel {
 		return countryListfromMap;
 	}
 
-	void reinforcementArmies(){
+	/**
+	 * It shows all countries and continents, armies on each country, ownership, and connectivity
+	 */
+	public void gamePlayShowmap() {
 
+		System.out.println("----------------------------------");
+		for (Country c: getCountryList()) {
+			System.out.println(c.getBelongToContinent().getName() + ": " +
+					c.getName() + ": Army count: " + c.getArmy() + ", Player: " +
+					c.getPlayer().getName() + ", Adjacent Countries: " + c.getAdjacentCountries());
+		}
+		System.out.println("----------------------------------");
+	}
 
-
-
-
+	/**
+	 * It will put one army on each country
+	 */
+	public void intitializeArmiesForAllCountries() {
+		
+		for (Country c: getCountryList()) {
+			c.setArmy(c.getArmy() + 1);
+			c.getPlayer().setArmies(c.getPlayer().getArmies() - 1);
+		}
 	}
 }
