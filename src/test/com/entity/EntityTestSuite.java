@@ -1,3 +1,9 @@
+/**
+ * This is a Test suite Class for testing Entity
+ * @author Maryam
+ * @author Mahmoudreza
+ * @version 0.0.1
+ */
 package com.entity;
 
 import org.junit.runner.RunWith;
