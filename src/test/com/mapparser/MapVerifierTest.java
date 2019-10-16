@@ -32,7 +32,6 @@ public class MapVerifierTest {
 	static Hmap map; 
 	ClassLoader loader;
 
-	String continentName = "North America";	
 	String mapAuthor = "Maryam";
 	String mapImage = "world.map";
 	String mapWrap = "no";
@@ -77,6 +76,7 @@ public class MapVerifierTest {
     @AfterClass
     public static void afterClassTests() {
         System.out.println("The test is done");
+    }
 	
 	/**
 	 * This method tests that map is null or not.
@@ -134,8 +134,8 @@ public class MapVerifierTest {
 		countryList.add(country);
 		continent.setCountries(countryList);
 		assertEquals(true,MapVerifier.isContinentConnectedGraph(continent, map));		
-		counList.add(country);
-		continent.setCountries(counList);
+		countryList.add(country);
+		continent.setCountries(countryList);
 		assertEquals(MapVerifier.isContinentConnectedGraph(continent, map), true);
 		System.out.println("The Unit Test for Continent_Connected_Graph is performed");
 	}

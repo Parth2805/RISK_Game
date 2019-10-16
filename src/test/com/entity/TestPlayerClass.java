@@ -1,10 +1,8 @@
 package com.entity;
 
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 /**
  * This is a Test Class for testing card
@@ -54,6 +52,7 @@ public class TestPlayerClass {
       assertNotEquals( 12,ply.getId());
       System.out.println("'assertNotEquals' test for getId method is passed");
   }
+}
 /*
     @Test
     public void testGetPlayer() {
