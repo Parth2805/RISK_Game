@@ -13,7 +13,7 @@ import static org.junit.Assert.*;
 	 * @author Mahmoudreza
 	 * @version 0.0.1
 	 */
-	public class TestCountry {
+	public class CountryTest {
 	Country cn = null;
 
 	/**

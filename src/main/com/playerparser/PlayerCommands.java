@@ -31,15 +31,16 @@ public class PlayerCommands {
 	/**
 	 * Setter method for the country hash-map.
 	 *
-	 * @param countryMap
-	 *            hashmap of country
+	 * @param countryMap hash-map of country
 	 */
 	public void setCountryMap(HashMap<String, Country> countryMap) {
 		this.countryMap = countryMap;
 	}
 
 	/**
-	 * Get method for country hashmap.
+	 * Get method for country hash-map.
+	 *
+	 * @return map of countries
 	 */
 	public HashMap<String, Country> getCountryMap() {
 		return countryMap;
@@ -47,6 +48,8 @@ public class PlayerCommands {
 
 	/**
 	 * Get method for country list.
+	 * 
+	 * @return list of countries
 	 */
 	public ArrayList<Country> getCountryList() {
 		return countryList;
@@ -55,8 +58,7 @@ public class PlayerCommands {
 	/**
 	 * Setter method for the map object.
 	 *
-	 * @param countryList
-	 *            list of country
+	 * @param countryList list of country
 	 */
 	public void setCountryList(ArrayList<Country> countryList) {
 		this.countryList = countryList;
@@ -74,13 +76,17 @@ public class PlayerCommands {
 	/**
 	 * This method is to set the current player.
 	 * 
-	 * @param player
-	 *            Current player.
+	 * @param player Current player.
 	 */
 	public void setCurrentPlayer(Player player) {
 		currentPlayer = player;
 	}
 
+	/**
+	 * Get country list
+	 *
+	 * @return list of countries
+	 */	
 	public ArrayList<Country> getCountryList(Hmap map) {
 
 		for (Continent c : map.getContinents()) {
@@ -104,8 +110,7 @@ public class PlayerCommands {
 	/**
 	 * Setter method for the player list.
 	 *
-	 * @param playersList
-	 *            array list of players
+	 * @param playersList array list of players
 	 */
 	public void setPlayersList(ArrayList<Player> playersList) {
 		this.playersList = playersList;
@@ -114,8 +119,7 @@ public class PlayerCommands {
 	/**
 	 * This method removes the player from game.
 	 * 
-	 * @param playerName
-	 *            name of the player
+	 * @param playerName name of the player
 	 * @return true if player gets removed, false otherwise
 	 */
 	public boolean removePlayer(String playerName) {
@@ -136,8 +140,7 @@ public class PlayerCommands {
 	/**
 	 * This method creates the new player.
 	 * 
-	 * @param playerName
-	 *            name of the player
+	 * @param playerName name of the player
 	 * @return true if player gets created, false otherwise
 	 */
 	public boolean createPlayer(String playerName) {
@@ -164,6 +167,8 @@ public class PlayerCommands {
 
 	/**
 	 * This method allocates armies to players.
+	 * 
+	 * @return true if armies are assigned to more then 1 player, false otherwise
 	 */
 	public boolean assignArmiesToPlayers() {
 		int armiesCount = 0;
@@ -187,9 +192,7 @@ public class PlayerCommands {
 	}
 
 	/**
-	 * This method places armies.
-	 * 
-	 * @return true if player gets created, false otherwise
+	 * This method places all armies. 
 	 */
 	public void placeAll() {
 
@@ -208,9 +211,7 @@ public class PlayerCommands {
 	/**
 	 * This method generates random number from 0 to number.
 	 * 
-	 * @param number
-	 *            number up to which find random numbers to be generated, from 0 to
-	 *            number
+	 * @param number number up to which find random numbers to be generated, from 0 to number
 	 * @return random number from 0 to number, including number
 	 */
 	public static int getRandomNumber(int number) {
@@ -220,18 +221,17 @@ public class PlayerCommands {
 	/**
 	 * This method places armies.
 	 * 
-	 * @param playerName
-	 *            name of the player
-	 * @return true if player gets created, false otherwise
+	 * @param countryName name of the country
+	 * @return true if army gets placed, false otherwise
 	 */
 	public boolean placeArmy(String countryName) {
 
 		int playerArmies = currentPlayer.getArmies();
 
-		System.out.println("Exception: This country is not assigned to player: " + getCurrentPlayer().getName());
-
-		if (!isCountryBelongToPlayer(currentPlayer, countryName))
+		if (!isCountryBelongToPlayer(currentPlayer, countryName)) {
+			System.out.println("Exception: This country is not assigned to player: " + getCurrentPlayer().getName());
 			return false;
+		}
 
 		if (playerArmies <= 0) {
 			System.out.println("The player: " + currentPlayer.getName() + " does not have any army left");
@@ -251,9 +251,9 @@ public class PlayerCommands {
 	}
 
 	/**
-	 * This method checks if players armies is exhausted.
+	 * This method checks armies of all players are exhausted or not.
 	 * 
-	 * @return returns true if player has exhausted the armies
+	 * @return true if player has exhausted the armies
 	 */
 	public boolean isAllPlayersArmiesExhausted() {
 
@@ -268,8 +268,7 @@ public class PlayerCommands {
 	/**
 	 * This method populates all countries.
 	 * 
-	 * @param map
-	 *            map object
+	 * @param map map object
 	 */
 	public void populateCountries(Hmap map) {
 
@@ -297,8 +296,8 @@ public class PlayerCommands {
 	/**
 	 * Parses the map and gets country list
 	 * 
-	 * @param map
-	 *            map object
+	 * @param map map object
+	 * @return list for countries from root Map
 	 */
 	public ArrayList<Country> getCountryListFromMap(Hmap map) {
 		ArrayList<Country> countryListfromMap = new ArrayList<Country>();
@@ -329,27 +328,26 @@ public class PlayerCommands {
 	/**
 	 * This method counts the number of reinforcement armies for the player.
 	 * 
-	 * @param currentPlayer
-	 *            current player object
-	 * @return return the player object after assigning armies.
+	 * @param player current player object
+	 * @return the number armies player will get in reinforcement 
 	 */
-	public void countReinforcementArmies(Player currentPlayer) {
-		int currentArmies = currentPlayer.getArmies();
-		int countryCount = currentPlayer.getAssignedCountry().size();
-		System.out.println("Number of Countires for Player : " + currentPlayer.getName() + " = " + countryCount);
+	public int countReinforcementArmies(Player player) {
+		int currentArmies = player.getArmies();
+		int countryCount = player.getAssignedCountry().size();
+		System.out.println("Number of Countires for Player : " + player.getName() + " = " + countryCount);
 		if (countryCount < 9) {
 			currentArmies = currentArmies + 3;
 		} else {
 			currentArmies += Math.floor(countryCount / 3);
 		}
-		System.out.println("After reinforcement, current number of Armies for Player : " + currentPlayer.getName()
+		System.out.println("After reinforcement, current number of Armies for Player : " + player.getName()
 				+ " = " + currentArmies);
-		// TODO if player owned continents then armies count?
-		currentPlayer.setArmies(currentArmies);
+
+		return currentArmies;
 	}
 
 	/**
-	 * It will put one army on each country
+	 * It will put one army on every country
 	 */
 	public void intitializeArmiesForAllCountries() {
 
@@ -362,13 +360,11 @@ public class PlayerCommands {
 	/**
 	 * This will do reinforcement
 	 * 
-	 * @param countryName
-	 *            name of the country
-	 * @param numberOfArmies
-	 *            number of armies
+	 * @param countryName name of the country
+	 * @param numberOfArmies number of armies
 	 * @return true if reinforcement is done, false otherwise
 	 */
-	public boolean assignArmiesForCurrentPlayer(String countryName, int numberOfArmies) {
+	public boolean reinforceArmiesForCurrentPlayer(String countryName, int numberOfArmies) {
 
 		int currentArmies = getCurrentPlayer().getArmies();
 
@@ -394,17 +390,18 @@ public class PlayerCommands {
 	}
 
 	/**
-	 * This will do assign armies to all players in Reinforcement
+	 * This will assign armies to all players in Reinforcement
 	 */
 	public void assignReinforceArmiesToPlayers() {
 
 		for (Player p : getPlayersList()) {
-			countReinforcementArmies(p);
+			int reinforeArmies = countReinforcementArmies(p);
+			p.setArmies(reinforeArmies);
 		}
 	}
 
 	/**
-	 * This will change current player
+	 * This will change the current player
 	 */
 	public void changeCurrentPlayer() {
 		int currentPlayerIdx = getPlayersList().indexOf(getCurrentPlayer());
@@ -414,6 +411,10 @@ public class PlayerCommands {
 
 	/**
 	 * This method will fortify for current player
+	 * @param fromCountry from country name
+	 * @param toCountry to country name
+	 * @param armiesCount number of armies
+	 * @return true if fortification is successful, false otherwise
 	 */
 	public boolean fortifyCurrentPlayer(String fromCountry, String toCountry, int armiesCount) {
 
@@ -459,11 +460,9 @@ public class PlayerCommands {
 	/**
 	 * This method will fortify for current player
 	 * 
-	 * @param fromCountry
-	 *            name of from country
-	 * @param toCountry
-	 *            name of to country
-	 * @return true if countries are adjacent, false otherwise
+	 * @param currentPlayer current player
+	 * @param country name of to country
+	 * @return true if country belong to given player
 	 */
 	public boolean isCountryBelongToPlayer(Player currentPlayer, String country) {
 
@@ -478,10 +477,8 @@ public class PlayerCommands {
 	/**
 	 * This method will fortify for current player
 	 * 
-	 * @param fromCountry
-	 *            name of from country
-	 * @param toCountry
-	 *            name of to country
+	 * @param fromCountry name of from country
+	 * @param toCountry name of to country
 	 * @return true if countries are adjacent, false otherwise
 	 */
 	public boolean isCountriesAdjacent(String fromCountry, String toCountry) {
@@ -497,7 +494,8 @@ public class PlayerCommands {
 	/**
 	 * This method will formulate country hashmap.
 	 * 
-	 * @param countryList
+	 * @param countryList list of countries
+	 * @return country hashmap
 	 */
 	public HashMap<String, Country> getCountryMapFromList(ArrayList<Country> countryList) {
 		HashMap<String, Country> countryMap = new HashMap<String, Country>();
@@ -511,8 +509,8 @@ public class PlayerCommands {
 	/**
 	 * This method checks whether current player is the last player or not.
 	 * 
-	 * @param currentPlayer
-	 *            current player
+	 * @param currentPlayer current player
+	 * @return true if current player is the last player, false otherwise
 	 */
 	public boolean isLastPlayer(Player currentPlayer) {
 

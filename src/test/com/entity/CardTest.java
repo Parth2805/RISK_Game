@@ -16,7 +16,7 @@ import com.config.CardType;
  * @version 0.0.1
  */
 
-public class TestCard {
+public class CardTest {
     Card cr = null;
 
     /**

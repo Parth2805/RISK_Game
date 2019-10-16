@@ -2,11 +2,9 @@ package com.commandparser;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import java.util.Scanner;
 
 import com.config.Commands;
-import com.entity.Country;
 import com.entity.Hmap;
 import com.entity.Player;
 import com.exception.InvalidMap;
@@ -42,8 +40,7 @@ public class CommandParser {
 	/**
 	 * Setter method for the map object.
 	 *
-	 * @param map
-	 *            object
+	 * @param map object
 	 */
 	private Hmap setMap(Hmap map) {
 		return this.rootMap = map;
@@ -61,14 +58,15 @@ public class CommandParser {
 	/**
 	 * Parses the String and calls the related map edit commands.
 	 * 
-	 * @param command
-	 *            User input Command/String to be parse
+	 * @param command User input Command/String
+	 * @return true if command is processed correctly, false otherwise
 	 */
 	public boolean processMapEditCommands(String command) {
 
 		String[] words = command.split(" ");
 		String commandType = words[0], filePath = "";
 		MapReader mapReader;
+		ClassLoader classloader = Thread.currentThread().getContextClassLoader();
 
 		switch (commandType) {
 
@@ -103,7 +101,7 @@ public class CommandParser {
 					idx = idx + 1;
 
 				} else {
-					System.out.println("Wrong input!!");
+					System.out.println("Invalid command, Try again !!!");
 				}
 			}
 			break;
@@ -134,6 +132,7 @@ public class CommandParser {
 
 			filePath = System.getProperty("user.dir") + "\\src\\main\\resources\\" + words[1];
 
+			// save map file should be similar to the one which was edited previously
 			if (!editFilePath.isEmpty()) {
 				if (!editFilePath.equals(filePath)) {
 					System.out.println("Please give same filename as you have given in editmap.");
@@ -180,7 +179,12 @@ public class CommandParser {
 		case Commands.MAP_COMMAND_LOADMAP:
 
 			mapReader = new MapReader();
-			ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+			
+			if (null == classloader.getResource(words[1])) {
+				System.out.println("Exception: File does not exist: " + words[1]);
+				break;
+			}
+
 			File inputMapFile = new File(classloader.getResource(words[1]).getFile().replace("%20", " "));
  
 			if (inputMapFile.exists()) {
@@ -203,10 +207,10 @@ public class CommandParser {
 	}
 
 	/**
-	 * Parses the String and calls the related game play commands.
+	 * Parses the String and calls the related player commands.
 	 * 
-	 * @param command
-	 *            User input Command/String to be parse
+	 * @param command User input Command/String
+	 * @return true if command is processed correctly, false otherwise
 	 */
 	public boolean processGamePlayCreatePlayerCommands(String command) {
 
@@ -270,8 +274,8 @@ public class CommandParser {
 	/**
 	 * Parses the String and calls the related game play startup commands.
 	 * 
-	 * @param command
-	 *            User input Command/String to be parse
+	 * @param sc scanner object
+	 * @return true if command is processed correctly, false otherwise
 	 */
 	public boolean processGamePlayStartupCommands(Scanner sc) {
 
@@ -316,8 +320,8 @@ public class CommandParser {
 	/**
 	 * Parses the String and calls the related game play reinforcement commands.
 	 * 
-	 * @param command
-	 *            User input Command/String to be parse
+	 * @param sc scanner object
+	 * @return true if command is processed correctly, false otherwise
 	 */
 	public boolean processGamePlayReinforcementCommands(Scanner sc) {
 
@@ -352,7 +356,7 @@ public class CommandParser {
 			if (!playerCommands.isCountryBelongToPlayer(playerCommands.getCurrentPlayer(), countryName))
 				return false;
 
-			if (playerCommands.assignArmiesForCurrentPlayer(countryName, numberOfArmies))
+			if (playerCommands.reinforceArmiesForCurrentPlayer(countryName, numberOfArmies))
 				return true;
 			break;
 
@@ -365,10 +369,10 @@ public class CommandParser {
 	}
 
 	/**
-	 * Parses the String and calls the related game play reinforcement commands.
+	 * Parses the String and calls the related game play fortify commands.
 	 * 
-	 * @param command
-	 *            User input Command/String to be parse
+	 * @param sc scanner object
+	 * @return true if command is processed correctly, false otherwise
 	 */
 	public boolean processGamePlayFortifyCommands(Scanner sc) {
 		System.out.println("Current state: Gameplay fortify phase (fortify, showmap)");

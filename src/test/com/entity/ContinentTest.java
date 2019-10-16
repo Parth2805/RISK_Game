@@ -14,7 +14,7 @@ import com.entity.Continent;
  * @author Mahmoudreza
  * @version 0.0.1
  */
-	public class TestContinent {
+	public class ContinentTest {
     Continent cont = null;
 
     /**
