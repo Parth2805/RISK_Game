@@ -166,6 +166,8 @@ public class MapCommands {
 		Country country = new Country();
 		Continent belongToContinent = null;
 		
+		country.setName(name);
+		
 		// check if country with same name exist or not
 		for (Continent c : map.getContinents()) {
 			
@@ -183,9 +185,8 @@ public class MapCommands {
 			System.out.println("Belong to continent: " + continentName + " does not exist in map");
 			return false;
 		}
-		
+
 		country.setBelongToContinent(belongToContinent);
-		country.setName(name);
 
 		map.getCountriesIdxMap().put(name, countryIdx++);
 		belongToContinent.getCountries().add(country);
@@ -251,13 +252,15 @@ public class MapCommands {
 	 */
 	public static boolean removeNeighborCountry(Hmap map, String countryName, String nbrCountryName) {
 		
+		boolean isCountryDel= false, isNeigborDel = false;
+		
 		if (!map.getCountriesIdxMap().containsKey(countryName)) {
-			System.out.println("The country: " + countryName + " does not exist in map");
+			System.out.println("Exception: The country: " + countryName + " does not exist in map");
 			return false;
 		}
 		
 		if (!map.getCountriesIdxMap().containsKey(nbrCountryName)) {
-			System.out.println("The neighbor country: " + nbrCountryName + " does not exist in map");
+			System.out.println("Exception: The neighbor country: " + nbrCountryName + " does not exist in map");
 			return false;
 		}
 		
@@ -268,16 +271,22 @@ public class MapCommands {
 					country.getAdjacentCountries().remove(c.getCountryMap().get(nbrCountryName));
 					country.getNeighborCountries().remove(nbrCountryName);
 					
-					c.getCountryMap().get(nbrCountryName).getAdjacentCountries().remove(country);
-					c.getCountryMap().get(nbrCountryName).getNeighborCountries().remove(countryName);
-					
 					System.out.println("The neighbor country: " + nbrCountryName + 
 							" removed from adjacent country: " + countryName);
 
-					return true;
+					isCountryDel = true;
+				}
+				
+				if (country.getName().equalsIgnoreCase(nbrCountryName)) {
+					country.getAdjacentCountries().remove(c.getCountryMap().get(countryName));
+					country.getNeighborCountries().remove(countryName);
+					isNeigborDel  = true;
 				}
 			}
 		}
+		
+		if (isCountryDel && isNeigborDel)
+			return true;
 		
 		return false;
 	}
@@ -291,34 +300,53 @@ public class MapCommands {
 	 */
 	public static boolean addNeighborCountry(Hmap map, String countryName, String nbrCountryName) {
 		
+		boolean isCountryAdded = false, isNeigborAdded = false;
+		
 		if (!map.getCountriesIdxMap().containsKey(countryName)) {
-			System.out.println("The country: " + countryName + " does not exist in map");
+			System.out.println("Exception: The country: " + countryName + " does not exist in map");
 			return false;
 		}
 		
 		if (!map.getCountriesIdxMap().containsKey(nbrCountryName)) {
-			System.out.println("The neighbor country: " + nbrCountryName + " does not exist in map");
+			System.out.println("Exception: The neighbor country: " + nbrCountryName + " does not exist in map");
 			return false;
 		}
 		
 		for (Continent c: map.getContinents()) {
 			for (Country country: c.getCountries()) {
 				if (country.getName().equalsIgnoreCase(countryName)) {
+		
+					if (country.getNeighborCountries().contains(nbrCountryName)) {
+						System.out.println("Exception: The neighbor country already exist");
+						return false;
+					}
 					
 					country.getAdjacentCountries().add(c.getCountryMap().get(nbrCountryName));
 					country.getNeighborCountries().add(nbrCountryName);
 					
-					c.getCountryMap().get(nbrCountryName).getAdjacentCountries().add(country);
-					c.getCountryMap().get(nbrCountryName).getNeighborCountries().add(countryName);
-					
 					System.out.println("The neighbor country: " + nbrCountryName + 
 							" added as an adjacent country to: " + countryName);
 
-					return true;
+					isCountryAdded = true;
+				}
+				
+				if (country.getName().equalsIgnoreCase(nbrCountryName)) {
+					
+					if (country.getNeighborCountries().contains(countryName)) {
+						System.out.println("Exception: The neighbor country already exist");
+						return false;
+					}
+					
+					country.getAdjacentCountries().add(c.getCountryMap().get(countryName));
+					country.getNeighborCountries().add(countryName);
+					isNeigborAdded = true;
 				}
 			}
 		}
 
+		if (isCountryAdded && isNeigborAdded)
+			return true;
+		
 		System.out.println("Failed to add the neighbor country: " + nbrCountryName);
 
 		return false;

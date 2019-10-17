@@ -261,6 +261,8 @@ public class PlayerCommands {
 				return false;
 			}
 		}
+		System.out.println("----------------------------------");
+		System.out.println("All players have placed armies.");
 		return true;
 	}
 

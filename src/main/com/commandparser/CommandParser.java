@@ -179,7 +179,14 @@ public class CommandParser {
 					break;
 				}
 			}
-
+			
+			try {
+				MapVerifier.verifyMap(getMap());
+			} catch (InvalidMap e1) {
+				System.out.println("Exception: " + e1.toString());
+				break;
+			}
+			
 			System.out.println("Saving File at: " + filePath);
 			File outputMapFile = new File(filePath);
 			mapWriter.writeMapFile(getMap(), outputMapFile);
@@ -342,7 +349,8 @@ public class CommandParser {
 	public boolean processGamePlayStartupCommands(Scanner sc) {
 
 		System.out.println("Current state: Gameplay startup phase (placearmy, placeall, showmap)");
-		System.out.println("Current Player: " + playerCommands.getCurrentPlayer().getName());
+		System.out.println("Current Player: " + playerCommands.getCurrentPlayer().getName() + 
+				", number of armies left = " + playerCommands.getCurrentPlayer().getArmies());
 
 		String command = sc.nextLine();
 		String[] words = command.split(" ");
