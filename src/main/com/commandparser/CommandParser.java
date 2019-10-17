@@ -130,6 +130,11 @@ public class CommandParser {
 
 		case Commands.MAP_COMMAND_SAVEMAP:
 
+			if (words.length < 2) {
+				System.out.println("Invalid command, Try again !!!");
+				break;
+			}
+
 			filePath = System.getProperty("user.dir") + "\\src\\main\\resources\\" + words[1];
 
 			// save map file should be similar to the one which was edited previously
@@ -147,6 +152,11 @@ public class CommandParser {
 
 		case Commands.MAP_COMMAND_EDITMAP:
 
+			if (words.length < 2) {
+				System.out.println("Invalid command, Try again !!!");
+				break;
+			}
+			
 			editFilePath = System.getProperty("user.dir") + "\\src\\main\\resources\\" + words[1];
 			File editMapFile = new File(editFilePath);
 			mapReader = new MapReader();
@@ -178,6 +188,11 @@ public class CommandParser {
 
 		case Commands.MAP_COMMAND_LOADMAP:
 
+			if (words.length < 2) {
+				System.out.println("Invalid command, Try again !!!");
+				break;
+			}
+			
 			mapReader = new MapReader();
 			
 			if (null == classloader.getResource(words[1])) {
@@ -294,6 +309,11 @@ public class CommandParser {
 
 		case Commands.MAP_COMMAND_PLACE_ARMY:
 
+			if (words.length < 2) {
+				System.out.println("Invalid command, Try again !!!");
+				break;
+			}
+			
 			if (playerCommands.placeArmy(words[1])) {
 				playerCommands.changeCurrentPlayer();
 			}
@@ -345,6 +365,12 @@ public class CommandParser {
 			break;
 		
 		case Commands.MAP_COMMAND_REINFORCE:
+			
+			if (words.length < 3) {
+				System.out.println("Invalid command, Try again !!!");
+				break;
+			}
+			
 			String countryName = words[1];
 			int numberOfArmies = Integer.parseInt(words[2]);
 

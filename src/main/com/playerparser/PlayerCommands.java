@@ -229,7 +229,6 @@ public class PlayerCommands {
 		int playerArmies = currentPlayer.getArmies();
 
 		if (!isCountryBelongToPlayer(currentPlayer, countryName)) {
-			System.out.println("Exception: This country is not assigned to player: " + getCurrentPlayer().getName());
 			return false;
 		}
 

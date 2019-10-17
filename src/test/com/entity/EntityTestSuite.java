@@ -11,7 +11,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({CardTest.class, ContinentTest.class, CountryTest.class, PlayerTest.class})
+@SuiteClasses({ CardTest.class, ContinentTest.class, CountryTest.class, PlayerTest.class })
 
 public class EntityTestSuite {
 }
