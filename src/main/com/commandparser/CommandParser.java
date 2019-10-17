@@ -75,10 +75,21 @@ public class CommandParser {
 			for (int idx = 1; idx < words.length; idx++) {
 
 				if (words[idx].equals(Commands.MAP_COMMAND_OPTION_ADD)) {
+					
+					if (words.length < idx + 3) {
+						System.out.println("Invalid command, Try again !!!");
+						return false;
+					}
+					
 					MapCommands.addContinent(getMap(), words[idx + 1], words[idx + 2], "");
 					idx = idx + 2;
 
 				} else if (words[idx].equals(Commands.MAP_COMMAND_OPTION_REMOVE)) {
+					
+					if (words.length < idx + 2) {
+						System.out.println("Invalid command, Try again !!!");
+						return false;
+					}
 					MapCommands.removeContinent(getMap(), words[idx + 1]);
 					idx = idx + 1;
 
@@ -93,10 +104,22 @@ public class CommandParser {
 			for (int idx = 1; idx < words.length; idx++) {
 
 				if (words[idx].equals(Commands.MAP_COMMAND_OPTION_ADD)) {
+					
+					if (words.length < idx + 3) {
+						System.out.println("Invalid command, Try again !!!");
+						return false;
+					}
+					
 					MapCommands.addCountry(getMap(), words[idx + 1], words[idx + 2]);
 					idx = idx + 2;
 
 				} else if (words[idx].equals(Commands.MAP_COMMAND_OPTION_REMOVE)) {
+					
+					if (words.length < idx + 2) {
+						System.out.println("Invalid command, Try again !!!");
+						return false;
+					}
+					
 					MapCommands.removeCountry(getMap(), words[idx + 1]);
 					idx = idx + 1;
 
@@ -111,10 +134,22 @@ public class CommandParser {
 			for (int idx = 1; idx < words.length; idx++) {
 
 				if (words[idx].equals(Commands.MAP_COMMAND_OPTION_ADD)) {
+					
+					if (words.length < idx + 3) {
+						System.out.println("Invalid command, Try again !!!");
+						return false;
+					}
+					
 					MapCommands.addNeighborCountry(getMap(), words[idx + 1], words[idx + 2]);
 					idx = idx + 2;
 
 				} else if (words[idx].equals(Commands.MAP_COMMAND_OPTION_REMOVE)) {
+					
+					if (words.length < idx + 3) {
+						System.out.println("Invalid command, Try again !!!");
+						return false;
+					}
+					
 					MapCommands.removeNeighborCountry(getMap(), words[idx + 1], words[idx + 2]);
 					idx = idx + 2;
 
@@ -242,11 +277,23 @@ public class CommandParser {
 
 			for (int idx = 1; idx < words.length; idx++) {
 				if (words[idx].equals(Commands.MAP_COMMAND_OPTION_ADD)) {
+					
+					if (words.length < idx + 2) {
+						System.out.println("Invalid command, Try again !!!");
+						return false;
+					}
+					
 					String playerName = words[idx + 1];
 					playerCommands.createPlayer(playerName);
 					idx = idx + 1;
 
 				} else if (words[idx].equals(Commands.MAP_COMMAND_OPTION_REMOVE)) {
+					
+					if (words.length < idx + 2) {
+						System.out.println("Invalid command, Try again !!!");
+						return false;
+					}
+					
 					String playerName = words[idx + 1];
 					playerCommands.removePlayer(playerName);
 					idx = idx + 1;
@@ -445,6 +492,11 @@ public class CommandParser {
 					numArmies = Integer.parseInt(words[3]);
 				} catch (Exception e) {
 					System.out.println("Exception: " + e.toString());
+					return false;
+				}
+				
+				if (numArmies <= 0) {
+					System.out.println("Exception: Invalid number of armies");
 					return false;
 				}
 				

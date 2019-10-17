@@ -465,6 +465,11 @@ public class PlayerCommands {
 	 */
 	public boolean isCountryBelongToPlayer(Player currentPlayer, String country) {
 
+		if (getCountryMap().get(country) == null) {
+			System.out.println("Exception: Given country " + country + " does not exist in map");
+			return false;
+		}
+		
 		if (getCountryMap().get(country).getPlayer().getName().equalsIgnoreCase(currentPlayer.getName()))
 			return true;
 
