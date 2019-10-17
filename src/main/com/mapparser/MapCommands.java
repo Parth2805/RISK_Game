@@ -1,5 +1,6 @@
 package com.mapparser;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,7 +58,14 @@ public class MapCommands {
 		Continent continent = new Continent();
 		
 		continent.setName(name);
-		continent.setValue(Integer.parseInt(ctrlValue));
+		
+		try {
+			continent.setValue(Integer.parseInt(ctrlValue));
+		} catch (Exception e) {
+			System.out.println("Exception: " + e.toString());
+			return false;
+		}
+		
 		continent.setColor(color);
 		
 		if (map.getContinents().contains(continent)) {

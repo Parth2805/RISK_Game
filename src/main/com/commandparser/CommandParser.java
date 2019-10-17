@@ -372,9 +372,16 @@ public class CommandParser {
 			}
 			
 			String countryName = words[1];
-			int numberOfArmies = Integer.parseInt(words[2]);
-
-			if (numberOfArmies < 0) {
+			int numberOfArmies = 0;
+			
+			try {
+				numberOfArmies = Integer.parseInt(words[2]);
+			} catch (Exception e) {
+				System.out.println("Exception: " + e.toString());
+				return false;
+			}
+			
+			if (numberOfArmies <= 0) {
 				System.out.println("You have entered invalid number of armies.");
 				return false;
 			}
@@ -432,7 +439,16 @@ public class CommandParser {
 					return false;
 				}
 
-				if (playerCommands.fortifyCurrentPlayer(words[1], words[2], Integer.parseInt(words[3]))) 	
+				int numArmies = 0;
+				
+				try {
+					numArmies = Integer.parseInt(words[3]);
+				} catch (Exception e) {
+					System.out.println("Exception: " + e.toString());
+					return false;
+				}
+				
+				if (playerCommands.fortifyCurrentPlayer(words[1], words[2], numArmies)) 	
 					isForifyDone = true;				
 			}
 			
