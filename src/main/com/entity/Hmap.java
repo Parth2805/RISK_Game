@@ -53,7 +53,7 @@ public class Hmap {
 	
 	/**
 	 * This sets the map data.
-	 * @param mapData
+	 * @param mapData map data
 	 */
 	public void setMapData(HashMap <String, String> mapData) {
 		this.filesAttribute = mapData;
@@ -69,7 +69,7 @@ public class Hmap {
 	
 	/**
 	 * This sets the continents.
-	 * @param continents
+	 * @param continents list of continents
 	 */
 	public void setContinents(List <Continent> continents) {
 		this.continents = continents;
@@ -85,7 +85,7 @@ public class Hmap {
 	
 	/**
 	 * This sets the continent index map.
-	 * @param countriesIdxMap
+	 * @param countriesIdxMap continent index map
 	 */
 	public void setCountriesIdxMap(HashMap <String, Integer> countriesIdxMap) {
 		this.countriesIdxMap = countriesIdxMap;
@@ -101,7 +101,7 @@ public class Hmap {
 	
 	/**
 	 * This sets the continent map.
-	 * @param continentMap
+	 * @param continentMap continent map
 	 */
 	public void setContinentMap(HashMap <String, Continent> continentMap) {
 		this.continentMap = continentMap;

@@ -34,7 +34,7 @@ public class Player {
 
 	/**
 	 * set cards of the player
-	 * @param cardList
+	 * @param cardList card list
 	 */
 	public void setCardList(List <Card> cardList) {
 		this.cardList = cardList;
@@ -112,7 +112,7 @@ public class Player {
 	
 	/**
 	 * Setter method to assign country to the player.
-	 * @param assignedCountry
+	 * @param assignedCountry assign country
 	 */
 	public void setAssignedCountry(Country assignedCountry) {
 		this.assignedCountry.add(assignedCountry);
@@ -128,7 +128,7 @@ public class Player {
 
 	/**
 	 * Setter method for the cards exchanged.
-	 * @param numeberOfCardsExchanged
+	 * @param numeberOfCardsExchanged number Of Cards Exchanged
 	 */
 	public void setNumeberOfTimesCardsExchanged(int numeberOfCardsExchanged) {
 		this.numeberOfCardsExchanged = numeberOfCardsExchanged;

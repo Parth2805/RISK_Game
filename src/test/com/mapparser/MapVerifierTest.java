@@ -80,6 +80,7 @@ public class MapVerifierTest {
 
 	/**
 	 * This method tests that map is null or not.
+	 * @throws InvalidMap Invalid Map
 	 */
 	@Test(expected = InvalidMap.class)
 	public void verifyNullMapTest() throws InvalidMap {
@@ -89,6 +90,7 @@ public class MapVerifierTest {
 
 	/**
 	 * This method verifies that map has at least one continent.
+	 * @throws InvalidMap Invalid Map
 	 */
 	@Test(expected = InvalidMap.class)
 	public void verifyMap() throws InvalidMap {
@@ -98,8 +100,7 @@ public class MapVerifierTest {
 
 	/**
 	 * This method is used to verify that continent is null or not.
-	 * 
-	 * @throws InvalidMapException invalid map exception.
+	 * @throws InvalidMap Invalid Map
 	 */
 	@Test(expected = InvalidMap.class)
 	public void verifyContinentsTest() throws InvalidMap {
@@ -110,6 +111,7 @@ public class MapVerifierTest {
 
 	/**
 	 * This method is used to test if a continent is a sub-graph or not.
+	 * @throws InvalidMap Invalid Map
 	 */
 	@Test
 	public void isMapConnectedGraphTest() throws InvalidMap {

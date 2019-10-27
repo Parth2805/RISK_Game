@@ -36,7 +36,7 @@ public class MapReaderTest {
 
 	/**
 	 * This method runs before running each test methods. 
-	 * @throws IOException
+	 * @throws IOException io Exception
 	 */
 	@Before
 	public void beforeMethods() throws IOException {
@@ -55,7 +55,7 @@ public class MapReaderTest {
 
 	/**
 	 * This method tests map validation 
-	 * @throws InvalidMap
+	 * @throws InvalidMap Invalid Map
 	 */
 	@Test
 	public void testMapValidation() throws InvalidMap {

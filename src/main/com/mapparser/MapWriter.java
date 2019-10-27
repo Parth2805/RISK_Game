@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.mapparser;
 
 import java.io.File;

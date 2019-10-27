@@ -107,6 +107,7 @@ public class MapCommandsTest {
 
 	/**
 	 * This method Test the update country
+	 * @throws InvalidMap Invalid Map
 	 */
 	@Test
 	public void updateCountryTest() throws InvalidMap {

@@ -11,7 +11,7 @@ import com.config.Config;
 public class PlayerCommands {
 
 	private ArrayList<Country> countryList;
-	private HashMap<String, Country> countryMap;
+	private Map<String, Country> countryMap;
 
 	private ArrayList<Player> playersList;
 	private static int[] numOfArmies = { Config.CONFIG_ARMIES_TWO_PLAYER, Config.CONFIG_ARMIES_THREE_PLAYER,
@@ -25,7 +25,7 @@ public class PlayerCommands {
 	public PlayerCommands() {
 		this.playersList = new ArrayList<Player>();
 		this.countryList = new ArrayList<Country>();
-		this.countryMap = new HashMap<String, Country>();
+		this.countryMap = new TreeMap<String, Country>(String.CASE_INSENSITIVE_ORDER);
 	}
 
 	/**
@@ -33,7 +33,7 @@ public class PlayerCommands {
 	 *
 	 * @param countryMap hash-map of country
 	 */
-	public void setCountryMap(HashMap<String, Country> countryMap) {
+	public void setCountryMap(Map<String, Country> countryMap) {
 		this.countryMap = countryMap;
 	}
 
@@ -42,7 +42,7 @@ public class PlayerCommands {
 	 *
 	 * @return map of countries
 	 */
-	public HashMap<String, Country> getCountryMap() {
+	public Map<String, Country> getCountryMap() {
 		return countryMap;
 	}
 
@@ -85,6 +85,7 @@ public class PlayerCommands {
 	/**
 	 * Get country list
 	 *
+	 * @param map map object
 	 * @return list of countries
 	 */	
 	public ArrayList<Country> getCountryList(Hmap map) {
@@ -419,15 +420,15 @@ public class PlayerCommands {
 	 */
 	public boolean fortifyCurrentPlayer(String fromCountry, String toCountry, int armiesCount) {
 
-		int fromCountryArmyCount = getCountryMap().get(fromCountry).getArmy();
-		int toCountryArmyCount = getCountryMap().get(toCountry).getArmy();
-
 		if (!isCountryBelongToPlayer(getCurrentPlayer(), fromCountry))
 			return false;
 
 		if (!isCountryBelongToPlayer(getCurrentPlayer(), toCountry))
 			return false;
 
+		int fromCountryArmyCount = getCountryMap().get(fromCountry).getArmy();
+		int toCountryArmyCount = getCountryMap().get(toCountry).getArmy();
+		
 		if (armiesCount > fromCountryArmyCount) {
 			System.out.println("Exception: Given army count should be less than fromCountry: " + fromCountry
 					+ "'s current armies which is = " + fromCountryArmyCount);
@@ -489,9 +490,13 @@ public class PlayerCommands {
 	 */
 	public boolean isCountriesAdjacent(String fromCountry, String toCountry) {
 
-		if (getCountryMap().get(fromCountry).getNeighborCountries().contains(toCountry)) {
-			if (getCountryMap().get(toCountry).getNeighborCountries().contains(fromCountry))
-				return true;
+		for (String nbrCountry: getCountryMap().get(fromCountry).getNeighborCountries()) {
+			if (nbrCountry.equalsIgnoreCase(toCountry)) {
+				for (String origCountry: getCountryMap().get(toCountry).getNeighborCountries()) {
+					if (origCountry.equalsIgnoreCase(fromCountry))
+						return true;
+				}
+			}
 		}
 
 		return false;
@@ -503,8 +508,8 @@ public class PlayerCommands {
 	 * @param countryList list of countries
 	 * @return country hashmap
 	 */
-	public HashMap<String, Country> getCountryMapFromList(ArrayList<Country> countryList) {
-		HashMap<String, Country> countryMap = new HashMap<String, Country>();
+	public Map<String, Country> getCountryMapFromList(ArrayList<Country> countryList) {
+		Map<String, Country> countryMap = new TreeMap<String, Country>(String.CASE_INSENSITIVE_ORDER);
 
 		for (Country c : countryList)
 			countryMap.put(c.getName(), c);

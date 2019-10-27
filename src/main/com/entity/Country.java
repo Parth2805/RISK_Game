@@ -66,7 +66,7 @@ public class Country {
 
 	/**
 	 * Setter method for the player.
-	 * @param player
+	 * @param player player object
 	 */
 	public void setPlayer(Player player) {
 		this.player = player;
@@ -74,7 +74,7 @@ public class Country {
 
 	/**
 	 * Setter method for the country armies count.
-	 * @param army
+	 * @param army count of army
 	 */
 	public void setArmy(int army) {
 		if (army > 5000) {
@@ -94,7 +94,7 @@ public class Country {
 	
 	/**
 	 * Setter method for the country name.
-	 * @param name
+	 * @param name country name
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -110,7 +110,7 @@ public class Country {
 	
 	/**
 	 * Setter method for the X coordinate of the country.
-	 * @param xCoordinate
+	 * @param xCoordinate X coordinate
 	 */
 	public void setxCoordinate(int xCoordinate) {
 		this.xCoordinate = xCoordinate;
@@ -118,7 +118,7 @@ public class Country {
 	
 	/**
 	 * Getter method for the y coordinate of the country.
-	 * @return yCoordinate
+	 * @return yCoordinate Y coordinate
 	 */
 	public int getyCoordinate() {
 		return yCoordinate;
@@ -142,7 +142,7 @@ public class Country {
 	
 	/**
 	 * Setter method to set the continent for the country.
-	 * @param belongToContinent
+	 * @param belongToContinent belong to continent
 	 */
 	public void setBelongToContinent(Continent belongToContinent) {
 		this.belongToContinent = belongToContinent;
@@ -158,7 +158,7 @@ public class Country {
 	
 	/**
 	 * Setter method for the adjacent countries to the country.
-	 * @param adjCountries
+	 * @param adjCountries adjacent countries
 	 */
 	public void setNeighborCountries(List <String> adjCountries) {
 		this.neighborCountries = adjCountries;
@@ -174,7 +174,7 @@ public class Country {
 	
 	/**
 	 * Setter method for the adjacent countries to the countries.
-	 * @param adjacentCountries
+	 * @param adjacentCountries adjacent Countries
 	 */
 	public void setAdjacentCountries(List <Country> adjacentCountries) {
 		this.adjacentCountries = adjacentCountries;
@@ -190,7 +190,7 @@ public class Country {
 	
 	/**
 	 * Setter method for the country as processed.
-	 * @param isProcessed
+	 * @param isProcessed processed flag
 	 */
 	public void setVisited(boolean isProcessed) {
 		this.isVisited = isProcessed;

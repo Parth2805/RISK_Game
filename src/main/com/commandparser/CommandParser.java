@@ -41,6 +41,7 @@ public class CommandParser {
 	 * Setter method for the map object.
 	 *
 	 * @param map object
+	 * @return root map
 	 */
 	private Hmap setMap(Hmap map) {
 		return this.rootMap = map;
@@ -186,9 +187,10 @@ public class CommandParser {
 				System.out.println("Exception: " + e1.toString());
 				break;
 			}
-			
+				
 			System.out.println("Saving File at: " + filePath);
 			File outputMapFile = new File(filePath);
+						
 			mapWriter.writeMapFile(getMap(), outputMapFile);
 			break;
 
@@ -210,9 +212,9 @@ public class CommandParser {
 					System.out.println("Exception: " + e.toString());
 				}
 			} else {
-				System.out.println("Given map file does not exist. New Map file has been created.");
 				try {
 					editMapFile.createNewFile();
+					System.out.println("Given map file does not exist. New Map file has been created.");
 				} catch (IOException e) {
 					System.out.println("Exception: " + e.toString());
 				}
@@ -235,24 +237,19 @@ public class CommandParser {
 				break;
 			}
 			
-			mapReader = new MapReader();
-			
 			if (null == classloader.getResource(words[1])) {
 				System.out.println("Exception: File does not exist: " + words[1]);
 				break;
 			}
-
+			
 			File inputMapFile = new File(classloader.getResource(words[1]).getFile().replace("%20", " "));
- 
-			if (inputMapFile.exists()) {
-				try {
-					setMap(mapReader.readMapFile(inputMapFile));
-					return true;
-				} catch (InvalidMap e) {
-					System.out.println("Exception: " + e.toString());
-				}
-			} else {
-				System.out.println("Exception: File does not exist: " + inputMapFile.getAbsolutePath());
+			mapReader = new MapReader();
+			
+			try {
+				setMap(mapReader.readMapFile(inputMapFile));
+				return true;
+			} catch (InvalidMap e) {
+				System.out.println("Exception: " + e.toString());
 			}
 			break;
 
