@@ -2,10 +2,8 @@ package com.models;
 
 import java.util.*;
 
-import com.entity.Continent;
-import com.entity.Country;
-import com.entity.Hmap;
-import com.entity.Player;
+import com.config.CardType;
+import com.entity.*;
 import com.config.Config;
 
 public class PlayerModel {
@@ -14,11 +12,14 @@ public class PlayerModel {
 	private static int[] numOfArmies = { Config.CONFIG_ARMIES_TWO_PLAYER, Config.CONFIG_ARMIES_THREE_PLAYER,
 			Config.CONFIG_ARMIES_FOUR_PLAYER, Config.CONFIG_ARMIES_FIVE_PLAYER, Config.CONFIG_ARMIES_SIX_PLAYER };
 
+	private Stack<Card> cards;
+
 	/**
 	 * This is the default constructor of Player Model.
 	 */
 	public PlayerModel() {
 		this.playersList = new ArrayList<Player>();
+		this.cards= new Stack<Card>();
 	}
 
 	/**
@@ -468,4 +469,40 @@ public class PlayerModel {
 
 		return false;
 	}
+
+	public void allocateCardsToCountry(){
+
+		ArrayList<CardType> cardlist = new ArrayList<>();
+		int eachUniqueCards = countryList.size() / 3;
+		cardlist.addAll(Collections.nCopies(eachUniqueCards, CardType.valueOf("CAVALRY")));
+		cardlist.addAll(Collections.nCopies(eachUniqueCards, CardType.valueOf("ARTILLERY")));
+		cardlist.addAll(Collections.nCopies(eachUniqueCards, CardType.valueOf("INFANTRY")));
+		
+		int left = countryList.size() - cardlist.size();
+		
+		
+		if(left > 0) {
+			for(int i=0; i < left; i++) {
+				System.out.println("inside");
+				cardlist.add(CardType.values()[(int) (Math.random() * CardType.values().length)]);
+			}
+		}
+		int i = 0;
+		for (Country country : countryList) {
+			Card card = new Card(cardlist.get(i++));
+			card.setCountryToWhichCardBelong(country);
+			cards.push(card);
+		}
+
+		Collections.shuffle(cards);
+		for(Card cards:cards){
+
+			System.out.println(cards);
+		}
+
+
+
+	}
+
+
 }

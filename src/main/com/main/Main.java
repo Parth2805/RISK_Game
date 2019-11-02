@@ -4,6 +4,8 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Scanner;
 
+import com.config.Commands;
+import com.config.Config;
 import com.config.GameState;
 import com.controller.GameController;
 import com.controller.MapContoller;
@@ -66,6 +68,7 @@ public class Main implements Observer {
 				
 			case RISK_STATE_GAMEPLAY_STARTUP_PHASE:
 				mainView.gameController.processGamePlayStartupCommands(sc);
+
 				break;
 				
 			case RISK_STATE_GAMEPLAY_REINFORCEMENT_PHASE:

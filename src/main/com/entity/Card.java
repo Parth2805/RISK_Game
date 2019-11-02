@@ -13,6 +13,10 @@ public class Card {
 	
 	private Country countryToWhichCardBelong;
 
+	public Card() {
+
+	}
+
 	/**
 	 * This method gets Card Kind.
 	 * @return the type of the card

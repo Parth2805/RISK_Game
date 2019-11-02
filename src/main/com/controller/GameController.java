@@ -480,6 +480,23 @@ public class GameController extends Observable {
 		}
 	}
 
+	public void cardsInitialize(){
+
+		playerModel.allocateCardsToCountry();
+
+	}
+
+//	public boolean processGamePlayAttackCommands(Scanner sc){
+//
+//
+//
+//
+//
+//	}
+
+
+
+
 	/**
 	 * Parses the String and calls the related game play fortify commands.
 	 * 
@@ -568,5 +585,4 @@ public class GameController extends Observable {
 		int totalPlayers = playerModel.getPlayersList().size();
 		setCurrentPlayer(playerModel.getPlayersList().get((currentPlayerIdx + 1) % totalPlayers));
 	}
-
 }
