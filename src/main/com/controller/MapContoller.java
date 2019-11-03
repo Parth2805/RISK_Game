@@ -1,4 +1,4 @@
-package com.mapparser;
+package com.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ import com.exception.InvalidMap;
  * @author Mehul
  * @author Komal
  */
-public class MapCommands {
+public class MapContoller {
 	
 	private static int countryIdx = 1;
 	

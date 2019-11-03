@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
@@ -145,6 +146,14 @@ public class MapReader {
 		}
 		map.setContinentMap(continentMap);
 		map.setContinents(continentList);
+		
+		// Set Hashmap Country Name: Country object
+		Map<String, Country> countryMap = map.getCountryMap();
+		
+		for (Continent continent : continentList) {
+			for (Country c : continent.getCountries())
+				countryMap.put(c.getName(), c);
+		}
 		
 		return map;
 	}
