@@ -349,6 +349,7 @@ public class CommandParser {
      */
     public boolean processGamePlayStartupCommands(Scanner sc) {
 
+
         System.out.println("Current state: Gameplay startup phase (placearmy, placeall, showmap)");
         System.out.println("Current Player: " + playerCommands.getCurrentPlayer().getName() +
                 ", number of armies left = " + playerCommands.getCurrentPlayer().getArmies());
@@ -579,7 +580,13 @@ public class CommandParser {
 
 
 
+
+
+
                     }else if(words[4].equalsIgnoreCase(Commands.MAP_COMMAND_ATTACK_OPTION_NOATTACK)){
+
+                        //Going to next phase
+                        return true;
 
 
 
@@ -590,9 +597,25 @@ public class CommandParser {
                     }
 
 
+                }else{
+
+                    String attackingCountry=words[1];
+                    String defendingCountry=words[2];
+                    int numofdice= Integer.parseInt(words[3]);
+
+                    playerCommands.attackphase(attackingCountry,defendingCountry,numofdice);
+
+
+
+
                 }
 
                 break;
+
+            case Commands.MAP_COMMAND_SHOWMAP:
+                playerCommands.gamePlayShowmap();
+                break;
+
             default:
 
                 System.out.println("Invalid Input");

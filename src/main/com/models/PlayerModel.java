@@ -564,8 +564,66 @@ public class PlayerModel {
 		setNumberOfTimesCardExchanged();
 
 		for(Card card : cardlist){
-
-			cards.remove(card);
+			//Removing the exchanged cards from players hand
+			getCurrentPlayer().getCardList().remove(card);
 		}
+		//Adding cards back to deck
+		cards.addAll(cardlist);
+
+
+	}
+
+	public boolean attackphase(String attackingCountry,String defendingCountry,int numOfDice){
+
+		Country attackCountry=null;
+		Country defendCountry=null;
+
+
+		if(numOfDice>3){
+
+			System.out.println("Can attack only with 1-3 dice");
+			return false;
+		}
+
+		for(Country c:getCurrentPlayer().getAssignedCountry()){
+
+			if(c.getName().equalsIgnoreCase(attackingCountry)){
+				attackCountry=c;
+			}
+			for(Country n:c.getAdjacentCountries()){
+
+				if(n.getName().equalsIgnoreCase(defendingCountry)){
+
+					defendCountry=n;
+				}
+
+			}
+
+
+		}
+
+		//check if attacking country belongs to player
+		//check if defending country belongs to neighbor
+		if(attackCountry==null){
+
+			System.out.println("You do not own this country!!");
+			return false;
+		}
+		if(defendCountry==null){
+
+			System.out.println("Cant attack to this country as its not you neighbor");
+			return false;
+		}
+
+		if(attackCountry.getArmy()==1){
+
+			System.out.println("Cant Attack with this country as it has only one army(need >1 army to attack");
+			return false;
+
+		}else if(attackCountry.getArmy()<numOfDice){
+
+			System.out.println();
+		}
+
 	}
 }
