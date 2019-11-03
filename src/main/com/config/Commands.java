@@ -29,4 +29,5 @@ public class Commands {
 
 	public static final String MAP_COMMAND_OPTION_ADD = "-add";
 	public static final String MAP_COMMAND_OPTION_REMOVE = "-remove";
+	public static final String MAP_COMMAND_REINFORCE_OPTION_EXCHANGECARDS = "exhangecards";
 }

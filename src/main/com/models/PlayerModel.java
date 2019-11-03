@@ -12,8 +12,17 @@ public class PlayerModel {
 	private static int[] numOfArmies = { Config.CONFIG_ARMIES_TWO_PLAYER, Config.CONFIG_ARMIES_THREE_PLAYER,
 			Config.CONFIG_ARMIES_FOUR_PLAYER, Config.CONFIG_ARMIES_FIVE_PLAYER, Config.CONFIG_ARMIES_SIX_PLAYER };
 
+	private int cardExchanged = 5;
 	private Stack<Card> cards;
 
+	public void setNumberOfTimesCardExchanged(){
+		cardExchanged +=5;
+	}
+	
+	public int getCardExchanged(){
+		return cardExchanged;
+	}
+	
 	/**
 	 * This is the default constructor of Player Model.
 	 */
@@ -483,26 +492,74 @@ public class PlayerModel {
 		
 		if(left > 0) {
 			for(int i=0; i < left; i++) {
-				System.out.println("inside");
+				//System.out.println("inside");
 				cardlist.add(CardType.values()[(int) (Math.random() * CardType.values().length)]);
 			}
 		}
+
+
 		int i = 0;
+
 		for (Country country : countryList) {
+
 			Card card = new Card(cardlist.get(i++));
 			card.setCountryToWhichCardBelong(country);
 			cards.push(card);
 		}
 
 		Collections.shuffle(cards);
-		for(Card cards:cards){
-
-			System.out.println(cards);
-		}
+//		for(Card cards:cards){
+//
+//			System.out.println(cards);
+//		}
 
 
 
 	}
 
+	public int areCardsvalidForExchange(List<Card> cardlist) {
 
+
+		int ans = 0;
+
+
+		if(cardlist.size()==3) {
+
+
+			int infantry = 0, cavalry = 0, artillery = 0;
+
+			for (Card card : cardlist) {
+
+				if(card.getCardKind().toString().equals(CardType.CAVALRY.toString())) {
+					infantry++;
+				}
+				else if(card.getCardKind().toString().equals(CardType.INFANTRY.toString())) {
+					cavalry++;
+				}
+				else if(card.getCardKind().toString().equals(CardType.ARTILLERY.toString())) {
+					artillery++;
+				}
+			}
+			//if all are of different kind or all are of same kind then only, player can exchange cards for army.
+
+			if((infantry==1 && cavalry==1 && artillery==1) || infantry==3 || cavalry==3 || artillery==3) {
+				ans = 1;
+			}
+		}
+		return ans;
+	}
+
+	public void exchangeCards(int idx[],List<Card> cardlist){
+
+		for(int index:idx){
+			for(Country c:getCurrentPlayer().getAssignedCountry()){
+				if(c.getName().equalsIgnoreCase(cardlist.get(index).getCountryToWhichCardBelong().getName())){
+
+					getCurrentPlayer().setArmies(getCurrentPlayer().getArmies()+2);
+				}
+			}
+		}
+		getCurrentPlayer().setArmies(getCurrentPlayer().getArmies()+getCardExchanged());
+		setNumberOfTimesCardExchanged();
+	}
 }
