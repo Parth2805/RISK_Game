@@ -6,7 +6,7 @@ import org.junit.*;
 import com.entity.Country;
 import com.entity.Player;
 import com.mapparser.MapVerifier;
-import com.playerparser.PlayerCommands;
+import com.models.PlayerModel;
 
 /**
  * This is the test class for PlayerCommands
@@ -16,7 +16,7 @@ import com.playerparser.PlayerCommands;
  */
 public class PlayerCommandsTest {
 	Player player;
-	PlayerCommands playerCmd;
+	PlayerModel playerCmd;
 	
 	/**
 	 * This method executed before all the methods of the class.
@@ -32,7 +32,7 @@ public class PlayerCommandsTest {
 	@Before
 	public void beforeTest() {
 		player = new Player(4, "TestPlayer");
-		playerCmd = new PlayerCommands();
+		playerCmd = new PlayerModel();
 	}
 
 	/**

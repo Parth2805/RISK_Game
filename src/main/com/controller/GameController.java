@@ -1,18 +1,18 @@
-package com.commandparser;
+package com.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import com.config.Commands;
 import com.entity.Hmap;
 import com.entity.Player;
 import com.exception.InvalidMap;
-import com.mapparser.MapCommands;
 import com.mapparser.MapReader;
 import com.mapparser.MapVerifier;
 import com.mapparser.MapWriter;
-import com.playerparser.PlayerCommands;
+import com.models.PlayerModel;
 
 
 /**
@@ -21,22 +21,43 @@ import com.playerparser.PlayerCommands;
  * @author Parth
  * @author Mehul
  */
-public class CommandParser {
+public class GameController {
 
 	Hmap rootMap;
 	MapWriter mapWriter;
-	PlayerCommands playerCommands;
 	
 	String editFilePath = "";
 	boolean isReinfoceArmiesAssigned = false;
 	
+	PlayerModel playerModel;
+
+	Player currentPlayer;
+		
 	// default constructor to initialize members
-	public CommandParser() {
+	public GameController() {
 		this.mapWriter = new MapWriter();
-		this.playerCommands = new PlayerCommands();
+		this.playerModel = new PlayerModel();
 		this.rootMap = new Hmap();
 	}
 
+	/**
+	 * Get the current player.
+	 * 
+	 * @return player playing
+	 */
+	public Player getCurrentPlayer() {
+		return currentPlayer;
+	}
+
+	/**
+	 * This method is to set the current player.
+	 * 
+	 * @param player Current player.
+	 */
+	public void setCurrentPlayer(Player player) {
+		currentPlayer = player;
+	}
+	
 	/**
 	 * Setter method for the map object.
 	 *
@@ -82,7 +103,7 @@ public class CommandParser {
 						return false;
 					}
 					
-					MapCommands.addContinent(getMap(), words[idx + 1], words[idx + 2], "");
+					MapContoller.addContinent(getMap(), words[idx + 1], words[idx + 2], "");
 					idx = idx + 2;
 
 				} else if (words[idx].equals(Commands.MAP_COMMAND_OPTION_REMOVE)) {
@@ -91,7 +112,7 @@ public class CommandParser {
 						System.out.println("Invalid command, Try again !!!");
 						return false;
 					}
-					MapCommands.removeContinent(getMap(), words[idx + 1]);
+					MapContoller.removeContinent(getMap(), words[idx + 1]);
 					idx = idx + 1;
 
 				} else {
@@ -111,7 +132,7 @@ public class CommandParser {
 						return false;
 					}
 					
-					MapCommands.addCountry(getMap(), words[idx + 1], words[idx + 2]);
+					MapContoller.addCountry(getMap(), words[idx + 1], words[idx + 2]);
 					idx = idx + 2;
 
 				} else if (words[idx].equals(Commands.MAP_COMMAND_OPTION_REMOVE)) {
@@ -121,7 +142,7 @@ public class CommandParser {
 						return false;
 					}
 					
-					MapCommands.removeCountry(getMap(), words[idx + 1]);
+					MapContoller.removeCountry(getMap(), words[idx + 1]);
 					idx = idx + 1;
 
 				} else {
@@ -141,7 +162,7 @@ public class CommandParser {
 						return false;
 					}
 					
-					MapCommands.addNeighborCountry(getMap(), words[idx + 1], words[idx + 2]);
+					MapContoller.addNeighborCountry(getMap(), words[idx + 1], words[idx + 2]);
 					idx = idx + 2;
 
 				} else if (words[idx].equals(Commands.MAP_COMMAND_OPTION_REMOVE)) {
@@ -151,7 +172,7 @@ public class CommandParser {
 						return false;
 					}
 					
-					MapCommands.removeNeighborCountry(getMap(), words[idx + 1], words[idx + 2]);
+					MapContoller.removeNeighborCountry(getMap(), words[idx + 1], words[idx + 2]);
 					idx = idx + 2;
 
 				} else {
@@ -161,7 +182,7 @@ public class CommandParser {
 			break;
 
 		case Commands.MAP_COMMAND_SHOWMAP:
-			MapCommands.mapEditorShowmap(getMap());
+			MapContoller.mapEditorShowmap(getMap());
 			break;
 
 		case Commands.MAP_COMMAND_SAVEMAP:
@@ -274,7 +295,7 @@ public class CommandParser {
 		switch (commandType) {
 
 		case Commands.MAP_COMMAND_SHOWMAP:
-			MapCommands.mapEditorShowmap(getMap());
+			MapContoller.mapEditorShowmap(getMap());
 			break;
 
 		case Commands.MAP_COMMAND_GAMEPLAYER:
@@ -288,7 +309,7 @@ public class CommandParser {
 					}
 					
 					String playerName = words[idx + 1];
-					playerCommands.createPlayer(playerName);
+					playerModel.createPlayer(playerName);
 					idx = idx + 1;
 
 				} else if (words[idx].equals(Commands.MAP_COMMAND_OPTION_REMOVE)) {
@@ -299,7 +320,7 @@ public class CommandParser {
 					}
 					
 					String playerName = words[idx + 1];
-					playerCommands.removePlayer(playerName);
+					playerModel.removePlayer(playerName);
 					idx = idx + 1;
 
 				} else {
@@ -311,20 +332,18 @@ public class CommandParser {
 
 		case Commands.MAP_COMMAND_POPULATE_COUNTRIES:
 
-			playerCommands.setCountryList(playerCommands.getCountryListFromMap(getMap()));
+			// Assign armies according the players count
+			if (playerModel.assignArmiesToAllPlayers()) {
 
-			if (playerCommands.assignArmiesToPlayers()) {
+				playerModel.populateCountries(getMap());
+				playerModel.intitializeArmiesForAllCountries(getMap());
 
-				playerCommands.populateCountries(getMap());
-				playerCommands.intitializeArmiesForAllCountries();
-
-				for (Player p : playerCommands.getPlayersList()) {
+				for (Player p : playerModel.getPlayersList()) {
 					int countryCount = p.getAssignedCountry().size();
 					System.out.println("Number of Countries for Player : " + p.getName() + " = " + countryCount);
 				}
 				
-				playerCommands.setCurrentPlayer(playerCommands.getPlayersList().get(0));				
-				playerCommands.setCountryMap(playerCommands.getCountryMapFromList(playerCommands.getCountryList()));
+				setCurrentPlayer(playerModel.getPlayersList().get(0));				
 				return true;
 			}
 			break;
@@ -345,9 +364,9 @@ public class CommandParser {
 	 */
 	public boolean processGamePlayStartupCommands(Scanner sc) {
 
-		System.out.println("Current state: Gameplay startup phase (placearmy, placeall, showmap)");
-		System.out.println("Current Player: " + playerCommands.getCurrentPlayer().getName() + 
-				", number of armies left = " + playerCommands.getCurrentPlayer().getArmies());
+		System.out.println("Current game phase: Gameplay startup phase (placearmy, placeall, showmap)");
+		System.out.println("Current Player: " + getCurrentPlayer().getName() + 
+				", number of armies left = " + getCurrentPlayer().getArmies());
 
 		String command = sc.nextLine();
 		String[] words = command.split(" ");
@@ -356,7 +375,7 @@ public class CommandParser {
 		switch (commandType) {
 
 		case Commands.MAP_COMMAND_SHOWMAP:
-			playerCommands.gamePlayShowmap();
+			playerModel.gamePlayShowmap(getMap());
 			break;
 
 		case Commands.MAP_COMMAND_PLACE_ARMY:
@@ -366,19 +385,19 @@ public class CommandParser {
 				break;
 			}
 			
-			if (playerCommands.placeArmy(words[1])) {
-				playerCommands.changeCurrentPlayer();
+			if (playerModel.placeArmy(getMap(), getCurrentPlayer(), words[1])) {
+				changeCurrentPlayer();
 			}
 
-			if (playerCommands.isAllPlayersArmiesExhausted()) {
-				playerCommands.setCurrentPlayer(playerCommands.getPlayersList().get(0));
+			if (playerModel.isAllPlayersArmiesExhausted()) {
+				setCurrentPlayer(playerModel.getPlayersList().get(0));
 				return true;
 			}
 			break;
 
 		case Commands.MAP_COMMAND_PLACE_ALL:
-			playerCommands.placeAll();
-			playerCommands.setCurrentPlayer(playerCommands.getPlayersList().get(0));				
+			playerModel.placeAll();
+			setCurrentPlayer(playerModel.getPlayersList().get(0));				
 			return true;
 
 		default:
@@ -398,13 +417,13 @@ public class CommandParser {
 	public boolean processGamePlayReinforcementCommands(Scanner sc) {
 
 		if (!isReinfoceArmiesAssigned) {
-			playerCommands.assignReinforceArmiesToPlayers();
+			playerModel.assignReinforceArmiesToPlayers();
 			isReinfoceArmiesAssigned = true;
 		}
 
-		System.out.println("Current state: Gameplay reinforcement phase (reinforce, showmap)");
-		System.out.println("Current Player: " + playerCommands.getCurrentPlayer().getName()
-				+ ", Armies left for reinforcement = " + playerCommands.getCurrentPlayer().getArmies());
+		System.out.println("Current game phase: Gameplay reinforcement phase (reinforce, showmap)");
+		System.out.println("Current Player: " + getCurrentPlayer().getName()
+				+ ", Armies left for reinforcement = " + getCurrentPlayer().getArmies());
 
 		String command = sc.nextLine();
 		String[] words = command.split(" ");
@@ -413,7 +432,7 @@ public class CommandParser {
 		switch (commandType) {
 
 		case Commands.MAP_COMMAND_SHOWMAP:
-			playerCommands.gamePlayShowmap();
+			playerModel.gamePlayShowmap(getMap());
 			break;
 		
 		case Commands.MAP_COMMAND_REINFORCE:
@@ -438,10 +457,10 @@ public class CommandParser {
 				return false;
 			}
 
-			if (!playerCommands.isCountryBelongToPlayer(playerCommands.getCurrentPlayer(), countryName))
+			if (!playerModel.isCountryBelongToPlayer(getMap(), getCurrentPlayer(), countryName))
 				return false;
 
-			if (playerCommands.reinforceArmiesForCurrentPlayer(countryName, numberOfArmies))
+			if (playerModel.reinforceArmiesForCurrentPlayer(getCurrentPlayer(), countryName, numberOfArmies))
 				return true;
 			break;
 
@@ -460,8 +479,8 @@ public class CommandParser {
 	 * @return true if command is processed correctly, false otherwise
 	 */
 	public boolean processGamePlayFortifyCommands(Scanner sc) {
-		System.out.println("Current state: Gameplay fortify phase (fortify, showmap)");
-		System.out.println("Current Player: " + playerCommands.getCurrentPlayer().getName());
+		System.out.println("Current game phase: Gameplay fortify phase (fortify, showmap)");
+		System.out.println("Current Player: " + getCurrentPlayer().getName());
 		
 		boolean isForifyDone = false;
 		String command = sc.nextLine();
@@ -471,7 +490,7 @@ public class CommandParser {
 		switch (commandType) {
 
 		case Commands.MAP_COMMAND_SHOWMAP:
-			playerCommands.gamePlayShowmap();
+			playerModel.gamePlayShowmap(getMap());
 			break;
 		
 		case Commands.MAP_COMMAND_FORTIFY:
@@ -505,17 +524,17 @@ public class CommandParser {
 					return false;
 				}
 				
-				if (playerCommands.fortifyCurrentPlayer(words[1], words[2], numArmies)) 	
+				if (playerModel.fortifyCurrentPlayer(getMap(), getCurrentPlayer(), words[1], words[2], numArmies)) 	
 					isForifyDone = true;				
 			}
 			
 			if (isForifyDone) { 
 				// check all players have played
-				if (playerCommands.isLastPlayer(playerCommands.getCurrentPlayer())) {
+				if (playerModel.isLastPlayer(getCurrentPlayer())) {
 					isReinfoceArmiesAssigned = false;
 					System.out.println("***** All players have played. Going back to reinforcement again *****");
 				}
-				playerCommands.changeCurrentPlayer();	
+				changeCurrentPlayer();	
 			}
 			break;
 
@@ -525,5 +544,14 @@ public class CommandParser {
 		}
 
 		return isForifyDone;
+	}
+	
+	/**
+	 * This will change the current player
+	 */
+	public void changeCurrentPlayer() {
+		int currentPlayerIdx = playerModel.getPlayersList().indexOf(getCurrentPlayer());
+		int totalPlayers = playerModel.getPlayersList().size();
+		setCurrentPlayer(playerModel.getPlayersList().get((currentPlayerIdx + 1) % totalPlayers));
 	}
 }

@@ -4,12 +4,13 @@ import static org.junit.Assert.*;
 
 import java.util.HashMap;
 
-import com.mapparser.MapCommands;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.AfterClass;
 import org.junit.Test;
 import org.junit.Ignore;
+
+import com.controller.MapContoller;
 import com.entity.Continent;
 import com.entity.Country;
 import com.entity.Hmap;
@@ -23,7 +24,7 @@ import com.exception.InvalidMap;
  * @version 0.0.1
  */
 public class MapCommandsTest {
-	MapCommands mpcom;
+	MapContoller mpcom;
 	static Continent continent;
 	static Hmap mp;
 	String nameContinent = "North-America";
@@ -100,7 +101,7 @@ public class MapCommandsTest {
 	 */
 	@Test
 	public void addCountryTest() {
-		boolean output = MapCommands.addCountry(mp, nameCountry, nameContinent);
+		boolean output = MapContoller.addCountry(mp, nameCountry, nameContinent);
 		assertNotNull(output);
 		System.out.println("This is a test for AddCountry Continent");
 	}
