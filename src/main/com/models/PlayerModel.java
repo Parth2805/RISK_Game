@@ -556,10 +556,16 @@ public class PlayerModel {
 				if(c.getName().equalsIgnoreCase(cardlist.get(index).getCountryToWhichCardBelong().getName())){
 
 					getCurrentPlayer().setArmies(getCurrentPlayer().getArmies()+2);
+					break;
 				}
 			}
 		}
 		getCurrentPlayer().setArmies(getCurrentPlayer().getArmies()+getCardExchanged());
 		setNumberOfTimesCardExchanged();
+
+		for(Card card : cardlist){
+
+			cards.remove(card);
+		}
 	}
 }
