@@ -4,12 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Observable;
-import java.util.List;
 import java.util.Scanner;
 
 import com.config.Commands;
-import com.entity.Card;
-import com.entity.Country;
 import com.entity.Hmap;
 import com.entity.Player;
 import com.exception.InvalidMap;
@@ -435,80 +432,6 @@ public class GameController extends Observable {
 		System.out.println("Current Player: " + getCurrentPlayer().getName()
 				+ ", Armies left for reinforcement = " + getCurrentPlayer().getArmies());
 
-		if (getCurrentPlayer().getCardList().size()==5){
-
-			System.out.println("You have 5(max) cards, need to exchange!!");
-
-			System.out.println("Cards List:");
-			int i=1;
-			for(Card cards: getCurrentPlayer().getCardList()){
-
-				System.out.println(i+"."+cards);
-				i++;
-			}
-			System.out.println("Countries owned");
-			for(Country c: getCurrentPlayer().getAssignedCountry()){
-
-				System.out.println(c.getName());
-			}
-
-			Scanner sc1 = new Scanner(System.in);
-
-			while(getCurrentPlayer().getCardList().size()==5){
-				System.out.println("Enter the cards(index) to exchange:");
-				String input =sc1.nextLine();
-				String tempwords[] = input.split(" ");
-				if(tempwords[0].equalsIgnoreCase(Commands.MAP_COMMAND_REINFORCE_OPTION_EXCHANGECARDS)){
-
-					if(tempwords.length==5&&tempwords[4].equalsIgnoreCase("-none")){
-
-						System.out.println("Need to Exchange Cards!!");
-
-					}else{
-						int idx[]= new int[3];
-						idx[0]=Integer.parseInt(tempwords[1])-1;
-						idx[1]=Integer.parseInt(tempwords[2])-1;
-						idx[2]=Integer.parseInt(tempwords[3])-1;
-						List<Card> cardschoosen = new ArrayList<>();
-
-						List<Card> cardlist= getCurrentPlayer().getCardList();
-
-						for(int index:idx){
-
-							cardschoosen.add(cardlist.get(index));
-
-						}
-
-						int ans = playerModel.areCardsvalidForExchange(cardschoosen);
-						
-						if (ans == 1) {
-
-
-						}
-
-
-
-
-
-
-					}
-
-
-
-
-				}else{
-
-					System.out.println("Invalid Input Command!!");
-				}
-
-
-			}
-
-
-
-
-		}
-
 		String command = sc.nextLine();
 		String[] words = command.split(" ");
 		String commandType = words[0];
@@ -556,23 +479,6 @@ public class GameController extends Observable {
 			break;
 		}
 	}
-
-	public void cardsInitialize(){
-
-		playerModel.allocateCardsToCountry();
-
-	}
-
-//	public boolean processGamePlayAttackCommands(Scanner sc){
-//
-//
-//
-//
-//
-//	}
-
-
-
 
 	/**
 	 * Parses the String and calls the related game play fortify commands.
@@ -663,11 +569,4 @@ public class GameController extends Observable {
 		setCurrentPlayer(playerModel.getPlayersList().get((currentPlayerIdx + 1) % totalPlayers));
 	}
 
-	public boolean processGamePlayAttackCommands(Scanner sc){
-
-
-
-		return false;
-
-	}
 }
