@@ -38,10 +38,6 @@ public class GameController extends Observable {
 	Player currentPlayer;
 	public static Stack<Card> stackOfCards;
 
-
-
-
-
 	// default constructor to initialize members
 	public GameController(Main mainView) {
 		this.mapWriter = new MapWriter();

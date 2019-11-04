@@ -569,6 +569,12 @@ public class PlayerModel {
         diceModel.rolldice();
         diceModel.getResultAfterRoll();
         
+        // Is game over for defender player?
+        
+        // Is game win by attacker?
+        
+        // Move country
+        
 		return false;
 	}
 	
