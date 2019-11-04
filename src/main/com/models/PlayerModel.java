@@ -680,9 +680,19 @@ public class PlayerModel {
 			diceModel.getResultAfterRoll();
 		}
 
+		if(defendCountry.getArmy()==0){
+			modifyDefendingCountryOwnerShip(defendCountry,attackCountry);
+		}
+	}
 
+	public void modifyDefendingCountryOwnerShip(Country defendingCountry,Country attackingCountry) {
 
+		List<Country> defendersCountries = defendingCountry.getPlayer().getAssignedCountry();
 
+		defendersCountries.remove(defendingCountry);
+
+		defendingCountry.setPlayer(attackingCountry.getPlayer());
+		attackingCountry.getPlayer().getAssignedCountry().add(defendingCountry);
 
 	}
 }
