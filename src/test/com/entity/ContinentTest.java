@@ -63,5 +63,4 @@ public class ContinentTest {
 		assertNotEquals("Advance Programming", cont.getName());
 		System.out.println("'assertNotEqual' test for getName method is passed");
 	}
-
 }

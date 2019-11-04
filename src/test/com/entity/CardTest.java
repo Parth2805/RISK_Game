@@ -32,9 +32,9 @@ public class CardTest {
 	 */
 	@Before
 	public void beforeTest() {
-		cr = new Card(CardType.CARD_TYPE_CAVALRY);
-		cr = new Card(CardType.CARD_TYPE_ARTILLERY);
-		cr = new Card(CardType.CARD_TYPE_INFANTRY);
+		cr = new Card(CardType.CAVALRY);
+		cr = new Card(CardType.ARTILLERY);
+		cr = new Card(CardType.INFANTRY);
 	}
 
 	/**
