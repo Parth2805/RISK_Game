@@ -336,7 +336,7 @@ public class PlayerModel {
 		}
 
 		if (player.getArmies() == 0) {
-			System.out.println("Reinforcement has been completed. You can now do fortify once.");
+			System.out.println("Reinforcement has been completed. You can now attack the countries.");
 			return true;
 		}
 
@@ -503,7 +503,7 @@ public class PlayerModel {
 	 * 
 	 * @return true if current player is the last player, false otherwise
 	 */
-	public boolean attackphase(Player player, String attackingCountry, String defendingCountry, int numOfDice) {
+	public boolean attackCountry(Player player, String attackingCountry, String defendingCountry, int numOfDice) {
 
 		Country attackCountry = null;
 		Country defendCountry = null;

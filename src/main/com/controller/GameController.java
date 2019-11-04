@@ -561,7 +561,7 @@ public class GameController extends Observable {
 	 *            scanner object
 	 * @return true if command is processed correctly, false otherwise
 	 */
-	public boolean processGamePlayAttackCommands(Scanner sc) {
+	public void processGamePlayAttackCommands(Scanner sc) {
 
 		System.out.println("Current phase: Gameplay Attack phase (attack, defend, attackmove, showmap)");
 		System.out.println("Current Player: " + getCurrentPlayer().getName());
@@ -573,29 +573,53 @@ public class GameController extends Observable {
 
 		case Commands.MAP_COMMMAND_ATTACK:
 
-			if (words.length == 5) {
+			// Player may decide to attack or not to attack again. If attack not possible, attack automatically ends. 1
 
+			if (words.length < 2) {
+				System.out.println("Invalid command, Try again !!!");
+				return;
+			}
+			
+			for (String w: words) {
+				if (w.equalsIgnoreCase(Commands.MAP_COMMAND_ATTACK_OPTION_NOATTACK)) {
+					System.out.println(getCurrentPlayer() + " has chosen not to attack");
+					// Going to next phase - Update View
+					setChanged();
+					notifyObservers("attackdone");
+					return;
+				}
+			}
+
+			if (words.length < 4) {
+				System.out.println("Invalid command, Try again !!!");
+				return;
+			}
+			
+			if (words.length >= 5) {
+				
+				// Attack with allout mode
 				if (words[4].equalsIgnoreCase(Commands.MAP_COMMAND_ATTACK_OPTION_ALLOUT)) {
 
-				} else if (words[4].equalsIgnoreCase(Commands.MAP_COMMAND_ATTACK_OPTION_NOATTACK)) {
-
-					// Going to next phase
-					return true;
-
-				} else {
-
-					System.out.println("Invalid Input!!");
-					return false;
+					// Going to next phase - Update View
+					setChanged();
+					notifyObservers("attackdone");
+					break;
 				}
 			} else {
 
+				int numOfDice = 0;
 				String attackingCountry = words[1];
 				String defendingCountry = words[2];
-				int numofdice = Integer.parseInt(words[3]);
+				
+				try {
+					numOfDice = Integer.parseInt(words[3]);
+				} catch (Exception e) {
+					System.out.println("Exception: " + e.toString());
+					return;
+				}
 
-				playerModel.attackphase(getCurrentPlayer(), attackingCountry, defendingCountry, numofdice);
+				playerModel.attackCountry(getCurrentPlayer(), attackingCountry, defendingCountry, numOfDice);
 			}
-
 			break;
 
 		case Commands.MAP_COMMAND_SHOWMAP:
@@ -607,7 +631,6 @@ public class GameController extends Observable {
 			break;
 
 		}
-		return false;
 	}
 
 	/**
@@ -641,7 +664,7 @@ public class GameController extends Observable {
 			}
 
 			if (words[1].equalsIgnoreCase(Commands.MAP_COMMAND_FORTIFY_OPTION_NONE)) {
-				System.out.println("You have chosen to skip fortify.");
+				System.out.println(getCurrentPlayer() + " has chosen to skip fortify.");
 				// Update View
 				setChanged();
 				notifyObservers("fortifydone");
