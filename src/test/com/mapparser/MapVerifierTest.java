@@ -23,6 +23,7 @@ import com.mapparser.MapReader;
  * 
  * @author Mahmoudreza
  * @author Maryam
+ * @author Komal
  * @version 0.0.1
  */
 public class MapVerifierTest {
