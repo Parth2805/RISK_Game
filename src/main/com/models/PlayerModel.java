@@ -633,64 +633,51 @@ public class PlayerModel {
 		Country attackCountry = map.getCountryMap().get(attackingCountry);
 		Country defendCountry = map.getCountryMap().get(defendingCountry);
 
-		while(attackCountry.getArmy()!=1 || defendCountry.getArmy()<=0){
+		// check if attacking country belongs to player
+		if (!isCountryBelongToPlayer(map, player, attackingCountry))
+			return;
+
+		// check if defending country does not belongs to same player
+		if (isCountryBelongToPlayer(map, player, defendingCountry)) {
+			System.out.println("Error: Can't attack becuase attacking country: " + attackingCountry + " and defending country " + defendingCountry + " belongs to same" + player);
+			return;
+		}
+
+		// check if defending country belongs to neighbor
+		if (!isCountriesAdjacent(map, attackingCountry, defendingCountry)) {
+			System.out.println("Error: Can't attack to this country as its not your neighbor");
+			return;
+		}
+
+		while(true){
 
 
-			if (numOfDice > 3) {
-				System.out.println("Error: Can attack only with 1-3 dice");
+			if(attackCountry.getArmy()==1){
 				break;
 			}
-
-			// check if attacking country belongs to player
-			if (!isCountryBelongToPlayer(map, player, attackingCountry))
-				break;
-
-			// check if defending country does not belongs to same player
-			if (isCountryBelongToPlayer(map, player, defendingCountry)) {
-				System.out.println("Error: Can't attack becuase attacking country: " + attackingCountry + " and defending country " + defendingCountry + " belongs to same" + player);
+			if(defendCountry.getArmy()<=0){
 				break;
 			}
+			int numOfDefenderDice=2;
 
-			// check if defending country belongs to neighbor
-			if (!isCountriesAdjacent(map, attackingCountry, defendingCountry)) {
-				System.out.println("Error: Can't attack to this country as its not your neighbor");
-				break;
-			}
-
-			attackCountry = map.getCountryMap().get(attackingCountry);
-			defendCountry = map.getCountryMap().get(defendingCountry);
 
 			// Check armies count
-			if (attackCountry.getArmy() <= 1) {
-				System.out.println("Error: Can't attack with " + attackingCountry + " country as it has only one army (need > 1 army to attack");
-				break;
+			if (attackCountry.getArmy() <= 3) {
+
+				numOfDice=attackCountry.getArmy()-1;
+
+			}
+			if(defendCountry.getArmy()<=2){
+
+				numOfDefenderDice=defendCountry.getArmy();
 			}
 
-			// Check dice count
-			if (attackCountry.getArmy() <= numOfDice) {
-				System.out.println("Error: Can't attack because your (attack armies count = " +
-						(attackCountry.getArmy() - 1)  + ") < (num of dice = " + numOfDice + ")");
-				break;
-			}
 
-			String defenderPlayerName = defendCountry.getPlayer().getName();
-			Player defenderplayer = null;
-
-			for (Player p: playersList) {
-				if (p.getName().equalsIgnoreCase(defenderPlayerName))
-					defenderplayer = p;
-			}
 
 			// Do attack now
-			//int numOfDefenderDice = getDefenderDice(defenderplayer, defendCountry);
-
-			DiceModel diceModel = new DiceModel(attackCountry, defendCountry, 3, 2);
+			DiceModel diceModel = new DiceModel(attackCountry, defendCountry, numOfDice, numOfDefenderDice);
 			diceModel.rolldice();
 			diceModel.getResultAfterRoll();
-
-
-
-
 		}
 
 

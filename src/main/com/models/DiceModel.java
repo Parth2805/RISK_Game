@@ -47,9 +47,6 @@ public class DiceModel {
             int value = new Random().nextInt(6)+1;
             attackerDiceValues.add(value);
         }
-
-        System.out.println("Defender dice values:");
-        
         for (int i = 0; i < numberOfDiceUsedByDefender; i++) {
 
             int value= new Random().nextInt(6)+1;
