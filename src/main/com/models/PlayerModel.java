@@ -2,7 +2,7 @@ package com.models;
 
 import java.util.*;
 
-import com.config.CardType;
+import com.config.Commands;
 import com.entity.*;
 import com.config.Config;
 
@@ -218,7 +218,15 @@ public class PlayerModel {
 
 			// Get Player one by one from list and assign country
 			currentPlayer = getPlayersList().get(playerNum);
-			currentPlayer.setAssignedCountry(countryAssigned);
+			
+			// Set player in assigned country in Map
+			for (Continent cont : map.getContinents()) {
+				for (Country c : cont.getCountries()) {
+					if (c.getName().equalsIgnoreCase(countryAssigned.getName()))
+						currentPlayer.setAssignedCountry(c);
+				}
+			}
+			
 			playerNum = (playerNum + 1) % getPlayersList().size();
 			countriesList.remove(chooseCountry);
 
@@ -269,6 +277,7 @@ public class PlayerModel {
 						+ c.getAdjacentCountries());
 			}
 		}
+		
 		System.out.println("----------------------------------");
 	}
 
@@ -336,7 +345,7 @@ public class PlayerModel {
 		}
 
 		if (player.getArmies() == 0) {
-			System.out.println("Reinforcement has been completed. You can now do fortify once.");
+			System.out.println("Reinforcement has been completed. You can now attack the countries.");
 			return true;
 		}
 
@@ -435,8 +444,8 @@ public class PlayerModel {
 		if (map.getCountryMap().get(country).getPlayer().getName().equalsIgnoreCase(currentPlayer.getName()))
 			return true;
 
-		System.out
-				.println("Error: Given country " + country + " does not belong to player: " + currentPlayer.getName());
+		// TODO print here ?
+		System.out.println("Error: Given country " + country + " does not belong " + currentPlayer);
 		return false;
 	}
 
@@ -503,59 +512,119 @@ public class PlayerModel {
 	 * 
 	 * @return true if current player is the last player, false otherwise
 	 */
-	public boolean attackphase(Player player, String attackingCountry, String defendingCountry, int numOfDice) {
+	public boolean attackCountry(Hmap map, Player player, String attackingCountry, String defendingCountry, int numOfDice) {
 
-		Country attackCountry = null;
-		Country defendCountry = null;
-
+		Country attackCountry;
+		Country defendCountry;
+		
 		if (numOfDice > 3) {
-
-			System.out.println("Can attack only with 1-3 dice");
+			System.out.println("Error: Can attack only with 1-3 dice");
 			return false;
-		}
-
-		for (Country c : player.getAssignedCountry()) {
-
-			if (c.getName().equalsIgnoreCase(attackingCountry)) {
-				attackCountry = c;
-			}
-			for (Country n : c.getAdjacentCountries()) {
-
-				if (n.getName().equalsIgnoreCase(defendingCountry)) {
-
-					defendCountry = n;
-				}
-
-			}
-
 		}
 
 		// check if attacking country belongs to player
+		if (!isCountryBelongToPlayer(map, player, attackingCountry))
+			return false;
+
+		// check if defending country does not belongs to same player
+		if (isCountryBelongToPlayer(map, player, defendingCountry)) {
+			System.out.println("Error: Can't attack becuase attacking country: " + attackingCountry + " and defending country " + defendingCountry + " belongs to same" + player);
+			return false;
+		}
+		
 		// check if defending country belongs to neighbor
-		if (attackCountry == null) {
-
-			System.out.println("You do not own this country!!");
+		if (!isCountriesAdjacent(map, attackingCountry, defendingCountry)) {
+			System.out.println("Error: Can't attack to this country as its not your neighbor");
 			return false;
 		}
-		if (defendCountry == null) {
+		
+		attackCountry = map.getCountryMap().get(attackingCountry);
+		defendCountry = map.getCountryMap().get(defendingCountry);
 
-			System.out.println("Cant attack to this country as its not you neighbor");
+		// Check armies count
+		if (attackCountry.getArmy() <= 1) {
+			System.out.println("Error: Can't attack with " + attackingCountry + " country as it has only one army (need > 1 army to attack");
+			return false;
+		} 
+		
+		// Check dice count
+		if (attackCountry.getArmy() <= numOfDice) {
+			System.out.println("Error: Can't attack because your (attack armies count = " +
+					(attackCountry.getArmy() - 1)  + ") < (num of dice = " + numOfDice + ")");
 			return false;
 		}
 
-		if (attackCountry.getArmy() == 1) {
+		String defenderPlayerName = defendCountry.getPlayer().getName();
+        Player defenderplayer = null;
+  
+        for (Player p: playersList) {
+            if (p.getName().equalsIgnoreCase(defenderPlayerName))
+            	defenderplayer = p;
+        }
 
-			System.out.println("Cant Attack with this country as it has only one army(need >1 army to attack");
-			return false;
-
-		} else if (attackCountry.getArmy() < numOfDice) {
-
-			System.out.println();
-		}
+		// Do attack now
+        int numOfDefenderDice = getDefenderDice(defenderplayer, defendCountry);
+    
+        DiceModel diceModel = new DiceModel(attackCountry, defendCountry, numOfDice, numOfDefenderDice);
+        diceModel.rolldice();
+        diceModel.getResultAfterRoll();
+        
+        // Is game over for defender player?
+        
+        // Is game win by attacker?
+        
+        // Move country
+        
 		return false;
-
 	}
+	
+	/**
+	 * 
+	 */
+	public int getDefenderDice(Player player, Country defendCountry) {
+	
+		int numOfDice = 0;
 
-
-
+	    while (true) {
+	        Scanner sc = new Scanner(System.in);
+	        System.out.println("Defending Player: " + player.getName());
+	        System.out.println("Use \"defend numdice\" command");
+	
+			String command = sc.nextLine();
+			String words[] = command.split(" ");
+	
+			switch (words[0]) {
+	
+			case Commands.MAP_COMMAND_DEFEND:
+				
+				if (words.length < 2) {
+					System.out.println("Invalid command, Try again !!!");
+				}
+				
+				try {
+					numOfDice = Integer.parseInt(words[1]);
+				} catch (Exception e) {
+					System.out.println("Exception: " + e.toString());
+					break;
+				}
+				
+				if (numOfDice > 2) {
+					System.out.println("Error: number of dice should be less than 3");
+					break;
+				}
+				
+				if (player.getArmies() < numOfDice) {
+					System.out.println("Error: Can't defend with your (defend armies count = " +
+							(defendCountry.getArmy())  + ") < (num of dice = " + numOfDice + ")");
+					break;
+				}
+				
+				return numOfDice;
+				
+			default:
+				System.out.println("Invalid command, Try again !!!");
+				break;
+			}
+        }
+	}
 }
