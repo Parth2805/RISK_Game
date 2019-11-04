@@ -596,6 +596,19 @@ public class GameController extends Observable {
 				// Attack with allout mode
 				if (words[4].equalsIgnoreCase(Commands.MAP_COMMAND_ATTACK_OPTION_ALLOUT)) {
 
+
+					int numOfDice = 0;
+					String attackingCountry = words[1];
+					String defendingCountry = words[2];
+					try {
+						numOfDice = Integer.parseInt(words[3]);
+					} catch (Exception e) {
+						System.out.println("Exception: " + e.toString());
+						return;
+					}
+
+					playerModel.alloutattackCountry(getMap(), getCurrentPlayer(), attackingCountry, defendingCountry, numOfDice);
+
 					// Going to next phase - Update View
 					setChanged();
 					notifyObservers("attackdone");
