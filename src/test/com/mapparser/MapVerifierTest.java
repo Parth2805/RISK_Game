@@ -23,6 +23,7 @@ import com.mapparser.MapReader;
  * 
  * @author Mahmoudreza
  * @author Maryam
+ * @author Komal
  * @version 0.0.1
  */
 public class MapVerifierTest {
@@ -50,9 +51,6 @@ public class MapVerifierTest {
 	@BeforeClass
 	public static void beforeClass() {
 		System.out.println("This is for testing MapVerifier Class");
-		continent = new Continent();
-		country = new Country();
-		map = new Hmap();
 	}
 
 	/**
@@ -60,6 +58,9 @@ public class MapVerifierTest {
 	 */
 	@Before
 	public void beforeTest() {
+		continent = new Continent();
+		country = new Country();
+		map = new Hmap();
 		map.setMapData(mapData);
 		continent.setName(continentName);
 		continent.setValue(controlValue);
@@ -75,7 +76,7 @@ public class MapVerifierTest {
 	 */
 	@AfterClass
 	public static void afterClassTests() {
-		System.out.println("The test is done");
+		System.out.println("The map verify test is done");
 	}
 
 	/**
@@ -114,7 +115,7 @@ public class MapVerifierTest {
 	 * @throws InvalidMap Invalid Map
 	 */
 	@Test
-	public void isMapConnectedGraphTest() throws InvalidMap {
+	public void isMapNotConnectedGraphTest() throws InvalidMap {
 		assertFalse(mapverifier.isMapConnectedGraph(map));
 		System.out.println("This Unit Test for Map_Connected_Graph is performed");
 	}
@@ -132,12 +133,74 @@ public class MapVerifierTest {
 		country2.setName("Iran");
 		country2.setxCoordinate(1);
 		country2.setyCoordinate(2);
-		countryList.add(country);
+		countryList.add(country2);
+		country2.getAdjacentCountries().add(country);
+		country.getAdjacentCountries().add(country2);
 		continent.setCountries(countryList);
 		assertEquals(true, MapVerifier.isContinentConnectedGraph(continent, map));
-		countryList.add(country);
-		continent.setCountries(countryList);
-		assertEquals(MapVerifier.isContinentConnectedGraph(continent, map), true);
 		System.out.println("The Unit Test for Continent_Connected_Graph is performed");
+	}
+	
+	/**
+	 * This method is used to test the continent is connected to graph or not.
+	 */
+	@Test
+	public void isContinentNotConnectedGraphTest() {
+
+		System.out.println("This is a test for Continent not Connected Graph");
+		List<Country> countryList = new ArrayList<>();
+		countryList.add(country);
+		Country country2 = new Country();
+		country2.setName("Iran");
+		country2.setxCoordinate(1);
+		country2.setyCoordinate(2);
+		countryList.add(country2);
+		Country country3 = new Country();
+		country3.setName("India");
+		country3.setxCoordinate(1);
+		country3.setyCoordinate(2);
+		countryList.add(country3);
+		country2.getAdjacentCountries().add(country);
+		country.getAdjacentCountries().add(country2);
+		continent.setCountries(countryList);
+		assertNotEquals(true, MapVerifier.isContinentConnectedGraph(continent, map));
+		System.out.println("The Unit Test for Continent_Not_Connected_Graph is performed");
+	}
+	
+	/**
+	 * This method is used to test the map is connected to graph or not.
+	 */
+	@Test
+	public void isMapConnectedGraphTest() {
+
+		System.out.println("This is a test for Continent not Connected Graph");
+		List<Country> countryList = new ArrayList<>();
+		countryList.add(country);
+		Country country2 = new Country();
+		country2.setName("Iran");
+		country2.setxCoordinate(1);
+		country2.setyCoordinate(2);
+		countryList.add(country2);
+		country2.getAdjacentCountries().add(country);
+		country.getAdjacentCountries().add(country2);
+		continent.setCountries(countryList);
+		Country country3 = new Country();
+		country3.setName("India");
+		country3.setxCoordinate(4);
+		country3.setyCoordinate(6);
+		List<Country> countryList1 = new ArrayList<>();
+		countryList1.add(country3);
+		Continent continent2 = new Continent();
+		continent2.setName("Asia");
+		continent2.setValue(11);
+		continentList.add(continent2);
+		continent2.setCountries(countryList1);
+		country3.getAdjacentCountries().add(country);
+		country.getAdjacentCountries().add(country3);
+		country3.getAdjacentCountries().add(country2);
+		country2.getAdjacentCountries().add(country3);
+		map.setContinents(continentList);
+		assertEquals(MapVerifier.isMapConnectedGraph(map), true);
+		System.out.println("The Unit Test for Map_Connected_Graph is performed");
 	}
 }
