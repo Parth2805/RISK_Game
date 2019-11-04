@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Scanner;
+import java.util.Stack;
 
 import com.config.Commands;
 import com.entity.Card;
@@ -13,7 +14,7 @@ import com.entity.Country;
 import com.entity.Hmap;
 import com.entity.Player;
 import com.exception.InvalidMap;
-import com.main.Main;
+import com.maingame.Main;
 import com.mapparser.MapReader;
 import com.mapparser.MapVerifier;
 import com.mapparser.MapWriter;
@@ -36,6 +37,7 @@ public class GameController extends Observable {
 	PlayerModel playerModel;
 	CardModel cardModel;
 	Player currentPlayer;
+	Stack<Card> stackOfCards;
 
 	// default constructor to initialize members
 	public GameController(Main mainView) {
@@ -44,6 +46,16 @@ public class GameController extends Observable {
 		this.cardModel = new CardModel();
 		this.rootMap = new Hmap();
 		this.addObserver(mainView);
+		this.stackOfCards = new Stack<Card>();
+	}
+
+	/**
+	 * Get the current player.
+	 * 
+	 * @return player playing
+	 */
+	public Stack<Card> getCardsStack() {
+		return stackOfCards;
 	}
 
 	/**
@@ -510,9 +522,10 @@ public class GameController extends Observable {
 					cardschoosen.add(cardlist.get(index));
 				}
 
-				int ans = cardModel.areCardsvalidForExchange(cardschoosen);
+				int ans = 0;
+				//int ans = cardModel.areCardsvalidForExchange(cardschoosen);
 				if (ans == 1) {
-					cardModel.exchangeCards(idx, cardschoosen);
+					//cardModel.exchangeCards(idx, cardschoosen);
 
 				} else {
 
@@ -536,7 +549,7 @@ public class GameController extends Observable {
 	 * @return true if command is processed correctly, false otherwise
 	 */
 	public void cardsInitialize() {
-		cardModel.allocateCardsToCountry();
+		cardModel.allocateCardsToCountry(getMap(), getCardsStack());
 	}
 
 	/**
@@ -658,17 +671,18 @@ public class GameController extends Observable {
 			}
 
 			if (isForifyDone) {
+				
 				// check all players have played
 				if (playerModel.isLastPlayer(getCurrentPlayer())) {
 					isReinfoceArmiesAssigned = false;
 					System.out.println("***** All players have played. Going back to reinforcement again *****");
+					
+					// Update View
+					setChanged();
+					notifyObservers("fortifydone");
 				}
-
+				
 				changeCurrentPlayer();
-
-				// Update View
-				setChanged();
-				notifyObservers("fortifydone");
 			}
 			break;
 

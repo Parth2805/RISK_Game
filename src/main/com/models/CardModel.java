@@ -4,18 +4,47 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Stack;
 
 import com.config.CardType;
 import com.config.Commands;
 import com.entity.Card;
 import com.entity.Country;
+import com.entity.Hmap;
 import com.entity.Player;
 
+/**
+ * This class is handles the behavior of the card.
+ * @author Mehul
+ */
 public class CardModel {
 
 	
-	public void allocateCardsToCountry() {
+	private List<Card> cardForExchange;
 
+	
+	/**
+	 * Gets the cards to be exchanged.
+	 * @return the cardsToBeExchange
+	 */
+	public List<Card> getCardsToBeExchange() {
+		return cardForExchange;
+	}
+
+	/**
+	 * Sets the cards to be exchanged.
+	 * @param cardsToBeExchange the cardsToBeExchange to set
+	 */
+	public void setCardsToBeExchange(List<Card> cardsToBeExchange) {
+		this.cardForExchange = cardsToBeExchange;
+	}
+	
+	/**
+	 * Allocates card
+	 */
+	public void allocateCardsToCountry(Hmap map, Stack<Card> stackOfCards) {
+
+		ArrayList<Country> countryList = map.getCountries();
 		ArrayList<CardType> cardlist = new ArrayList<>();
 		int eachUniqueCards = countryList.size() / 3;
 		cardlist.addAll(Collections.nCopies(eachUniqueCards, CardType.valueOf("CAVALRY")));
@@ -38,34 +67,37 @@ public class CardModel {
 
 			Card card = new Card(cardlist.get(i++));
 			card.setCountryToWhichCardBelong(country);
-			cards.push(card);
+			stackOfCards.push(card);
 		}
 
-		Collections.shuffle(cards);
+		Collections.shuffle(stackOfCards);
 //		for(Card cards:cards){
 //
 //			System.out.println(cards);
 //		}
 	}
 	
-	public void exchangeCards(int idx[],List<Card> cardlist){
+	/*
+	public void exchangeCards(Player player, int idx[], List<Card> cardlist){
 
 		for(int index:idx){
-			for(Country c:getCurrentPlayer().getAssignedCountry()){
+			for(Country c: player.getAssignedCountry()){
 				if(c.getName().equalsIgnoreCase(cardlist.get(index).getCountryToWhichCardBelong().getName())){
 
-					getCurrentPlayer().setArmies(getCurrentPlayer().getArmies()+2);
+					player.setArmies(player).getArmies() + 2);
 					break;
 				}
 			}
 		}
-		getCurrentPlayer().setArmies(getCurrentPlayer().getArmies()+getCardExchanged());
+		
+		player.setArmies(player.getArmies()+ getCardExchanged());
 		setNumberOfTimesCardExchanged();
 
 		for(Card card : cardlist){
 			//Removing the exchanged cards from players hand
-			getCurrentPlayer().getCardList().remove(card);
+			player.getCardList().remove(card);
 		}
+		
 		//Adding cards back to deck
 		cards.addAll(cardlist);
 
@@ -103,7 +135,7 @@ public class CardModel {
 		}
 		return ans;
 	}
-
+*/
 	/**
 	 * Parses the String and calls the related game play startup commands.
 	 * 
@@ -161,10 +193,11 @@ public class CardModel {
 							cardschoosen.add(cardlist.get(index));
 
 						}
-						int ans = areCardsvalidForExchange(cardschoosen);
+						int ans=0;
+						//int ans = areCardsvalidForExchange(cardschoosen);
 						if (ans == 1) {
-							exchangeCards(idx, cardschoosen);
-
+							//exchangeCards(idx, cardschoosen);
+							
 						} else {
 							System.out.println("Only exchange 1.Cards of all same type or 2.Cards of all different type");
 						}

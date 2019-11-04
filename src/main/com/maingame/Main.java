@@ -1,4 +1,4 @@
-package com.main;
+package com.maingame;
 
 import java.util.Observable;
 import java.util.Observer;
