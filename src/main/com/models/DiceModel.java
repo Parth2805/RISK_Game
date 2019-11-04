@@ -54,12 +54,10 @@ public class DiceModel {
         }
     }
 
-    public  void getResultAfterRoll(){
+    public void getResultAfterRoll(){
 
         Collections.sort(attackerDiceValues, Collections.reverseOrder());
-
         Collections.sort(defenderDiceValues, Collections.reverseOrder());
-
 
         for (Integer defenderDiceValue : defenderDiceValues) {
 

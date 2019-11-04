@@ -618,7 +618,7 @@ public class GameController extends Observable {
 					return;
 				}
 
-				playerModel.attackCountry(getCurrentPlayer(), attackingCountry, defendingCountry, numOfDice);
+				playerModel.attackCountry(getMap(), getCurrentPlayer(), attackingCountry, defendingCountry, numOfDice);
 			}
 			break;
 
