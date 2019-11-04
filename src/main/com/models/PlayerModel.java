@@ -132,10 +132,10 @@ public class PlayerModel {
 	}
 
 	/**
-	 * This method generates random number from 0 to number.
+	 * This method generates random number from 1 to number.
 	 * 
 	 * @param number number up to which find random numbers to be generated, from 0 to number
-	 * @return random number from 0 to number, including number
+	 * @return random number from 1 to number, including number
 	 */
 	public static int getRandomNumber(int number) {
 		return new Random().nextInt(number + 1);
