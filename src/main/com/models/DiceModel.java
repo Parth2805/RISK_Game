@@ -41,13 +41,16 @@ public class DiceModel {
 
         this.attackerDiceValues= new ArrayList<>();
         this.defenderDiceValues = new ArrayList<>();
-        for(int i=0;i<numberOfDiceUsedByAttacker;i++){
+                
+        for (int i = 0; i < numberOfDiceUsedByAttacker; i++) {
 
-            int value= new Random().nextInt(6)+1;
+            int value = new Random().nextInt(6)+1;
             attackerDiceValues.add(value);
         }
 
-        for(int i=0;i<numberOfDiceUsedByDefender;i++){
+        System.out.println("Defender dice values:");
+        
+        for (int i = 0; i < numberOfDiceUsedByDefender; i++) {
 
             int value= new Random().nextInt(6)+1;
             defenderDiceValues.add(value);
@@ -58,6 +61,9 @@ public class DiceModel {
 
         Collections.sort(attackerDiceValues, Collections.reverseOrder());
         Collections.sort(defenderDiceValues, Collections.reverseOrder());
+        
+        System.out.println("Attacker dice = " + attackerDiceValues);
+        System.out.println("Defender dice = " + defenderDiceValues);
 
         for (Integer defenderDiceValue : defenderDiceValues) {
 
@@ -67,7 +73,6 @@ public class DiceModel {
 
                     System.out.println("1 army lost by Attacker");
                     if (attackingCountry.getArmy() > 1) {
-
                         attackingCountry.setArmy(attackingCountry.getArmy() - 1);
                     }
                 } else if (attackerDiceValue.compareTo(defenderDiceValue) > 0) {
