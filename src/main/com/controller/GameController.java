@@ -10,7 +10,6 @@ import java.util.Stack;
 
 import com.config.Commands;
 import com.entity.Card;
-import com.entity.Country;
 import com.entity.Hmap;
 import com.entity.Player;
 import com.exception.InvalidMap;
@@ -37,7 +36,11 @@ public class GameController extends Observable {
 	PlayerModel playerModel;
 	CardModel cardModel;
 	Player currentPlayer;
-	Stack<Card> stackOfCards;
+	public static Stack<Card> stackOfCards;
+
+
+
+
 
 	// default constructor to initialize members
 	public GameController(Main mainView) {
@@ -424,6 +427,7 @@ public class GameController extends Observable {
 
 		case Commands.MAP_COMMAND_PLACE_ALL:
 			playerModel.placeAll();
+			cardsInitialize();
 			setCurrentPlayer(playerModel.getPlayersList().get(0));
 			// Update View
 			setChanged();
@@ -453,7 +457,7 @@ public class GameController extends Observable {
 		System.out.println("Current Player: " + getCurrentPlayer().getName() + ", Armies left for reinforcement = "
 				+ getCurrentPlayer().getArmies());
 
-		cardModel.doCardExchange(getCurrentPlayer());
+		cardModel.checkMaxCards(getCurrentPlayer());
 
 		String command = sc.nextLine();
 		String[] words = command.split(" ");
@@ -522,8 +526,8 @@ public class GameController extends Observable {
 					cardschoosen.add(cardlist.get(index));
 				}
 
-				int ans = 0;
-				//int ans = cardModel.areCardsvalidForExchange(cardschoosen);
+//				int ans = 0;
+				int ans = cardModel.areCardsvalidForExchange(cardschoosen);
 				if (ans == 1) {
 					//cardModel.exchangeCards(idx, cardschoosen);
 
@@ -544,8 +548,6 @@ public class GameController extends Observable {
 	/**
 	 * Parses the String and calls the related game play fortify commands.
 	 * 
-	 * @param sc
-	 *            scanner object
 	 * @return true if command is processed correctly, false otherwise
 	 */
 	public void cardsInitialize() {

@@ -12,23 +12,13 @@ public class PlayerModel {
 	private static int[] numOfArmies = { Config.CONFIG_ARMIES_TWO_PLAYER, Config.CONFIG_ARMIES_THREE_PLAYER,
 			Config.CONFIG_ARMIES_FOUR_PLAYER, Config.CONFIG_ARMIES_FIVE_PLAYER, Config.CONFIG_ARMIES_SIX_PLAYER };
 
-	private int cardExchanged = 5;
-	private Stack<Card> cards;
 
-	public void setNumberOfTimesCardExchanged() {
-		cardExchanged += 5;
-	}
-
-	public int getCardExchanged() {
-		return cardExchanged;
-	}
 
 	/**
 	 * This is the default constructor of Player Model.
 	 */
 	public PlayerModel() {
 		this.playersList = new ArrayList<Player>();
-		this.cards = new Stack<Card>();
 	}
 
 	/**
@@ -321,7 +311,7 @@ public class PlayerModel {
 	/**
 	 * This will do reinforcement
 	 * 
-	 * @param Player
+	 * @param player
 	 *            current player
 	 * @param countryName
 	 *            name of the country
@@ -511,8 +501,6 @@ public class PlayerModel {
 	/**
 	 * This implements attach phase.
 	 * 
-	 * @param currentPlayer
-	 *            current player
 	 * @return true if current player is the last player, false otherwise
 	 */
 	public boolean attackphase(Player player, String attackingCountry, String defendingCountry, int numOfDice) {
@@ -567,4 +555,7 @@ public class PlayerModel {
 		return false;
 
 	}
+
+
+
 }
