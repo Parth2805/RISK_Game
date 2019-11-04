@@ -570,10 +570,10 @@ public class PlayerModel {
 		}
 
 		Collections.shuffle(cards);
-//		for(Card cards:cards){
-//
-//			System.out.println(cards);
-//		}
+		for(Card cards:cards){
+
+			System.out.println(cards);
+		}
 
 
 
@@ -708,15 +708,43 @@ public class PlayerModel {
 
 				if(words[0].equals(Commands.MAP_COMMAND_DEFEND)){
 
-					flag=1;
-					int defenderNumberOfDice=Integer.parseInt(words[1]);
-					DiceModel diceModel = new DiceModel(attackCountry,defendCountry,attackerNumOfDice,defenderNumberOfDice);
-					diceModel.rolldice();
 
+					int defenderNumberOfDice=Integer.parseInt(words[1]);
+
+					if(defendCountry.getArmy()<defenderNumberOfDice){
+						System.out.println("Defending country should have number of dice 1 or 2");
+
+					}else{
+
+						flag=1;
+						DiceModel diceModel = new DiceModel(attackCountry,defendCountry,attackerNumOfDice,defenderNumberOfDice);
+						diceModel.rolldice();
+
+						String defenderplayername=defendCountry.getPlayer().getName();
+
+						Player defenderplayer;
+
+						for(Player p:playersList){
+
+							if(p.getName().equalsIgnoreCase(defenderplayername)){
+
+								defenderplayer=p;
+							}
+
+						}
+
+						Player attackplayer=getCurrentPlayer();
+
+
+
+
+
+
+
+					}
 				}else{
 
 					System.out.println("Invalid Command!!!");
-
 				}
 
 			}

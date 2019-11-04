@@ -443,6 +443,11 @@ public class CommandParser {
                         System.out.println("Need to Exchange Cards!!");
 
                     } else {
+
+                        if(playerModel.getCurrentPlayer().getCardList().size()<3){
+                            System.out.println("Have less than 3 cards, cant exchange");
+                            return false;
+                        }
                         int idx[] = new int[3];
                         idx[0] = Integer.parseInt(tempwords[1]) - 1;
                         idx[1] = Integer.parseInt(tempwords[2]) - 1;
@@ -517,11 +522,18 @@ public class CommandParser {
                 break;
             case Commands.MAP_COMMAND_REINFORCE_OPTION_EXCHANGECARDS:
 
+                if(playerModel.getCurrentPlayer().getCardList().size()<3){
+
+                    System.out.println("Need more than 3 cards to exchange, only have "+playerModel.getCurrentPlayer().getCardList().size());
+                    return false;
+                }
                 if (words.length == 5 && words[4].equalsIgnoreCase("-none")) {
 
                     return false;
 
                 } else {
+
+
                     int idx[] = new int[3];
                     idx[0] = Integer.parseInt(words[1]) - 1;
                     idx[1] = Integer.parseInt(words[2]) - 1;

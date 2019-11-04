@@ -1,6 +1,7 @@
 package com.model;
 
 import com.entity.Country;
+import com.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,7 +22,9 @@ public class DiceModel {
 
     public List<Integer> defenderDiceValues;
 
-    public DiceModel(Country attackingCountry, Country defendingCountry,int numberOfDiceUsedByAttacker,int numberOfDiceUsedByDefender){
+    public ArrayList<Player> playerslist;
+
+    public DiceModel(Country attackingCountry, Country defendingCountry, int numberOfDiceUsedByAttacker, int numberOfDiceUsedByDefender){
 
         this.attackingCountry=attackingCountry;
         this.defendingCountry=defendingCountry;
@@ -29,6 +32,7 @@ public class DiceModel {
         this.defenderDiceValues = new ArrayList<>();
         this.numberOfDiceUsedByAttacker=numberOfDiceUsedByAttacker;
         this.numberOfDiceUsedByDefender=numberOfDiceUsedByDefender;
+        //this.playerslist=playersList;
     }
 
 
@@ -85,11 +89,27 @@ public class DiceModel {
                 attackerDiceValues.remove(0);
             }
         }
-
-
-
-
     }
 
-
+//    public void updateCountriesAndPlayer(){
+//
+//        String defenderplayername=defendCountry.getPlayer().getName();
+//
+//        Player defenderplayer;
+//
+//        for(Player p:playersList){
+//
+//            if(p.getName().equalsIgnoreCase(defenderplayername)){
+//
+//                defenderplayer=p;
+//            }
+//
+//        }
+//
+//        Player attackplayer=getCurrentPlayer();
+//
+//
+//
+//
+//    }
 }
