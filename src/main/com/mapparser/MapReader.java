@@ -150,9 +150,14 @@ public class MapReader {
 		// Set Hashmap Country Name: Country object
 		Map<String, Country> countryMap = map.getCountryMap();
 		
+		// Set country list
+		ArrayList<Country> countryList = map.getCountries();
+		
 		for (Continent continent : continentList) {
-			for (Country c : continent.getCountries())
+			for (Country c : continent.getCountries()) {
 				countryMap.put(c.getName(), c);
+				countryList.add(c);
+			}
 		}
 		
 		return map;

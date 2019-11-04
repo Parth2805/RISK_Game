@@ -1,4 +1,4 @@
-package com.main;
+package com.maingame;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -6,7 +6,6 @@ import java.util.Scanner;
 
 import com.config.GameState;
 import com.controller.GameController;
-import com.controller.MapContoller;
 
 
 public class Main implements Observer {
@@ -72,6 +71,10 @@ public class Main implements Observer {
 				mainView.gameController.processGamePlayReinforcementCommands(sc);
 				break;
 				
+			case RISK_STATE_GAMEPLAY_ATTACK_PHASE:
+				mainView.gameController.processGamePlayAttackCommands(sc);
+				break;
+				
 			case RISK_STATE_GAMEPLAY_FORTIFICATION_PHASE:
 				mainView.gameController.processGamePlayFortifyCommands(sc);
 				break;
@@ -104,6 +107,10 @@ public class Main implements Observer {
 			System.out.println("----------------------------------");
 		}
 		else if (methodValue.equals("reinforcedone")) {
+			setGamePhase(GameState.RISK_STATE_GAMEPLAY_ATTACK_PHASE);
+			System.out.println("----------------------------------");
+		}
+		else if (methodValue.equals("attackdone")) {
 			setGamePhase(GameState.RISK_STATE_GAMEPLAY_FORTIFICATION_PHASE);
 			System.out.println("----------------------------------");
 		}

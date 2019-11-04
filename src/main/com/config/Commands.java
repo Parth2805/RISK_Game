@@ -29,4 +29,11 @@ public class Commands {
 
 	public static final String MAP_COMMAND_OPTION_ADD = "-add";
 	public static final String MAP_COMMAND_OPTION_REMOVE = "-remove";
+	public static final String MAP_COMMAND_REINFORCE_OPTION_EXCHANGECARDS = "exchangecards";
+
+	public static final String MAP_COMMMAND_ATTACK = "attack";
+	public static final String MAP_COMMAND_DEFEND = "defend";
+	public static final String MAP_COMMAND_ATTACKMOVE = "attackmove";
+	public static final String MAP_COMMAND_ATTACK_OPTION_ALLOUT = "-allout";
+	public static final String MAP_COMMAND_ATTACK_OPTION_NOATTACK = "-noattack";
 }
