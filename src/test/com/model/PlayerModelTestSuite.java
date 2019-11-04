@@ -1,4 +1,4 @@
-package com.playerparser;
+package com.model;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -9,8 +9,8 @@ import org.junit.runners.Suite.SuiteClasses;
  * @author Mehul
  */
 @RunWith(Suite.class)
-@SuiteClasses({PlayerCommandsTest.class})
+@SuiteClasses({PlayerModelTest.class})
 
-public class PlayerCommandsTestSuite {
+public class PlayerModelTestSuite {
 }
 
