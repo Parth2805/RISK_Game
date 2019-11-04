@@ -1,4 +1,4 @@
-package com.model;
+package com.models;
 
 import com.entity.Country;
 import com.entity.Player;
