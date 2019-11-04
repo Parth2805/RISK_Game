@@ -39,6 +39,8 @@ public class DiceModel {
 
     public void rolldice(){
 
+        this.attackerDiceValues= new ArrayList<>();
+        this.defenderDiceValues = new ArrayList<>();
         for(int i=0;i<numberOfDiceUsedByAttacker;i++){
 
             int value= new Random().nextInt(6)+1;
