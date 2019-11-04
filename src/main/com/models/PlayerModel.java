@@ -298,7 +298,7 @@ public class PlayerModel {
 	/**
 	 * This will do reinforcement
 	 * 
-	 * @param Player current player
+	 * @param player current player
 	 * @param countryName name of the country
 	 * @param numberOfArmies number of armies
 	 * @return true if reinforcement is done, false otherwise

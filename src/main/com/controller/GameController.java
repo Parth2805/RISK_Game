@@ -43,7 +43,7 @@ public class GameController {
 	/**
 	 * Get the current player.
 	 * 
-	 * @return player playing
+	 * @return currentPlayer playing
 	 */
 	public Player getCurrentPlayer() {
 		return currentPlayer;
