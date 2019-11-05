@@ -574,9 +574,10 @@ public class PlayerModel {
 
     public void attackmove(Country attackCountry, Country defendCountry) {
 
-        System.out.println("You conquered the country successfully");
-        System.out.println("Move army to Conquered Country, max armies:+" + (attackCountry.getArmy() - 1) + " min armies:1");
-        System.out.println("Command \" attackmove num\":  ");
+        System.out.println("You conquered the " + attackCountry.getName() + " "
+        		+ "country successfully");
+        System.out.println("You need to move armies to conquered Country, max armies: " + (attackCountry.getArmy() - 1) + ", min armies: 1");
+        System.out.println("Command \"attackmove num\":  ");
 
         while (true) {
 
@@ -587,13 +588,12 @@ public class PlayerModel {
 
             if (words[0].equalsIgnoreCase(Commands.MAP_COMMAND_ATTACKMOVE)) {
 
-                if (armyToMove <= 1) {
+                if (armyToMove < 1) {
                     System.out.println("Need to move atleast 1 army to conquered country");
 
                 } else if (armyToMove >= attackCountry.getArmy()) {
-
-                    System.out.println("Cant move more than:" + (attackCountry.getArmy() - 1));
-
+                    System.out.println("Can't move more than: " + (attackCountry.getArmy() - 1));
+                    
                 } else {
                     attackCountry.setArmy(attackCountry.getArmy() - armyToMove);
                     defendCountry.setArmy(defendCountry.getArmy() + armyToMove);
@@ -699,7 +699,7 @@ public class PlayerModel {
 			if (attackCountry.getArmy() <= 1)
 				break;
 
-			if (defendCountry.getArmy() <= 0)
+			if (defendCountry.getPlayer() == player)
 				break;
 		}
 		
