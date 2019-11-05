@@ -21,7 +21,6 @@ public class MapWriter {
 	/**
 	 * This method processes the map by calling three different methods and makes a
 	 * string to be written in the map file.
-	 * 
 	 * @param map object of the map which is being processed
 	 * @return String to be written in the map file
 	 */
@@ -36,7 +35,6 @@ public class MapWriter {
 	
 	/**
 	 * This method writes the map details to the map file.
-	 * 
 	 * @param map object of the map which is being processed
 	 * @param file file path
 	 */
@@ -62,7 +60,6 @@ public class MapWriter {
 
 	/**
 	 * This method process the map attributes.
-	 * 
 	 * @param map object of the map which is being processed
 	 * @return a String that contains the map properties.
 	 */
@@ -81,7 +78,6 @@ public class MapWriter {
 
 	/**
 	 * This method processes the continents.
-	 * 
 	 * @param map object of the map which is being processed
 	 * @return a string that contains details of the continents that will eventually
 	 *         be written in the map file.
@@ -109,7 +105,6 @@ public class MapWriter {
 
 	/**
 	 * This method processes the countries.
-	 * 
 	 * @param map object of the map that is being processed
 	 * @return a string that contains details of the countries that will eventually
 	 *         be written in the map file.
@@ -140,7 +135,6 @@ public class MapWriter {
 
 	/**
 	 * This method processes the borders.
-	 * 
 	 * @param map object of the map that is being processed
 	 * @return a string that contains details of the countries that will eventually
 	 *         be written in the map file.

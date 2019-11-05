@@ -41,7 +41,6 @@ public class CardModel {
 
     /**
      * Sets the cards to be exchanged.
-     *
      * @param cardsToBeExchange the cardsToBeExchange to set
      */
     public void setCardsToBeExchange(List<Card> cardsToBeExchange) {
@@ -87,7 +86,6 @@ public class CardModel {
     /**
      * exchange of cards between players
      * @param cardlist list of cards
-     * 
      */    
     public void exchangeCards(Player player, int idx[], List<Card> cardlist) {
 
@@ -116,7 +114,6 @@ public class CardModel {
     * validates card for exchange
     * @param player scanner object
     * @return number of cards 
-  	*
     */
     public boolean areCardsvalidForExchange(List<Card> cardlist) {
 
@@ -147,7 +144,6 @@ public class CardModel {
     /**
     * Parses the String and calls the related game play startup commands.
     * @param player scanner object
-    * 
     */
     public boolean checkMaxCards(Player player) {
 

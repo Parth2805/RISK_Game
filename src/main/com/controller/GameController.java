@@ -471,7 +471,7 @@ public class GameController extends Observable {
 
 				if (numberOfArmies <= 0) {
 					System.out.println("Error: You have entered invalid number of armies.");
-				return;
+					return;
 				}
 
 				if (!playerModel.isCountryBelongToPlayer(getMap(), getCurrentPlayer(), countryName))
@@ -588,17 +588,17 @@ public class GameController extends Observable {
 							return;
 						}
 
-					playerModel.alloutattackCountry(getMap(), getCurrentPlayer(), attackingCountry, defendingCountry, numOfDice);
-						if(playerModel.winGame(getCurrentPlayer(),rootMap.getCountries())){
-							System.out.println("Player:"+getCurrentPlayer().getName()+" won the game!!!!!!!");
-							//exit(0);
-							setChanged();
-							notifyObservers("gameover");
-						}else{
-							// Going to next phase - Update View
-							setChanged();
-							notifyObservers("attackdone");
-						}
+						playerModel.alloutattackCountry(getMap(), getCurrentPlayer(), attackingCountry, defendingCountry, numOfDice);
+							if(playerModel.winGame(getCurrentPlayer(),rootMap.getCountries())){
+								System.out.println("Player:"+getCurrentPlayer().getName()+" won the game!!!!!!!");
+								//exit(0);
+								setChanged();
+								notifyObservers("gameover");
+							}else{
+								// Going to next phase - Update View
+								setChanged();
+								notifyObservers("attackdone");
+							}
 						break;
 					}
 				} else {
@@ -668,37 +668,37 @@ public class GameController extends Observable {
 					if (words.length < 4) {
 						System.out.println("Invalid command length. Try again !!!");
 						return;
+					}
+
+					int numArmies = 0;
+
+					try {
+						numArmies = Integer.parseInt(words[3]);
+					} catch (Exception e) {
+						System.out.println("Exception: " + e.toString());
+						return;
+					}
+
+					if (numArmies <= 0) {
+						System.out.println("Exception: Invalid number of armies");
+						return;
+					}
+
+					if (playerModel.fortifyCurrentPlayer(getMap(), getCurrentPlayer(), words[1], words[2], numArmies))
+						isForifyDone = true;
 				}
 
-				int numArmies = 0;
-
-				try {
-					numArmies = Integer.parseInt(words[3]);
-				} catch (Exception e) {
-					System.out.println("Exception: " + e.toString());
-					return;
+				if (isForifyDone) {
+					// check all players have played
+					if (playerModel.isLastPlayer(getCurrentPlayer())) {
+						isReinfoceArmiesAssigned = false;
+						System.out.println("***** All players have played. Going back to reinforcement again *****");
+						// Update View
+						setChanged();
+						notifyObservers("fortifydone");
+					}
+					changeCurrentPlayer();
 				}
-
-				if (numArmies <= 0) {
-					System.out.println("Exception: Invalid number of armies");
-					return;
-				}
-
-				if (playerModel.fortifyCurrentPlayer(getMap(), getCurrentPlayer(), words[1], words[2], numArmies))
-					isForifyDone = true;
-			}
-
-			if (isForifyDone) {
-				// check all players have played
-				if (playerModel.isLastPlayer(getCurrentPlayer())) {
-					isReinfoceArmiesAssigned = false;
-					System.out.println("***** All players have played. Going back to reinforcement again *****");
-					// Update View
-					setChanged();
-					notifyObservers("fortifydone");
-				}
-				changeCurrentPlayer();
-			}
 			break;
 
 			default:
