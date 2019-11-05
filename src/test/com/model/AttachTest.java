@@ -6,7 +6,12 @@ import static org.junit.Assert.*;
 import java.util.*;
 import com.entity.*;
 
-
+/**
+ * This class test the attack phase
+ * @author Maryam
+ * @author Mahmoud Reza
+ *
+ */
 public class AttachTest {
 
     public static Hmap map;
@@ -18,12 +23,17 @@ public class AttachTest {
     int currentArmies ;
 
 
-
+    /**
+     * This method runs before all tests just one time
+     */
     @BeforeClass
     public static void beforeAll () {
     System.out.println("This is for testing Attack Class");
     }
 
+    /**
+     * This method runs before  each test
+     */
     @Before
     public void beforeTest () {
         player = new Player(4,"playerTest");
@@ -32,11 +42,17 @@ public class AttachTest {
         currentArmies = player.getArmies();
 
     }
+    /**
+     * This method runs after all test just one time
+     */
     @AfterClass
     public static void afterAllTest() {
         System.out.println("All tests are done");
     }
-
+    
+    /**
+     * This method test the attack country
+     */
     @Test
     public void attackCountryTest() {
 
@@ -44,6 +60,9 @@ public class AttachTest {
         assertTrue(true);
     }
 
+    /**
+     * This method test the dicattack country 
+     */
     @Test
     public void attackCountryDicTest() {
 
@@ -52,6 +71,9 @@ public class AttachTest {
         System.out.println("Attack test is passed");
     }
 
+    /**
+     * This method test the fortify 
+     */
     @Ignore
     public void fortifyTest() {
 
