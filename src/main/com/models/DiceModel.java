@@ -8,8 +8,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * This class is handles the dice.
+ *
+ * @author Parth
+ */
 public class DiceModel {
-
+	
+	
     public int numberOfDiceUsedByAttacker;
 
     public int numberOfDiceUsedByDefender;
@@ -25,8 +31,8 @@ public class DiceModel {
     public ArrayList<Player> playerslist;
 
     public DiceModel(Country attackingCountry, Country defendingCountry, int numberOfDiceUsedByAttacker, int numberOfDiceUsedByDefender){
-
-        this.attackingCountry=attackingCountry;
+        
+    	this.attackingCountry=attackingCountry;
         this.defendingCountry=defendingCountry;
         this.attackerDiceValues= new ArrayList<>();
         this.defenderDiceValues = new ArrayList<>();
@@ -35,8 +41,10 @@ public class DiceModel {
         //this.playerslist=playersList;
     }
 
-
-
+    /**
+     * This roll the Dices of attacker and defender 
+     * 
+     */
     public void rolldice(){
 
         this.attackerDiceValues= new ArrayList<>();
@@ -54,6 +62,10 @@ public class DiceModel {
         }
     }
 
+    /**
+     * This gets the dice values of attacker and defender after roll.
+     *
+     */
     public void getResultAfterRoll(){
 
         Collections.sort(attackerDiceValues, Collections.reverseOrder());
@@ -92,5 +104,4 @@ public class DiceModel {
             }
         }
     }
-    
 }
