@@ -85,7 +85,6 @@ public class GameController extends Observable {
 
 	/**
 	 * Get map object
-	 *
 	 * @return the map
 	 */
 	private Hmap getMap() {
@@ -94,9 +93,7 @@ public class GameController extends Observable {
 
 	/**
 	 * Parses the String and calls the related map edit commands.
-	 * 
-	 * @param command
-	 *            User input Command/String
+	 * @param command User input Command/String          
 	 */
 	public void processMapEditCommands(String command) {
 
