@@ -612,11 +612,14 @@ public class GameController extends Observable {
 					playerModel.alloutattackCountry(getMap(), getCurrentPlayer(), attackingCountry, defendingCountry, numOfDice);
 					if(playerModel.winGame(getCurrentPlayer(),rootMap.getCountries())){
 						System.out.println("Player:"+getCurrentPlayer().getName()+" won the game!!!!!!!");
-						exit(0);
-					}
+						//exit(0);
+						setChanged();
+						notifyObservers("gameover");
+					}else{
 					// Going to next phase - Update View
 					setChanged();
 					notifyObservers("attackdone");
+					}
 					break;
 				}
 			} else {
