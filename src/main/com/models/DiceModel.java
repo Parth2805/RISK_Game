@@ -92,26 +92,5 @@ public class DiceModel {
             }
         }
     }
-
-//    public void updateCountriesAndPlayer(){
-//
-//        String defenderplayername=defendCountry.getPlayer().getName();
-//
-//        Player defenderplayer;
-//
-//        for(Player p:playersList){
-//
-//            if(p.getName().equalsIgnoreCase(defenderplayername)){
-//
-//                defenderplayer=p;
-//            }
-//
-//        }
-//
-//        Player attackplayer=getCurrentPlayer();
-//
-//
-//
-//
-//    }
+    
 }

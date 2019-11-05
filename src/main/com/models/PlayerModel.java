@@ -3,6 +3,7 @@ package com.models;
 import java.util.*;
 
 import com.config.Commands;
+import com.controller.GameController;
 import com.entity.*;
 import com.config.Config;
 
@@ -659,7 +660,7 @@ public class PlayerModel {
 				break;
 			}
 			int numOfDefenderDice=2;
-
+			numOfDice=3;
 
 			// Check armies count
 			if (attackCountry.getArmy() <= 3) {
@@ -681,8 +682,32 @@ public class PlayerModel {
 		}
 
 		if(defendCountry.getArmy()==0){
+
+			attackCountry.getPlayer().setCardList(GameController.stackOfCards.pop());
 			modifyDefendingCountryOwnerShip(defendCountry,attackCountry);
 		}
+	}
+
+	public boolean winGame(Player player,List<Country> totalCoutries){
+
+
+		if(player.getAssignedCountry().size()==totalCoutries.size()){
+
+			return true;
+		}
+//		for(Country pc:playerCountryList){
+//
+//			for(Country tc:playerCountryList){
+//
+//				if(pc.getName().equals(tc.getName())){
+//					count++;
+//				}
+//
+//			}
+//
+//		}
+		return false;
+
 	}
 
 	public void modifyDefendingCountryOwnerShip(Country defendingCountry,Country attackingCountry) {

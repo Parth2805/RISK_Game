@@ -20,6 +20,8 @@ import com.mapparser.MapWriter;
 import com.models.CardModel;
 import com.models.PlayerModel;
 
+import static java.lang.System.exit;
+
 /**
  * This class reads, parses the command line string from user input.
  *
@@ -608,7 +610,10 @@ public class GameController extends Observable {
 					}
 
 					playerModel.alloutattackCountry(getMap(), getCurrentPlayer(), attackingCountry, defendingCountry, numOfDice);
-
+					if(playerModel.winGame(getCurrentPlayer(),rootMap.getCountries())){
+						System.out.println("Player:"+getCurrentPlayer().getName()+" won the game!!!!!!!");
+						exit(0);
+					}
 					// Going to next phase - Update View
 					setChanged();
 					notifyObservers("attackdone");
