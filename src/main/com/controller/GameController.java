@@ -59,10 +59,19 @@ public class GameController extends Observable {
 		return stackOfCards;
 	}
 
+    /**
+     * Get the player model.
+     *
+     * @return player model
+     */
+    public PlayerModel getPlayerModel() {
+        return playerModel;
+    }
+
 	/**
 	 * Get the current player.
 	 * 
-	 * @return player playing
+	 * @return currentPlayer playing
 	 */
 	public Player getCurrentPlayer() {
 		return currentPlayer;
@@ -94,7 +103,7 @@ public class GameController extends Observable {
 	 *
 	 * @return the map
 	 */
-	private Hmap getMap() {
+	public Hmap getMap() {
 		return rootMap;
 	}
 
@@ -609,7 +618,11 @@ public class GameController extends Observable {
 						return;
 					}
 
-					playerModel.alloutattackCountry(getMap(), getCurrentPlayer(), attackingCountry, defendingCountry, numOfDice);
+                    // Update View
+                    setChanged();
+                    notifyObservers("show-world-domination");
+
+                    playerModel.alloutattackCountry(getMap(), getCurrentPlayer(), attackingCountry, defendingCountry, numOfDice);
 					if(playerModel.winGame(getCurrentPlayer(),rootMap.getCountries())){
 						System.out.println("Player:"+getCurrentPlayer().getName()+" won the game!!!!!!!");
 						//exit(0);
