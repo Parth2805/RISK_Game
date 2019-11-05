@@ -562,6 +562,16 @@ public class GameController extends Observable {
 		System.out.println("Current phase: Gameplay Attack phase (attack, defend, attackmove, showmap)");
 		System.out.println("Current Player: " + getCurrentPlayer().getName());
 
+		if(!playerModel.checkAttackPossible(getCurrentPlayer())){
+
+			System.out.println("Attack not possible for player:");
+			setChanged();
+			notifyObservers("attackdone");
+			return;
+
+
+		}
+
 		String command = sc.nextLine();
 		String words[] = command.split(" ");
 
@@ -612,8 +622,7 @@ public class GameController extends Observable {
 					notifyObservers("gameover");
 				} else {
 					// Going to next phase - Update View
-					setChanged();
-					notifyObservers("attackdone");
+					//function call
 				}
 			} else {
 
@@ -645,6 +654,12 @@ public class GameController extends Observable {
 							" has won the game !!!");
 					setChanged();
 					notifyObservers("gameover");
+				}else{
+					//function call to check attack possible
+
+
+
+
 				}
 			}
 			break;
