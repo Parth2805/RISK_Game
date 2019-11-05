@@ -27,7 +27,6 @@ public class PlayerModel {
 
 	/**
 	 * Get players list
-	 *
 	 * @return list of players
 	 */
 	public ArrayList<Player> getPlayersList() {
@@ -36,9 +35,7 @@ public class PlayerModel {
 
 	/**
 	 * Setter method for the player list.
-	 *
-	 * @param playersList
-	 *            array list of players
+	 * @param playersList array list of players
 	 */
 	public void setPlayersList(ArrayList<Player> playersList) {
 		this.playersList = playersList;
@@ -46,9 +43,7 @@ public class PlayerModel {
 
 	/**
 	 * This method removes the player from game.
-	 * 
-	 * @param playerName
-	 *            name of the player
+	 * @param playerName name of the player
 	 * @return true if player gets removed, false otherwise
 	 */
 	public boolean removePlayer(String playerName) {
@@ -68,9 +63,7 @@ public class PlayerModel {
 
 	/**
 	 * This method creates the new player.
-	 * 
-	 * @param playerName
-	 *            name of the player
+	 * @param playerName name of the player
 	 * @return true if player gets created, false otherwise
 	 */
 	public boolean createPlayer(String playerName) {
@@ -97,7 +90,6 @@ public class PlayerModel {
 
 	/**
 	 * This method allocates armies to players.
-	 * 
 	 * @return true if armies are assigned to more then 1 player, false otherwise
 	 */
 	public boolean assignArmiesToAllPlayers() {
@@ -140,7 +132,6 @@ public class PlayerModel {
 
 	/**
 	 * This method generates random number from 1 to number.
-	 * 
 	 * @param number number up to which find random numbers to be generated, from 0 to number
 	 * @return random number from 1 to number, including number
 	 * 
@@ -151,7 +142,6 @@ public class PlayerModel {
 
 	/**
 	 * This method places armies.
-	 * 
 	 * @param map main map
 	 * @param player player object
 	 * @param countryName name of the country
@@ -184,7 +174,6 @@ public class PlayerModel {
 
 	/**
 	 * This method checks armies of all players are exhausted or not.
-	 * 
 	 * @return true if player has exhausted the armies
 	 */
 	public boolean isAllPlayersArmiesExhausted() {
@@ -201,7 +190,6 @@ public class PlayerModel {
 
 	/**
 	 * This method populates all countries.
-	 * 
 	 * @param map map object
 	 */
 	public void populateCountries(Hmap map) {
@@ -241,7 +229,6 @@ public class PlayerModel {
 
 	/**
 	 * Parses the map and gets country list
-	 * 
 	 * @param map map object
 	 * @return list for countries from root Map
 	 */
@@ -279,7 +266,6 @@ public class PlayerModel {
 
 	/**
 	 * This method counts the number of reinforcement armies for the player.
-	 * 
 	 * @param player current player object
 	 * @return the number armies player will get in reinforcement
 	 */
@@ -313,12 +299,10 @@ public class PlayerModel {
 
 	/**
 	 * This will do reinforcement
-	 * 
 	 * @param player current player
 	 * @param countryName name of the country
 	 * @param numberOfArmie number of armies
 	 * @return true if reinforcement is done, false otherwise
-	 * 
 	 */
 	public boolean reinforceArmiesForCurrentPlayer(Player player, String countryName, int numberOfArmies) {
 
@@ -357,13 +341,11 @@ public class PlayerModel {
 
 	/**
 	 * This method will fortify for current player
-	 * 
 	 * @param map map object
 	 * @param player player object
 	 * @param fromCountry from country name
 	 * @param toCountry to country name
 	 * @param armiesCount number of armies
-	 * 
 	 * @return true if fortification is successful, false otherwise
 	 */
 	public boolean fortifyCurrentPlayer(Hmap map, Player player, String fromCountry, String toCountry,
@@ -411,7 +393,6 @@ public class PlayerModel {
 
 	/**
 	 * This method will fortify for current player
-	 *
 	 * @param map main map
 	 * @param currentPlayer current player
 	 * @param country name of to country
@@ -434,7 +415,6 @@ public class PlayerModel {
 
 	/**
 	 * This method will fortify for current player
-	 * 
 	 * @param map map object
 	 * @param fromCountry. name of from country
 	 * @param toCountry name of to country
@@ -455,7 +435,6 @@ public class PlayerModel {
 
 	/**
 	 * This method will formulate country hashmap.
-	 * 
 	 * @param countryList list of countries
 	 * @return country hashmap
 	 */
@@ -470,7 +449,6 @@ public class PlayerModel {
 
 	/**
 	 * This method checks whether current player is the last player or not.
-	 * 
 	 * @param currentPlayer current player
 	 * @return true if current player is the last player, false otherwise
 	 */
@@ -486,7 +464,6 @@ public class PlayerModel {
 
 	/**
 	 * This implements attach phase.
-	 * 
 	 * @return true if current player is the last player, false otherwise
 	 */
 	public boolean attackCountry(Hmap map, Player player, String attackingCountry, String defendingCountry, int numOfDice) {
@@ -545,7 +522,11 @@ public class PlayerModel {
         DiceModel diceModel = new DiceModel(attackCountry, defendCountry, numOfDice, numOfDefenderDice);
         diceModel.rolldice();
         diceModel.getResultAfterRoll();
-        
+        if(defendCountry.getArmy()==0){
+
+			attackCountry.getPlayer().setCardList(GameController.stackOfCards.pop());
+			modifyDefendingCountryOwnerShip(defendCountry,attackCountry);
+		}
         // Is game over for defender player?
         
         // Is game win by attacker?
@@ -557,7 +538,6 @@ public class PlayerModel {
 	
 	/**
 	 * This gets the Dice values of defender.
-	 * 
 	 * @return Dice value of defender
 	 */
 	public int getDefenderDice(Player player, Country defendCountry) {
@@ -606,6 +586,14 @@ public class PlayerModel {
 			}
         }
 	}
+	/**
+	 * This method all out attack country 
+	 * @param map map object
+	 * @param player player object
+	 * @param attackingCountry  attack country
+	 * @param defendingCountry define the country 
+	 * @param numOfDice number of dice
+	 */
 
 	public void alloutattackCountry(Hmap map, Player player, String attackingCountry, String defendingCountry, int numOfDice) {
 
@@ -666,6 +654,12 @@ public class PlayerModel {
 		}
 	}
 
+	/**
+	 * This method check win game
+	 * @param player object player
+	 * @param totalCoutries total country
+	 * @return true if player size is equal to total country size ,otherwise false
+	 */
 	public boolean winGame(Player player,List<Country> totalCoutries){
 
 
@@ -688,6 +682,11 @@ public class PlayerModel {
 
 	}
 
+	/**
+	 * This method modify country owner ship
+	 * @param defendingCountry define country 
+	 * @param attackingCountry attack country
+	 */
 	public void modifyDefendingCountryOwnerShip(Country defendingCountry,Country attackingCountry) {
 
 		List<Country> defendersCountries = defendingCountry.getPlayer().getAssignedCountry();
