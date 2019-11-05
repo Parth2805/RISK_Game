@@ -115,10 +115,10 @@ public class CardModel {
     }
 
 
-    public int areCardsvalidForExchange(List<Card> cardlist) {
+    public boolean areCardsvalidForExchange(List<Card> cardlist) {
 
 
-        int ans = 0;
+        boolean ans = false;
 
         if (cardlist.size() == 3) {
 
@@ -138,7 +138,7 @@ public class CardModel {
             //if all are of different kind or all are of same kind then only, player can exchange cards for army.
 
             if ((infantry == 1 && cavalry == 1 && artillery == 1) || infantry == 3 || cavalry == 3 || artillery == 3) {
-                ans = 1;
+                ans = true;
             }
         }
         return ans;
@@ -202,9 +202,8 @@ public class CardModel {
                             cardschoosen.add(cardlist.get(index));
 
                         }
-//                        int ans = 0;
-                        int ans = areCardsvalidForExchange(cardschoosen);
-                        if (ans == 1) {
+
+                        if (areCardsvalidForExchange(cardschoosen)) {
                             exchangeCards(player,idx, cardschoosen);
 
                         } else {
