@@ -23,6 +23,7 @@ public class AttachTest {
     int currentArmies ;
     public ArrayList<Player> playersList;
     String countryName;
+    List<Country> totalCoutries;
 
 
     /**
@@ -104,13 +105,6 @@ public class AttachTest {
     	assertFalse(assignarmy);
     }
     
-//    @Test 
-//    public void placeArmyTest () {
-//    	int playerArmies=10;
-//    	boolean p= playerModel. placeArmy( map,  player, countryName);
-//    	assertTrue(p);
-//    	
-//    }
     /**
      * This method test is all player armies exhausted
      */
@@ -151,9 +145,10 @@ public class AttachTest {
     @Test
     public void getDefenderDiceTest() {
     	int numOfDice = 0;
-    	int p=playerModel. getDefenderDice( player, count1);
-    	assertNotEquals(p,10);
+    	int diceTest=playerModel. getDefenderDice( player, count1);
+    	assertNotEquals(diceTest,10);
     }
 
+   
 
 }
