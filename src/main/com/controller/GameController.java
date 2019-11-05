@@ -133,56 +133,56 @@ public class GameController extends Observable {
 				}
 			break;
 
-		case Commands.MAP_COMMAND_EDIT_COUNTRY:
+			case Commands.MAP_COMMAND_EDIT_COUNTRY:
 
-			for (int idx = 1; idx < words.length; idx++) {
+				for (int idx = 1; idx < words.length; idx++) {
 
-				if (words[idx].equals(Commands.MAP_COMMAND_OPTION_ADD)) {
+					if (words[idx].equals(Commands.MAP_COMMAND_OPTION_ADD)) {
 
-					if (words.length < idx + 3) {
+						if (words.length < idx + 3) {
+							System.out.println("Invalid command, Try again !!!");
+							return;
+						}
+
+						MapContoller.addCountry(getMap(), words[idx + 1], words[idx + 2]);
+						idx = idx + 2;
+
+					} else if (words[idx].equals(Commands.MAP_COMMAND_OPTION_REMOVE)) {
+
+						if (words.length < idx + 2) {
+							System.out.println("Invalid command, Try again !!!");
+							return;
+						}
+
+						MapContoller.removeCountry(getMap(), words[idx + 1]);
+						idx = idx + 1;
+
+					} else {
 						System.out.println("Invalid command, Try again !!!");
-						return;
 					}
-
-					MapContoller.addCountry(getMap(), words[idx + 1], words[idx + 2]);
-					idx = idx + 2;
-
-				} else if (words[idx].equals(Commands.MAP_COMMAND_OPTION_REMOVE)) {
-
-					if (words.length < idx + 2) {
-						System.out.println("Invalid command, Try again !!!");
-						return;
-					}
-
-					MapContoller.removeCountry(getMap(), words[idx + 1]);
-					idx = idx + 1;
-
-				} else {
-					System.out.println("Invalid command, Try again !!!");
 				}
-			}
 			break;
 
-		case Commands.MAP_COMMAND_EDIT_NEIGHBOR:
+			case Commands.MAP_COMMAND_EDIT_NEIGHBOR:
 
-			for (int idx = 1; idx < words.length; idx++) {
+				for (int idx = 1; idx < words.length; idx++) {
 
-				if (words[idx].equals(Commands.MAP_COMMAND_OPTION_ADD)) {
+					if (words[idx].equals(Commands.MAP_COMMAND_OPTION_ADD)) {
 
-					if (words.length < idx + 3) {
-						System.out.println("Invalid command, Try again !!!");
-						return;
-					}
+						if (words.length < idx + 3) {
+							System.out.println("Invalid command, Try again !!!");
+							return;
+						}
 
-					MapContoller.addNeighborCountry(getMap(), words[idx + 1], words[idx + 2]);
-					idx = idx + 2;
+						MapContoller.addNeighborCountry(getMap(), words[idx + 1], words[idx + 2]);
+						idx = idx + 2;
 
-				} else if (words[idx].equals(Commands.MAP_COMMAND_OPTION_REMOVE)) {
+					} else if (words[idx].equals(Commands.MAP_COMMAND_OPTION_REMOVE)) {
 
-					if (words.length < idx + 3) {
-						System.out.println("Invalid command, Try again !!!");
-						return;
-					}
+						if (words.length < idx + 3) {
+							System.out.println("Invalid command, Try again !!!");
+							return;
+						}
 
 					MapContoller.removeNeighborCountry(getMap(), words[idx + 1], words[idx + 2]);
 					idx = idx + 2;
@@ -193,38 +193,38 @@ public class GameController extends Observable {
 			}
 			break;
 
-		case Commands.MAP_COMMAND_SHOWMAP:
-			MapContoller.mapEditorShowmap(getMap());
+			case Commands.MAP_COMMAND_SHOWMAP:
+				MapContoller.mapEditorShowmap(getMap());
 			break;
 
-		case Commands.MAP_COMMAND_SAVEMAP:
+			case Commands.MAP_COMMAND_SAVEMAP:
 
-			if (words.length < 2) {
-				System.out.println("Invalid command, Try again !!!");
-				break;
-			}
-
-			filePath = System.getProperty("user.dir") + "\\src\\main\\resources\\" + words[1];
-
-			// save map file should be similar to the one which was edited previously
-			if (!editFilePath.isEmpty()) {
-				if (!editFilePath.equals(filePath)) {
-					System.out.println("Please give same filename as you have given in editmap.");
+				if (words.length < 2) {
+					System.out.println("Invalid command, Try again !!!");
 					break;
 				}
-			}
 
-			try {
-				MapVerifier.verifyMap(getMap());
-			} catch (InvalidMap e1) {
-				System.out.println("Exception: " + e1.toString());
-				break;
-			}
+				filePath = System.getProperty("user.dir") + "\\src\\main\\resources\\" + words[1];
 
-			System.out.println("Saving File at: " + filePath);
-			File outputMapFile = new File(filePath);
+				// save map file should be similar to the one which was edited previously
+				if (!editFilePath.isEmpty()) {
+					if (!editFilePath.equals(filePath)) {
+						System.out.println("Please give same filename as you have given in editmap.");
+						break;
+					}
+				}
 
-			mapWriter.writeMapFile(getMap(), outputMapFile);
+				try {
+					MapVerifier.verifyMap(getMap());
+				} catch (InvalidMap e1) {
+					System.out.println("Exception: " + e1.toString());
+					break;
+				}
+
+				System.out.println("Saving File at: " + filePath);
+				File outputMapFile = new File(filePath);
+
+				mapWriter.writeMapFile(getMap(), outputMapFile);
 			break;
 
 		case Commands.MAP_COMMAND_EDITMAP:
