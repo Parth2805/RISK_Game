@@ -150,63 +150,60 @@ public class CardModel {
     */
     public boolean checkMaxCards(Player player, Stack<Card> cardStack) {
 
+        Scanner sc1 = new Scanner(System.in);
+
         // Check if player has 5 cards and tells to exchange until less than 5 cards
-        if (player.getCardList().size() >= 5) {
+        while (player.getCardList().size() >= 5) {
 
             int i = 1;
 
             System.out.println("You have 5(max) cards, need to exchange!!");
             System.out.println("Cards List:");
 
-            for (Card cards : player.getCardList()) {
-                System.out.println(i + "." + cards);
+            for (Card card : player.getCardList()) {
+                System.out.println(i + "." + card);
                 i++;
             }
-            System.out.println("Countries owned::");
 
-            for (Country c : player.getAssignedCountry()) {
-                System.out.println(c.getName());
-            }
+            System.out.println("Enter the cards(index) to exchange:");
+            String input = sc1.nextLine();
+            String tempwords[] = input.split(" ");
 
-            Scanner sc1 = new Scanner(System.in);
+            if (tempwords[0].equalsIgnoreCase(Commands.MAP_COMMAND_REINFORCE_OPTION_EXCHANGECARDS)) {
 
-            while (player.getCardList().size() == 5) {
-                System.out.println("Enter the cards(index) to exchange:");
-                String input = sc1.nextLine();
-                String tempwords[] = input.split(" ");
-
-                if (tempwords[0].equalsIgnoreCase(Commands.MAP_COMMAND_REINFORCE_OPTION_EXCHANGECARDS)) {
-
-                    if (tempwords[1].equalsIgnoreCase("-none")) {
-                        System.out.println("Need to Exchange Cards!!");
-                    } else {
-                        if (player.getCardList().size() < 3) {
-                            System.out.println("Have less than 3 cards, cant exchange");
-                            return false;
-                        }
-                        int idx[] = new int[3];
-                        idx[0] = Integer.parseInt(tempwords[1]) - 1;
-                        idx[1] = Integer.parseInt(tempwords[2]) - 1;
-                        idx[2] = Integer.parseInt(tempwords[3]) - 1;
-                        List<Card> cardschoosen = new ArrayList<>();
-
-                        List<Card> cardlist = player.getCardList();
-
-                        for (int index : idx) {
-                            cardschoosen.add(cardlist.get(index));
-                        }
-
-                        if (areCardsvalidForExchange(cardschoosen)) {
-                            exchangeCards(player, idx, cardschoosen, cardStack);
-                        } else {
-                            System.out.println("Only exchange 1.Cards of all same type or 2.Cards of all different type");
-                        }
-                    }
+                if (tempwords[1].equalsIgnoreCase("-none")) {
+                    System.out.println("You need to Exchange Cards!!");
                 } else {
-                	System.out.println("Invalid Input Command!!");
+                    if (player.getCardList().size() < 3) {
+                        System.out.println("Have less than 3 cards, cant exchange");
+                        return false;
+                    }
+                    
+                    int idx[] = new int[3];
+                    
+                    idx[0] = Integer.parseInt(tempwords[1]) - 1;
+                    idx[1] = Integer.parseInt(tempwords[2]) - 1;
+                    idx[2] = Integer.parseInt(tempwords[3]) - 1;
+                    
+                    List<Card> cardschoosen = new ArrayList<>();
+                    List<Card> cardlist = player.getCardList();
+
+                    for (int index : idx) {
+                        cardschoosen.add(cardlist.get(index));
+                    }
+
+                    if (areCardsvalidForExchange(cardschoosen)) {
+                        exchangeCards(player, idx, cardschoosen, cardStack);
+                        return true;
+                    } else {
+                        System.out.println("Only exchange 1.Cards of all same type or 2.Cards of all different type");
+                    }
                 }
+            } else {
+            	System.out.println("Invalid Input Command!!");
             }
         }
+        
         return false;
     }
 }

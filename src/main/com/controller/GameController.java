@@ -473,11 +473,9 @@ public class GameController extends Observable {
 	 */
 	public void processGamePlayReinforcementCommands(Scanner sc) {
 
-		if (getCurrentPlayer().getCardList().size() >= 3) {
-			// Card exchange view
-			setChanged();
-			notifyObservers("card-exchange");
-		}
+		// Card exchange view
+		setChanged();
+		notifyObservers("card-exchange");
 		
 		if (!isReinfoceArmiesAssigned) {
 		
@@ -560,14 +558,11 @@ public class GameController extends Observable {
 		System.out.println("Current phase: Gameplay Attack phase (attack, defend, attackmove, showmap)");
 		System.out.println("Current Player: " + getCurrentPlayer().getName());
 
-		if(!playerModel.checkAttackPossible(getCurrentPlayer())){
-
+		if (!playerModel.checkAttackPossible(getCurrentPlayer())){
 			System.out.println("Attack not possible for player:");
 			setChanged();
 			notifyObservers("attackdone");
 			return;
-
-
 		}
 
 		String command = sc.nextLine();
@@ -672,6 +667,18 @@ public class GameController extends Observable {
 	 * @return true if command is processed correctly, false otherwise
 	 */
 	public void processGamePlayFortifyCommands(Scanner sc) {
+		
+		if (getCurrentPlayer().getAssignedCountry().size() == 1) {
+			System.out.println("---- " + getCurrentPlayer() + " can't do fortify as you have"
+					+ "only one country ownership ----");
+			
+			// Update View
+			setChanged();
+			notifyObservers("fortifydone");
+			changeCurrentPlayer();
+			
+			return;
+		}
 		
 		System.out.println("Current game phase: Gameplay fortify phase (fortify, showmap)");
 		System.out.println("Current Player: " + getCurrentPlayer().getName());
