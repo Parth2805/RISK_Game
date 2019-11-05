@@ -1,8 +1,10 @@
 package com.maingame;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Set;
 
 import com.controller.GameController;
 import com.entity.Continent;
@@ -29,8 +31,8 @@ public class WorldDominationView implements Observer {
      * @param player player object
      * @return continentList continent List
      */
-    public ArrayList<String> getContinentOwnedByPlayer(Player player) {
-        ArrayList<String> continentList = new ArrayList<String>();
+    public Set<String> getContinentOwnedByPlayer(Player player) {
+    	Set<String> continentList = new HashSet<String>();
         Boolean isAllCountriesOwned;
 
         for (Country c : player.getAssignedCountry()) {
@@ -65,7 +67,7 @@ public class WorldDominationView implements Observer {
 
         if (methodValue.equals("show-world-domination")) {
 
-            System.out.println("-------- World Domination View ----------");
+            System.out.println("++++++++ World Domination View ++++++++");
 
             for (Player p: gameController.getPlayerModel().getPlayersList()) {
 
@@ -78,7 +80,7 @@ public class WorldDominationView implements Observer {
                 System.out.println("Player: " + p.getName() + " has total armies = " + p.getArmies());
             }
 
-            System.out.println("--------------------------------------");
+            System.out.println("+++++++++++++++++++++++++++");
         }
     }
 }

@@ -51,6 +51,15 @@ public class GameController extends Observable {
 	}
 
 	/**
+	 * Get the Card model.
+	 * 
+	 * @return card model object
+	 */
+	public CardModel getCardModel() {
+		return cardModel;
+	}
+	
+	/**
 	 * Get the player model.
 	 * 
 	 * @return player model object
@@ -376,6 +385,10 @@ public class GameController extends Observable {
 					System.out.println("Number of Countries for Player : " + p.getName() + " = " + countryCount);
 				}
 
+				// World domination view
+				setChanged();
+				notifyObservers("show-world-domination");
+
 				setCurrentPlayer(playerModel.getPlayersList().get(0));
 
 				// Update View
@@ -437,6 +450,7 @@ public class GameController extends Observable {
 			playerModel.placeAll();
 			
 			// Allocate cards to countries
+			System.out.println("---- Assigning Cards to Countries ----");
 			cardModel.allocateCardsToCountry(getMap(), getCardsStack());
 			setCurrentPlayer(playerModel.getPlayersList().get(0));
 			
@@ -459,12 +473,24 @@ public class GameController extends Observable {
 	 */
 	public void processGamePlayReinforcementCommands(Scanner sc) {
 
+		if (getCurrentPlayer().getCardList().size() >= 3) {
+			// Card exchange view
+			setChanged();
+			notifyObservers("card-exchange");
+		}
+		
 		if (!isReinfoceArmiesAssigned) {
+		
 			playerModel.assignReinforceArmiesToPlayers();
+			
+			// World domination view
+			setChanged();
+			notifyObservers("show-world-domination");
+			
 			isReinfoceArmiesAssigned = true;
 		}
 
-		System.out.println("Current game phase: Gameplay reinforcement phase (reinforce, showmap, exchangecards)");
+		System.out.println("Current game phase: Gameplay reinforcement phase (reinforce, showmap)");
 		System.out.println("Current Player: " + getCurrentPlayer().getName() + ", Armies left for reinforcement = "
 				+ getCurrentPlayer().getArmies());
 
@@ -510,45 +536,14 @@ public class GameController extends Observable {
 			if (playerModel.reinforceArmiesForCurrentPlayer(getCurrentPlayer(), countryName, numberOfArmies)) {
 				// Update View
 				setChanged();
+				notifyObservers("show-world-domination");
+				
+				// Update View
+				setChanged();
 				notifyObservers("reinforcedone");
 			}
 			break;
-
-		case Commands.MAP_COMMAND_REINFORCE_OPTION_EXCHANGECARDS:
-
-			if (getCurrentPlayer().getCardList().size() < 3) {
-
-				System.out.println(
-						"Need more than 3 cards to exchange, only have " + getCurrentPlayer().getCardList().size());
-				return;
-			}
-			if (words.length == 5 && words[4].equalsIgnoreCase("-none")) {
-				return;
-
-			} else {
-
-				int idx[] = new int[3];
-				idx[0] = Integer.parseInt(words[1]) - 1;
-				idx[1] = Integer.parseInt(words[2]) - 1;
-				idx[2] = Integer.parseInt(words[3]) - 1;
-				List<Card> cardschoosen = new ArrayList<>();
-
-				List<Card> cardlist = getCurrentPlayer().getCardList();
-
-				for (int index : idx) {
-					cardschoosen.add(cardlist.get(index));
-				}
-
-				Boolean retVal = cardModel.areCardsvalidForExchange(cardschoosen);
 		
-				if (retVal)
-					cardModel.exchangeCards(getCurrentPlayer(), idx, cardschoosen, stackOfCards);
-				else
-					System.out.println("Only exchange 1.Cards of all same type or 2.Cards of all different type");
-		
-			}
-			break;
-
 		default:
 			System.out.println("Invalid command, Try again !!!");
 			break;
@@ -602,8 +597,14 @@ public class GameController extends Observable {
 				String attackingCountry = words[1];
 				String defendingCountry = words[2];
 								
-				playerModel.allOutAttackCountry(getMap(), getCurrentPlayer(), 
-						attackingCountry, defendingCountry, stackOfCards);
+				if (!playerModel.allOutAttackCountry(getMap(), getCurrentPlayer(), 
+						attackingCountry, defendingCountry, stackOfCards)) {
+					return;
+				}
+				
+				// World domination view
+				setChanged();
+				notifyObservers("show-world-domination");
 				
 				if (playerModel.isPlayerWonGame(getCurrentPlayer(), rootMap.getCountries())){
 					System.out.println("Player: " + getCurrentPlayer().getName()+ " has won the game :)");
@@ -632,11 +633,16 @@ public class GameController extends Observable {
 					return;
 				}
 
-				playerModel.attackCountry(getMap(), getCurrentPlayer(), attackingCountry, 
-						defendingCountry, numOfDice, 0, stackOfCards);
+				if (playerModel.attackCountry(getMap(), getCurrentPlayer(), attackingCountry, 
+						defendingCountry, numOfDice, 0, stackOfCards)) {
+					// World domination view
+					setChanged();
+					notifyObservers("show-world-domination");
+				}
 				
 				if (playerModel.isPlayerWonGame(getCurrentPlayer(), rootMap.getCountries())){
-					System.out.println("Player:" + getCurrentPlayer().getName()+ " has won the game !!!");
+					System.out.println("Player:" + getCurrentPlayer().getName()+ 
+							" has won the game !!!");
 					setChanged();
 					notifyObservers("gameover");
 				}
