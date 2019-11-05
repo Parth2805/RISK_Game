@@ -298,9 +298,7 @@ public class GameController extends Observable {
 
 	/**
 	 * Parses the String and calls the related player commands.
-	 * 
-	 * @param command
-	 *            User input Command/String
+	 * @param command User input Command/String          
 	 */
 	public void processGamePlayCreatePlayerCommands(String command) {
 
@@ -309,74 +307,72 @@ public class GameController extends Observable {
 
 		switch (commandType) {
 
-		case Commands.MAP_COMMAND_SHOWMAP:
-			MapContoller.mapEditorShowmap(getMap());
+			case Commands.MAP_COMMAND_SHOWMAP:
+				MapContoller.mapEditorShowmap(getMap());
 			break;
 
-		case Commands.MAP_COMMAND_GAMEPLAYER:
+			case Commands.MAP_COMMAND_GAMEPLAYER:
 
-			for (int idx = 1; idx < words.length; idx++) {
-				if (words[idx].equals(Commands.MAP_COMMAND_OPTION_ADD)) {
+				for (int idx = 1; idx < words.length; idx++) {
+					if (words[idx].equals(Commands.MAP_COMMAND_OPTION_ADD)) {
 
-					if (words.length < idx + 2) {
+						if (words.length < idx + 2) {
+							System.out.println("Invalid command, Try again !!!");
+							return;
+						}
+
+						String playerName = words[idx + 1];
+						playerModel.createPlayer(playerName);
+						idx = idx + 1;
+
+					} else if (words[idx].equals(Commands.MAP_COMMAND_OPTION_REMOVE)) {
+
+						if (words.length < idx + 2) {
+							System.out.println("Invalid command, Try again !!!");
+							return;
+						}
+
+						String playerName = words[idx + 1];
+						playerModel.removePlayer(playerName);
+						idx = idx + 1;
+
+					} else {
 						System.out.println("Invalid command, Try again !!!");
-						return;
+						break;
+					}
+				}
+			break;
+
+			case Commands.MAP_COMMAND_POPULATE_COUNTRIES:
+
+				// Assign armies according the players count
+				if (playerModel.assignArmiesToAllPlayers()) {
+
+					playerModel.populateCountries(getMap());
+					playerModel.intitializeArmiesForAllCountries(getMap());
+
+					for (Player p : playerModel.getPlayersList()) {
+						int countryCount = p.getAssignedCountry().size();
+						System.out.println("Number of Countries for Player : " + p.getName() + " = " + countryCount);
 					}
 
-					String playerName = words[idx + 1];
-					playerModel.createPlayer(playerName);
-					idx = idx + 1;
+					setCurrentPlayer(playerModel.getPlayersList().get(0));
 
-				} else if (words[idx].equals(Commands.MAP_COMMAND_OPTION_REMOVE)) {
-
-					if (words.length < idx + 2) {
-						System.out.println("Invalid command, Try again !!!");
-						return;
-					}
-
-					String playerName = words[idx + 1];
-					playerModel.removePlayer(playerName);
-					idx = idx + 1;
-
-				} else {
-					System.out.println("Invalid command, Try again !!!");
-					break;
+					// Update View
+					setChanged();
+					notifyObservers("populatecountries");
 				}
-			}
-			break;
+				break;
 
-		case Commands.MAP_COMMAND_POPULATE_COUNTRIES:
-
-			// Assign armies according the players count
-			if (playerModel.assignArmiesToAllPlayers()) {
-
-				playerModel.populateCountries(getMap());
-				playerModel.intitializeArmiesForAllCountries(getMap());
-
-				for (Player p : playerModel.getPlayersList()) {
-					int countryCount = p.getAssignedCountry().size();
-					System.out.println("Number of Countries for Player : " + p.getName() + " = " + countryCount);
-				}
-
-				setCurrentPlayer(playerModel.getPlayersList().get(0));
-
-				// Update View
-				setChanged();
-				notifyObservers("populatecountries");
-			}
-			break;
-
-		default:
-			System.out.println("Invalid command, Try again !!!");
-			break;
+			default:
+				System.out.println("Invalid command, Try again !!!");
+				break;
 		}
 	}
 
 	/**
-	 * Parses the String and calls the related game play startup commands.
-	 * 
-	 * @param sc
-	 *            scanner object
+	 * Parses the String and calls the related game play startup commands. 
+	 * @param sc scanner object            
 	 */
 	public void processGamePlayStartupCommands(Scanner sc) {
 
@@ -390,50 +386,48 @@ public class GameController extends Observable {
 
 		switch (commandType) {
 
-		case Commands.MAP_COMMAND_SHOWMAP:
-			playerModel.gamePlayShowmap(getMap());
+			case Commands.MAP_COMMAND_SHOWMAP:
+				playerModel.gamePlayShowmap(getMap());
 			break;
 
-		case Commands.MAP_COMMAND_PLACE_ARMY:
+			case Commands.MAP_COMMAND_PLACE_ARMY:
 
-			if (words.length < 2) {
-				System.out.println("Invalid command, Try again !!!");
-				break;
-			}
+				if (words.length < 2) {
+					System.out.println("Invalid command, Try again !!!");
+					break;
+				}
 
-			if (playerModel.placeArmy(getMap(), getCurrentPlayer(), words[1])) {
-				changeCurrentPlayer();
-			}
+				if (playerModel.placeArmy(getMap(), getCurrentPlayer(), words[1])) {
+					changeCurrentPlayer();
+				}
 
-			if (playerModel.isAllPlayersArmiesExhausted()) {
-				setCurrentPlayer(playerModel.getPlayersList().get(0));
+				if (playerModel.isAllPlayersArmiesExhausted()) {
+					setCurrentPlayer(playerModel.getPlayersList().get(0));
 
 				// Update View
 				setChanged();
 				notifyObservers("placeall");
-			}
+				}
 			break;
 
-		case Commands.MAP_COMMAND_PLACE_ALL:
-			playerModel.placeAll();
-			cardsInitialize();
-			setCurrentPlayer(playerModel.getPlayersList().get(0));
-			// Update View
-			setChanged();
-			notifyObservers("placeall");
+			case Commands.MAP_COMMAND_PLACE_ALL:
+				playerModel.placeAll();
+				cardsInitialize();
+				setCurrentPlayer(playerModel.getPlayersList().get(0));
+				// Update View
+				setChanged();
+				notifyObservers("placeall");
 			break;
 
-		default:
-			System.out.println("Invalid command, Try again !!!");
+			default:
+				System.out.println("Invalid command, Try again !!!");
 			break;
 		}
 	}
 
 	/**
 	 * Parses the String and calls the related game play reinforcement commands.
-	 * 
-	 * @param sc
-	 *            scanner object
+	 * @param sc scanner object        
 	 */
 	public void processGamePlayReinforcementCommands(Scanner sc) {
 
