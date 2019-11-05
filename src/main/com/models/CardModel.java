@@ -89,12 +89,11 @@ public class CardModel {
      * @param cardlist list of cards
      * 
      */    
-    public void exchangeCards(Player player, int idx[], List<Card> cardlist) {
+    public void exchangeCards(Player player, int idx[], List<Card> cardlist, Stack<Card> cardStack) {
 
         for (int index : idx) {
             for (Country c : player.getAssignedCountry()) {
                 if (c.getName().equalsIgnoreCase(cardlist.get(index).getCountryToWhichCardBelong().getName())) {
-
                     player.setArmies(player.getArmies() + 2);
                     break;
                 }
@@ -105,11 +104,11 @@ public class CardModel {
         setNumberOfTimesCardExchanged();
 
         for (Card card : cardlist) {
-            //Removing the exchanged cards from players hand
+            // Removing the exchanged cards from players hand
             player.getCardList().remove(card);
-			GameController.stackOfCards.push(card);
+        	// Adding cards back to deck
+            cardStack.push(card);
         }
-        //Adding cards back to deck
     }
 
     /**
@@ -149,7 +148,7 @@ public class CardModel {
     * @param player scanner object
     * 
     */
-    public boolean checkMaxCards(Player player) {
+    public boolean checkMaxCards(Player player, Stack<Card> cardStack) {
 
         // Check if player has 5 cards and tells to exchange until less than 5 cards
         if (player.getCardList().size() >= 5) {
@@ -198,7 +197,7 @@ public class CardModel {
                         }
 
                         if (areCardsvalidForExchange(cardschoosen)) {
-                            exchangeCards(player,idx, cardschoosen);
+                            exchangeCards(player, idx, cardschoosen, cardStack);
                         } else {
                             System.out.println("Only exchange 1.Cards of all same type or 2.Cards of all different type");
                         }

@@ -6,7 +6,6 @@ import org.junit.Before;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +15,6 @@ import com.entity.Country;
 import com.entity.Hmap;
 import com.exception.InvalidMap;
 import com.mapparser.MapVerifier;
-import com.mapparser.MapReader;
 
 /**
  * This is the test class for MapVerifier. {@link MapVerifier}
