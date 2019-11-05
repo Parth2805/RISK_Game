@@ -11,8 +11,8 @@ import com.controller.GameController;
 public class Main implements Observer {
 
 	static GameState gamePhase;
-	GameController gameController = new GameController(this);
-
+	GameController gameController;
+	
 	/**
 	 * Get game phase
 	 * @return gameState
@@ -28,31 +28,26 @@ public class Main implements Observer {
 	public static void setGamePhase(GameState gameState) {
 		gamePhase = gameState;
 	}
-
-	/**
-	 * Get Game Controller
-	 * @return gameController
-	 */
-	public GameController getGameController() {
-		return gameController;
-	}
 	
 	public static void main(String[] args) {
 		
 		Main mainView = new Main();
-		WorldDominationView worldDomination = new WorldDominationView();
-		mainView.getGameController().addObserver(worldDomination);
-
-		setGamePhase(GameState.RISK_STATE_MAP_EDITING);
-		
+		WorldDominationView worldDominationView = new WorldDominationView();
+		setGamePhase(GameState.RISK_STATE_INIT);
 		Scanner sc = new Scanner(System.in);
-		System.out.println("---------- Welcome to Risk game ----------");
 		String command;
 
 		while (true) {
 
 			switch (getGamePhase()) {
 
+			case RISK_STATE_INIT:
+				System.out.println("---------- Welcome to Risk game ----------");
+				mainView.gameController = new GameController(mainView);
+				mainView.gameController.addObserver(worldDominationView);
+				setGamePhase(GameState.RISK_STATE_MAP_EDITING);
+				break;
+				
 			case RISK_STATE_MAP_EDITING:
 				
 				System.out.println("Current game phase: Map editor (editcontinent, "
@@ -108,7 +103,7 @@ public class Main implements Observer {
 		if (methodValue.equals("loadmap")) {
 			setGamePhase(GameState.RISK_STATE_GAMEPLAY_CREATE_PLAYERS);
 			System.out.println("----------------------------------");
-		}
+		} 
 		else if (methodValue.equals("populatecountries")) {
 			setGamePhase(GameState.RISK_STATE_GAMEPLAY_STARTUP_PHASE);
 			System.out.println("----------------------------------");
@@ -120,16 +115,17 @@ public class Main implements Observer {
 		else if (methodValue.equals("reinforcedone")) {
 			setGamePhase(GameState.RISK_STATE_GAMEPLAY_ATTACK_PHASE);
 			System.out.println("----------------------------------");
-		}
+		} 
 		else if (methodValue.equals("attackdone")) {
 			setGamePhase(GameState.RISK_STATE_GAMEPLAY_FORTIFICATION_PHASE);
 			System.out.println("----------------------------------");
-		}
+		} 
 		else if (methodValue.equals("fortifydone")) {
 			setGamePhase(GameState.RISK_STATE_GAMEPLAY_REINFORCEMENT_PHASE);
 			System.out.println("----------------------------------");
-		}else if (methodValue.equals("gameover")) {
-			setGamePhase(GameState.RISK_STATE_MAP_EDITING);
+		}
+		else if (methodValue.equals("gameover")) {
+			setGamePhase(GameState.RISK_STATE_INIT);
 			System.out.println("----------------------------------");
 		}
 	}

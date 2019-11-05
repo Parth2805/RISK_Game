@@ -38,7 +38,7 @@ public class GameController extends Observable {
 	PlayerModel playerModel;
 	CardModel cardModel;
 	Player currentPlayer;
-	public static Stack<Card> stackOfCards;
+	Stack<Card> stackOfCards;
 
 	// default constructor to initialize members
 	public GameController(Main mainView) {
@@ -51,6 +51,15 @@ public class GameController extends Observable {
 	}
 
 	/**
+	 * Get the player model.
+	 * 
+	 * @return player model object
+	 */
+	public PlayerModel getPlayerModel() {
+		return playerModel;
+	}
+
+	/**
 	 * Get the current player.
 	 * 
 	 * @return player playing
@@ -58,15 +67,6 @@ public class GameController extends Observable {
 	public Stack<Card> getCardsStack() {
 		return stackOfCards;
 	}
-
-    /**
-     * Get the player model.
-     *
-     * @return player model
-     */
-    public PlayerModel getPlayerModel() {
-        return playerModel;
-    }
 
 	/**
 	 * Get the current player.
@@ -433,9 +433,13 @@ public class GameController extends Observable {
 			break;
 
 		case Commands.MAP_COMMAND_PLACE_ALL:
+
 			playerModel.placeAll();
-			cardsInitialize();
+			
+			// Allocate cards to countries
+			cardModel.allocateCardsToCountry(getMap(), getCardsStack());
 			setCurrentPlayer(playerModel.getPlayersList().get(0));
+			
 			// Update View
 			setChanged();
 			notifyObservers("placeall");
@@ -464,7 +468,7 @@ public class GameController extends Observable {
 		System.out.println("Current Player: " + getCurrentPlayer().getName() + ", Armies left for reinforcement = "
 				+ getCurrentPlayer().getArmies());
 
-		cardModel.checkMaxCards(getCurrentPlayer());
+		cardModel.checkMaxCards(getCurrentPlayer(), stackOfCards);
 
 		String command = sc.nextLine();
 		String[] words = command.split(" ");
@@ -494,12 +498,14 @@ public class GameController extends Observable {
 			}
 
 			if (numberOfArmies <= 0) {
-				System.out.println("Error: You have entered invalid number of armies.");
+				System.out.println("Error: You have entered negative number of armies.");
 				return;
 			}
 
-			if (!playerModel.isCountryBelongToPlayer(getMap(), getCurrentPlayer(), countryName))
+			if (!playerModel.isCountryBelongToPlayer(getMap(), getCurrentPlayer(), countryName)) {
+				System.out.println("Error: Given country " + countryName + " does not belong to " + getCurrentPlayer());
 				return;
+			}
 
 			if (playerModel.reinforceArmiesForCurrentPlayer(getCurrentPlayer(), countryName, numberOfArmies)) {
 				// Update View
@@ -533,16 +539,13 @@ public class GameController extends Observable {
 					cardschoosen.add(cardlist.get(index));
 				}
 
-//				int ans = 0;
-				int ans = cardModel.areCardsvalidForExchange(cardschoosen);
-				if (ans == 1) {
-					//cardModel.exchangeCards(idx, cardschoosen);
-
-				} else {
-
+				Boolean retVal = cardModel.areCardsvalidForExchange(cardschoosen);
+		
+				if (retVal)
+					cardModel.exchangeCards(getCurrentPlayer(), idx, cardschoosen, stackOfCards);
+				else
 					System.out.println("Only exchange 1.Cards of all same type or 2.Cards of all different type");
-				}
-
+		
 			}
 			break;
 
@@ -550,15 +553,6 @@ public class GameController extends Observable {
 			System.out.println("Invalid command, Try again !!!");
 			break;
 		}
-	}
-
-	/**
-	 * Parses the String and calls the related game play fortify commands.
-	 * 
-	 * @return true if command is processed correctly, false otherwise
-	 */
-	public void cardsInitialize() {
-		cardModel.allocateCardsToCountry(getMap(), getCardsStack());
 	}
 
 	/**
@@ -601,39 +595,24 @@ public class GameController extends Observable {
 				System.out.println("Invalid command, Try again !!!");
 				return;
 			}
-			
-			if (words.length >= 5) {
+							
+			// Attack with allout mode
+			if (words[3].equalsIgnoreCase(Commands.MAP_COMMAND_ATTACK_OPTION_ALLOUT)) {
+
+				String attackingCountry = words[1];
+				String defendingCountry = words[2];
+								
+				playerModel.allOutAttackCountry(getMap(), getCurrentPlayer(), 
+						attackingCountry, defendingCountry, stackOfCards);
 				
-				// Attack with allout mode
-				if (words[4].equalsIgnoreCase(Commands.MAP_COMMAND_ATTACK_OPTION_ALLOUT)) {
-
-
-					int numOfDice = 0;
-					String attackingCountry = words[1];
-					String defendingCountry = words[2];
-					try {
-						numOfDice = Integer.parseInt(words[3]);
-					} catch (Exception e) {
-						System.out.println("Exception: " + e.toString());
-						return;
-					}
-
-                    // Update View
-                    setChanged();
-                    notifyObservers("show-world-domination");
-
-                    playerModel.alloutattackCountry(getMap(), getCurrentPlayer(), attackingCountry, defendingCountry, numOfDice);
-					if(playerModel.winGame(getCurrentPlayer(),rootMap.getCountries())){
-						System.out.println("Player:"+getCurrentPlayer().getName()+" won the game!!!!!!!");
-						//exit(0);
-						setChanged();
-						notifyObservers("gameover");
-					}else{
+				if (playerModel.isPlayerWonGame(getCurrentPlayer(), rootMap.getCountries())){
+					System.out.println("Player: " + getCurrentPlayer().getName()+ " has won the game :)");
+					setChanged();
+					notifyObservers("gameover");
+				} else {
 					// Going to next phase - Update View
 					setChanged();
 					notifyObservers("attackdone");
-					}
-					break;
 				}
 			} else {
 
@@ -647,8 +626,20 @@ public class GameController extends Observable {
 					System.out.println("Exception: " + e.toString());
 					return;
 				}
+				
+				if (numOfDice <= 0) {
+					System.out.println("Error: Invalid number of dice of entered");
+					return;
+				}
 
-				playerModel.attackCountry(getMap(), getCurrentPlayer(), attackingCountry, defendingCountry, numOfDice);
+				playerModel.attackCountry(getMap(), getCurrentPlayer(), attackingCountry, 
+						defendingCountry, numOfDice, 0, stackOfCards);
+				
+				if (playerModel.isPlayerWonGame(getCurrentPlayer(), rootMap.getCountries())){
+					System.out.println("Player:" + getCurrentPlayer().getName()+ " has won the game !!!");
+					setChanged();
+					notifyObservers("gameover");
+				}
 			}
 			break;
 
