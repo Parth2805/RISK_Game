@@ -49,7 +49,8 @@ public class CardModel {
     }
 
     /**
-     * Allocates card
+     * Allocate cards to country 
+     * 
      */
     public void allocateCardsToCountry(Hmap map, Stack<Card> stackOfCards) {
 
@@ -69,11 +70,9 @@ public class CardModel {
             }
         }
 
-
         int i = 0;
 
         for (Country country : countryList) {
-
             Card card = new Card(cardlist.get(i++));
             card.setCountryToWhichCardBelong(country);
             stackOfCards.push(card);
@@ -81,12 +80,15 @@ public class CardModel {
 
         Collections.shuffle(stackOfCards);
         for (Card cards : stackOfCards) {
-
             System.out.println(cards);
         }
     }
 
-
+    /**
+     * exchange of cards between players
+     * @param cardlist list of cards
+     * 
+     */    
     public void exchangeCards(Player player, int idx[], List<Card> cardlist) {
 
         for (int index : idx) {
@@ -107,26 +109,21 @@ public class CardModel {
             player.getCardList().remove(card);
 			GameController.stackOfCards.push(card);
         }
-
         //Adding cards back to deck
-
-
-
     }
 
-
+    /**
+    * validates card for exchange
+    * @param player scanner object
+    * @return number of cards 
+  	*
+    */
     public boolean areCardsvalidForExchange(List<Card> cardlist) {
 
-
-        boolean ans = false;
-
         if (cardlist.size() == 3) {
-
-
             int infantry = 0, cavalry = 0, artillery = 0;
-
+            
             for (Card card : cardlist) {
-
                 if (card.getCardKind().toString().equals(CardType.CAVALRY.toString())) {
                     infantry++;
                 } else if (card.getCardKind().toString().equals(CardType.INFANTRY.toString())) {
@@ -135,21 +132,23 @@ public class CardModel {
                     artillery++;
                 }
             }
-            //if all are of different kind or all are of same kind then only, player can exchange cards for army.
-
-            if ((infantry == 1 && cavalry == 1 && artillery == 1) || infantry == 3 || cavalry == 3 || artillery == 3) {
-                ans = true;
+            
+            // if all are of different kind or all are of same 
+            // kind then only, player can exchange cards for army.
+            if ((infantry == 1 && cavalry == 1 && artillery == 1) 
+            		|| infantry == 3 || cavalry == 3 || artillery == 3) {
+                return true;
             }
         }
-        return ans;
+        
+        return false;
     }
 
-
     /**
-     * Parses the String and calls the related game play startup commands.
-     *
-     * @param player scanner object
-     */
+    * Parses the String and calls the related game play startup commands.
+    * @param player scanner object
+    * 
+    */
     public boolean checkMaxCards(Player player) {
 
         // Check if player has 5 cards and tells to exchange until less than 5 cards
@@ -177,13 +176,10 @@ public class CardModel {
                 String input = sc1.nextLine();
                 String tempwords[] = input.split(" ");
 
-
                 if (tempwords[0].equalsIgnoreCase(Commands.MAP_COMMAND_REINFORCE_OPTION_EXCHANGECARDS)) {
 
                     if (tempwords[1].equalsIgnoreCase("-none")) {
-
                         System.out.println("Need to Exchange Cards!!");
-
                     } else {
                         if (player.getCardList().size() < 3) {
                             System.out.println("Have less than 3 cards, cant exchange");
@@ -198,26 +194,20 @@ public class CardModel {
                         List<Card> cardlist = player.getCardList();
 
                         for (int index : idx) {
-
                             cardschoosen.add(cardlist.get(index));
-
                         }
 
                         if (areCardsvalidForExchange(cardschoosen)) {
                             exchangeCards(player,idx, cardschoosen);
-
                         } else {
                             System.out.println("Only exchange 1.Cards of all same type or 2.Cards of all different type");
                         }
                     }
                 } else {
-                    System.out.println("Invalid Input Command!!");
+                	System.out.println("Invalid Input Command!!");
                 }
             }
         }
-
         return false;
     }
-
-
 }

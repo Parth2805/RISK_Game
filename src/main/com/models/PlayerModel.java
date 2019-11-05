@@ -7,13 +7,16 @@ import com.controller.GameController;
 import com.entity.*;
 import com.config.Config;
 
+/**
+* This class is handles the behaviour of players.
+* @author Parth
+*
+*/
 public class PlayerModel {
 
 	private ArrayList<Player> playersList;
 	private static int[] numOfArmies = { Config.CONFIG_ARMIES_TWO_PLAYER, Config.CONFIG_ARMIES_THREE_PLAYER,
 			Config.CONFIG_ARMIES_FOUR_PLAYER, Config.CONFIG_ARMIES_FIVE_PLAYER, Config.CONFIG_ARMIES_SIX_PLAYER };
-
-
 
 	/**
 	 * This is the default constructor of Player Model.
@@ -138,10 +141,9 @@ public class PlayerModel {
 	/**
 	 * This method generates random number from 1 to number.
 	 * 
-	 * @param number
-	 *            number up to which find random numbers to be generated, from 0 to
-	 *            number
+	 * @param number number up to which find random numbers to be generated, from 0 to number
 	 * @return random number from 1 to number, including number
+	 * 
 	 */
 	public static int getRandomNumber(int number) {
 		return new Random().nextInt(number + 1);
@@ -150,12 +152,9 @@ public class PlayerModel {
 	/**
 	 * This method places armies.
 	 * 
-	 * @param map
-	 *            main map
-	 * @param player
-	 *            player object
-	 * @param countryName
-	 *            name of the country
+	 * @param map main map
+	 * @param player player object
+	 * @param countryName name of the country
 	 * @return true if army gets placed, false otherwise
 	 */
 	public boolean placeArmy(Hmap map, Player player, String countryName) {
@@ -203,8 +202,7 @@ public class PlayerModel {
 	/**
 	 * This method populates all countries.
 	 * 
-	 * @param map
-	 *            map object
+	 * @param map map object
 	 */
 	public void populateCountries(Hmap map) {
 
@@ -244,8 +242,7 @@ public class PlayerModel {
 	/**
 	 * Parses the map and gets country list
 	 * 
-	 * @param map
-	 *            map object
+	 * @param map map object
 	 * @return list for countries from root Map
 	 */
 	public ArrayList<Country> getCountryListFromMap(Hmap map) {
@@ -261,11 +258,9 @@ public class PlayerModel {
 	}
 
 	/**
-	 * It shows all countries and continents, armies on each country, ownership, and
-	 * connectivity
+	 * It shows all countries and continents, armies on each country, ownership, and connectivity
+	 * @param map main map
 	 * 
-	 * @param map
-	 *            main map
 	 */
 	public void gamePlayShowmap(Hmap map) {
 
@@ -285,8 +280,7 @@ public class PlayerModel {
 	/**
 	 * This method counts the number of reinforcement armies for the player.
 	 * 
-	 * @param player
-	 *            current player object
+	 * @param player current player object
 	 * @return the number armies player will get in reinforcement
 	 */
 	public int countReinforcementArmies(Player player) {
@@ -305,8 +299,7 @@ public class PlayerModel {
 	}
 
 	/**
-	 * @param map
-	 *            main map It will put one army on every country
+	 * @param map main map It will put one army on every country
 	 */
 	public void intitializeArmiesForAllCountries(Hmap map) {
 
@@ -321,13 +314,11 @@ public class PlayerModel {
 	/**
 	 * This will do reinforcement
 	 * 
-	 * @param player
-	 *            current player
-	 * @param countryName
-	 *            name of the country
-	 * @param numberOfArmies
-	 *            number of armies
+	 * @param player current player
+	 * @param countryName name of the country
+	 * @param numberOfArmie number of armies
 	 * @return true if reinforcement is done, false otherwise
+	 * 
 	 */
 	public boolean reinforceArmiesForCurrentPlayer(Player player, String countryName, int numberOfArmies) {
 
@@ -357,7 +348,7 @@ public class PlayerModel {
 	 * This will assign armies to all players in Reinforcement
 	 */
 	public void assignReinforceArmiesToPlayers() {
-
+		
 		for (Player p : getPlayersList()) {
 			int reinforeArmies = countReinforcementArmies(p);
 			p.setArmies(reinforeArmies);
@@ -367,16 +358,11 @@ public class PlayerModel {
 	/**
 	 * This method will fortify for current player
 	 * 
-	 * @param map
-	 *            map object
-	 * @param player
-	 *            player object
-	 * @param fromCountry
-	 *            from country name
-	 * @param toCountry
-	 *            to country name
-	 * @param armiesCount
-	 *            number of armies
+	 * @param map map object
+	 * @param player player object
+	 * @param fromCountry from country name
+	 * @param toCountry to country name
+	 * @param armiesCount number of armies
 	 * 
 	 * @return true if fortification is successful, false otherwise
 	 */
@@ -417,8 +403,7 @@ public class PlayerModel {
 			return true;
 
 		} else {
-			System.out.println(
-					"Exception: fromCountry: " + fromCountry + " toCountry: " + toCountry + " are not adjacent.");
+			System.out.println("Exception: fromCountry: " + fromCountry + " toCountry: " + toCountry + " are not adjacent.");
 		}
 
 		return false;
@@ -427,12 +412,9 @@ public class PlayerModel {
 	/**
 	 * This method will fortify for current player
 	 *
-	 * @param map
-	 *            main map
-	 * @param currentPlayer
-	 *            current player
-	 * @param country
-	 *            name of to country
+	 * @param map main map
+	 * @param currentPlayer current player
+	 * @param country name of to country
 	 * @return true if country belong to given player
 	 */
 	public boolean isCountryBelongToPlayer(Hmap map, Player currentPlayer, String country) {
@@ -453,12 +435,9 @@ public class PlayerModel {
 	/**
 	 * This method will fortify for current player
 	 * 
-	 * @param map
-	 *            map object
-	 * @param fromCountry
-	 *            name of from country
-	 * @param toCountry
-	 *            name of to country
+	 * @param map map object
+	 * @param fromCountry. name of from country
+	 * @param toCountry name of to country
 	 * @return true if countries are adjacent, false otherwise
 	 */
 	public boolean isCountriesAdjacent(Hmap map, String fromCountry, String toCountry) {
@@ -471,20 +450,18 @@ public class PlayerModel {
 				}
 			}
 		}
-
 		return false;
 	}
 
 	/**
 	 * This method will formulate country hashmap.
 	 * 
-	 * @param countryList
-	 *            list of countries
+	 * @param countryList list of countries
 	 * @return country hashmap
 	 */
 	public Map<String, Country> getCountryMapFromList(ArrayList<Country> countryList) {
 		Map<String, Country> countryMap = new TreeMap<String, Country>(String.CASE_INSENSITIVE_ORDER);
-
+		
 		for (Country c : countryList)
 			countryMap.put(c.getName(), c);
 
@@ -494,8 +471,7 @@ public class PlayerModel {
 	/**
 	 * This method checks whether current player is the last player or not.
 	 * 
-	 * @param currentPlayer
-	 *            current player
+	 * @param currentPlayer current player
 	 * @return true if current player is the last player, false otherwise
 	 */
 	public boolean isLastPlayer(Player currentPlayer) {
@@ -580,7 +556,9 @@ public class PlayerModel {
 	}
 	
 	/**
+	 * This gets the Dice values of defender.
 	 * 
+	 * @return Dice value of defender
 	 */
 	public int getDefenderDice(Player player, Country defendCountry) {
 	
