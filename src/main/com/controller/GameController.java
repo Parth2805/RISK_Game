@@ -448,89 +448,88 @@ public class GameController extends Observable {
 
 		switch (commandType) {
 
-		case Commands.MAP_COMMAND_SHOWMAP:
-			playerModel.gamePlayShowmap(getMap());
+			case Commands.MAP_COMMAND_SHOWMAP:
+				playerModel.gamePlayShowmap(getMap());
 			break;
 
-		case Commands.MAP_COMMAND_REINFORCE:
+			case Commands.MAP_COMMAND_REINFORCE:
 
-			if (words.length < 3) {
-				System.out.println("Invalid command, Try again !!!");
+				if (words.length < 3) {
+					System.out.println("Invalid command, Try again !!!");
 				break;
-			}
+				}
 
 			String countryName = words[1];
 			int numberOfArmies = 0;
 
-			try {
-				numberOfArmies = Integer.parseInt(words[2]);
-			} catch (Exception e) {
-				System.out.println("Exception: " + e.toString());
+				try {
+					numberOfArmies = Integer.parseInt(words[2]);
+				} catch (Exception e) {
+					System.out.println("Exception: " + e.toString());
 				return;
-			}
-
-			if (numberOfArmies <= 0) {
-				System.out.println("Error: You have entered invalid number of armies.");
-				return;
-			}
-
-			if (!playerModel.isCountryBelongToPlayer(getMap(), getCurrentPlayer(), countryName))
-				return;
-
-			if (playerModel.reinforceArmiesForCurrentPlayer(getCurrentPlayer(), countryName, numberOfArmies)) {
-				// Update View
-				setChanged();
-				notifyObservers("reinforcedone");
-			}
-			break;
-
-		case Commands.MAP_COMMAND_REINFORCE_OPTION_EXCHANGECARDS:
-
-			if (getCurrentPlayer().getCardList().size() < 3) {
-
-				System.out.println(
-						"Need more than 3 cards to exchange, only have " + getCurrentPlayer().getCardList().size());
-				return;
-			}
-			if (words.length == 5 && words[4].equalsIgnoreCase("-none")) {
-				return;
-
-			} else {
-
-				int idx[] = new int[3];
-				idx[0] = Integer.parseInt(words[1]) - 1;
-				idx[1] = Integer.parseInt(words[2]) - 1;
-				idx[2] = Integer.parseInt(words[3]) - 1;
-				List<Card> cardschoosen = new ArrayList<>();
-
-				List<Card> cardlist = getCurrentPlayer().getCardList();
-
-				for (int index : idx) {
-					cardschoosen.add(cardlist.get(index));
 				}
 
-//				int ans = 0;
-				int ans = cardModel.areCardsvalidForExchange(cardschoosen);
-				if (ans == 1) {
-					//cardModel.exchangeCards(idx, cardschoosen);
+				if (numberOfArmies <= 0) {
+					System.out.println("Error: You have entered invalid number of armies.");
+				return;
+				}
+
+				if (!playerModel.isCountryBelongToPlayer(getMap(), getCurrentPlayer(), countryName))
+					return;
+
+				if (playerModel.reinforceArmiesForCurrentPlayer(getCurrentPlayer(), countryName, numberOfArmies)) {
+					// Update View
+					setChanged();
+					notifyObservers("reinforcedone");
+				}
+			break;
+
+			case Commands.MAP_COMMAND_REINFORCE_OPTION_EXCHANGECARDS:
+
+				if (getCurrentPlayer().getCardList().size() < 3) {
+
+					System.out.println("Need more than 3 cards to exchange, only have " + getCurrentPlayer().getCardList().size());
+						
+					return;
+				}
+				if (words.length == 5 && words[4].equalsIgnoreCase("-none")) {
+					return;
 
 				} else {
 
-					System.out.println("Only exchange 1.Cards of all same type or 2.Cards of all different type");
-				}
+					int idx[] = new int[3];
+					idx[0] = Integer.parseInt(words[1]) - 1;
+					idx[1] = Integer.parseInt(words[2]) - 1;
+					idx[2] = Integer.parseInt(words[3]) - 1;
+					List<Card> cardschoosen = new ArrayList<>();
 
-			}
+					List<Card> cardlist = getCurrentPlayer().getCardList();
+
+					for (int index : idx) {
+						cardschoosen.add(cardlist.get(index));
+					}
+
+//					int ans = 0;
+					int ans = cardModel.areCardsvalidForExchange(cardschoosen);
+					if (ans == 1) {
+						//cardModel.exchangeCards(idx, cardschoosen);
+
+					} else {
+
+						System.out.println("Only exchange 1.Cards of all same type or 2.Cards of all different type");
+					}
+
+				}
 			break;
 
-		default:
-			System.out.println("Invalid command, Try again !!!");
+			default:
+				System.out.println("Invalid command, Try again !!!");
 			break;
 		}
 	}
 
 	/**
 	 * Parses the String and calls the related game play fortify commands.
-	 * 
 	 * @return true if command is processed correctly, false otherwise
 	 */
 	public void cardsInitialize() {
@@ -539,9 +538,7 @@ public class GameController extends Observable {
 
 	/**
 	 * Parses the String and calls the related game play fortify commands.
-	 * 
-	 * @param sc
-	 *            scanner object
+	 * @param sc scanner object   
 	 * @return true if command is processed correctly, false otherwise
 	 */
 	public void processGamePlayAttackCommands(Scanner sc) {
@@ -554,39 +551,62 @@ public class GameController extends Observable {
 
 		switch (words[0]) {
 
-		case Commands.MAP_COMMMAND_ATTACK:
+			case Commands.MAP_COMMMAND_ATTACK:
 
-			// Player may decide to attack or not to attack again. If attack not possible, attack automatically ends. 1
+				// Player may decide to attack or not to attack again. If attack not possible, attack automatically ends. 1
 
-			if (words.length < 2) {
-				System.out.println("Invalid command, Try again !!!");
-				return;
-			}
-			
-			for (String w: words) {
-				if (w.equalsIgnoreCase(Commands.MAP_COMMAND_ATTACK_OPTION_NOATTACK)) {
-					System.out.println(getCurrentPlayer() + " has chosen not to attack");
-					// Going to next phase - Update View
-					setChanged();
-					notifyObservers("attackdone");
+				if (words.length < 2) {
+					System.out.println("Invalid command, Try again !!!");
 					return;
 				}
-			}
-
-			if (words.length < 4) {
-				System.out.println("Invalid command, Try again !!!");
-				return;
-			}
 			
-			if (words.length >= 5) {
-				
-				// Attack with allout mode
-				if (words[4].equalsIgnoreCase(Commands.MAP_COMMAND_ATTACK_OPTION_ALLOUT)) {
+				for (String w: words) {
+					if (w.equalsIgnoreCase(Commands.MAP_COMMAND_ATTACK_OPTION_NOATTACK)) {
+						System.out.println(getCurrentPlayer() + " has chosen not to attack");
+						// Going to next phase - Update View
+						setChanged();
+						notifyObservers("attackdone");
+						return;
+					}
+				}
 
+				if (words.length < 4) {
+					System.out.println("Invalid command, Try again !!!");
+					return;
+				}
+			
+				if (words.length >= 5) {
+					// Attack with allout mode
+					if (words[4].equalsIgnoreCase(Commands.MAP_COMMAND_ATTACK_OPTION_ALLOUT)) {
+						int numOfDice = 0;
+						String attackingCountry = words[1];
+						String defendingCountry = words[2];
+						try {
+							numOfDice = Integer.parseInt(words[3]);
+						} catch (Exception e) {
+							System.out.println("Exception: " + e.toString());
+							return;
+						}
+
+					playerModel.alloutattackCountry(getMap(), getCurrentPlayer(), attackingCountry, defendingCountry, numOfDice);
+						if(playerModel.winGame(getCurrentPlayer(),rootMap.getCountries())){
+							System.out.println("Player:"+getCurrentPlayer().getName()+" won the game!!!!!!!");
+							//exit(0);
+							setChanged();
+							notifyObservers("gameover");
+						}else{
+							// Going to next phase - Update View
+							setChanged();
+							notifyObservers("attackdone");
+						}
+						break;
+					}
+				} else {
 
 					int numOfDice = 0;
 					String attackingCountry = words[1];
 					String defendingCountry = words[2];
+				
 					try {
 						numOfDice = Integer.parseInt(words[3]);
 					} catch (Exception e) {
@@ -594,52 +614,23 @@ public class GameController extends Observable {
 						return;
 					}
 
-					playerModel.alloutattackCountry(getMap(), getCurrentPlayer(), attackingCountry, defendingCountry, numOfDice);
-					if(playerModel.winGame(getCurrentPlayer(),rootMap.getCountries())){
-						System.out.println("Player:"+getCurrentPlayer().getName()+" won the game!!!!!!!");
-						//exit(0);
-						setChanged();
-						notifyObservers("gameover");
-					}else{
-					// Going to next phase - Update View
-					setChanged();
-					notifyObservers("attackdone");
-					}
-					break;
+					playerModel.attackCountry(getMap(), getCurrentPlayer(), attackingCountry, defendingCountry, numOfDice);
 				}
-			} else {
-
-				int numOfDice = 0;
-				String attackingCountry = words[1];
-				String defendingCountry = words[2];
-				
-				try {
-					numOfDice = Integer.parseInt(words[3]);
-				} catch (Exception e) {
-					System.out.println("Exception: " + e.toString());
-					return;
-				}
-
-				playerModel.attackCountry(getMap(), getCurrentPlayer(), attackingCountry, defendingCountry, numOfDice);
-			}
 			break;
 
-		case Commands.MAP_COMMAND_SHOWMAP:
-			playerModel.gamePlayShowmap(getMap());
+			case Commands.MAP_COMMAND_SHOWMAP:
+				playerModel.gamePlayShowmap(getMap());
 			break;
 
-		default:
-			System.out.println("Invalid Input");
+			default:
+				System.out.println("Invalid Input");
 			break;
-
 		}
 	}
 
 	/**
 	 * Parses the String and calls the related game play fortify commands.
-	 * 
-	 * @param sc
-	 *            scanner object
+	 * @param sc scanner object      
 	 * @return true if command is processed correctly, false otherwise
 	 */
 	public void processGamePlayFortifyCommands(Scanner sc) {
@@ -654,29 +645,29 @@ public class GameController extends Observable {
 
 		switch (commandType) {
 
-		case Commands.MAP_COMMAND_SHOWMAP:
-			playerModel.gamePlayShowmap(getMap());
+			case Commands.MAP_COMMAND_SHOWMAP:
+				playerModel.gamePlayShowmap(getMap());
 			break;
 
-		case Commands.MAP_COMMAND_FORTIFY:
+			case Commands.MAP_COMMAND_FORTIFY:
 
-			if (words.length < 2) {
-				System.out.println("Invalid command length. Try again !!!");
-				return;
-			}
-
-			if (words[1].equalsIgnoreCase(Commands.MAP_COMMAND_FORTIFY_OPTION_NONE)) {
-				System.out.println(getCurrentPlayer() + " has chosen to skip fortify.");
-				// Update View
-				setChanged();
-				notifyObservers("fortifydone");
-				isForifyDone = true;
-				
-			} else {
-
-				if (words.length < 4) {
+				if (words.length < 2) {
 					System.out.println("Invalid command length. Try again !!!");
 					return;
+				}
+
+				if (words[1].equalsIgnoreCase(Commands.MAP_COMMAND_FORTIFY_OPTION_NONE)) {
+					System.out.println(getCurrentPlayer() + " has chosen to skip fortify.");
+					// Update View
+					setChanged();
+					notifyObservers("fortifydone");
+					isForifyDone = true;
+				
+				} else {
+
+					if (words.length < 4) {
+						System.out.println("Invalid command length. Try again !!!");
+						return;
 				}
 
 				int numArmies = 0;
@@ -698,23 +689,20 @@ public class GameController extends Observable {
 			}
 
 			if (isForifyDone) {
-				
 				// check all players have played
 				if (playerModel.isLastPlayer(getCurrentPlayer())) {
 					isReinfoceArmiesAssigned = false;
 					System.out.println("***** All players have played. Going back to reinforcement again *****");
-					
 					// Update View
 					setChanged();
 					notifyObservers("fortifydone");
 				}
-				
 				changeCurrentPlayer();
 			}
 			break;
 
-		default:
-			System.out.println("Invalid command, Try again !!!");
+			default:
+				System.out.println("Invalid command, Try again !!!");
 			break;
 		}
 	}
