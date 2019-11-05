@@ -227,71 +227,71 @@ public class GameController extends Observable {
 				mapWriter.writeMapFile(getMap(), outputMapFile);
 			break;
 
-		case Commands.MAP_COMMAND_EDITMAP:
+			case Commands.MAP_COMMAND_EDITMAP:
 
-			if (words.length < 2) {
-				System.out.println("Invalid command, Try again !!!");
+				if (words.length < 2) {
+					System.out.println("Invalid command, Try again !!!");
+					break;
+				}
+
+				editFilePath = System.getProperty("user.dir") + "\\src\\main\\resources\\" + words[1];
+				File editMapFile = new File(editFilePath);
+				mapReader = new MapReader();
+
+				if (editMapFile.exists()) {
+					try {
+						setMap(mapReader.readMapFile(editMapFile));
+					} catch (InvalidMap e) {
+						System.out.println("Exception: " + e.toString());
+					}
+				} else {
+					try {
+						editMapFile.createNewFile();
+						System.out.println("Given map file does not exist. New Map file has been created.");
+					} catch (IOException e) {
+						System.out.println("Exception: " + e.toString());
+					}
+				}
 				break;
-			}
 
-			editFilePath = System.getProperty("user.dir") + "\\src\\main\\resources\\" + words[1];
-			File editMapFile = new File(editFilePath);
-			mapReader = new MapReader();
+			case Commands.MAP_COMMAND_VALIDATEMAP:
 
-			if (editMapFile.exists()) {
 				try {
-					setMap(mapReader.readMapFile(editMapFile));
+					MapVerifier.verifyMap(getMap());
+				} catch (InvalidMap e1) {
+					System.out.println("Exception: " + e1.toString());
+				}
+			break;
+
+			case Commands.MAP_COMMAND_LOADMAP:
+
+				if (words.length < 2) {
+					System.out.println("Invalid command, Try again !!!");
+					break;
+				}
+
+				if (null == classloader.getResource(words[1])) {
+					System.out.println("Exception: File does not exist: " + words[1]);
+					break;
+				}
+
+				File inputMapFile = new File(classloader.getResource(words[1]).getFile().replace("%20", " "));
+				mapReader = new MapReader();
+
+				try {
+					setMap(mapReader.readMapFile(inputMapFile));
+
+					// Update View
+					setChanged();
+					notifyObservers("loadmap");
+
 				} catch (InvalidMap e) {
 					System.out.println("Exception: " + e.toString());
 				}
-			} else {
-				try {
-					editMapFile.createNewFile();
-					System.out.println("Given map file does not exist. New Map file has been created.");
-				} catch (IOException e) {
-					System.out.println("Exception: " + e.toString());
-				}
-			}
 			break;
 
-		case Commands.MAP_COMMAND_VALIDATEMAP:
-
-			try {
-				MapVerifier.verifyMap(getMap());
-			} catch (InvalidMap e1) {
-				System.out.println("Exception: " + e1.toString());
-			}
-			break;
-
-		case Commands.MAP_COMMAND_LOADMAP:
-
-			if (words.length < 2) {
+			default:
 				System.out.println("Invalid command, Try again !!!");
-				break;
-			}
-
-			if (null == classloader.getResource(words[1])) {
-				System.out.println("Exception: File does not exist: " + words[1]);
-				break;
-			}
-
-			File inputMapFile = new File(classloader.getResource(words[1]).getFile().replace("%20", " "));
-			mapReader = new MapReader();
-
-			try {
-				setMap(mapReader.readMapFile(inputMapFile));
-
-				// Update View
-				setChanged();
-				notifyObservers("loadmap");
-
-			} catch (InvalidMap e) {
-				System.out.println("Exception: " + e.toString());
-			}
-			break;
-
-		default:
-			System.out.println("Invalid command, Try again !!!");
 			break;
 		}
 	}
