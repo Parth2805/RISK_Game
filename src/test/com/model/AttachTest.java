@@ -61,7 +61,7 @@ public class AttachTest {
     }
 
     /**
-     * This method test the dicattack country 
+     * This method test the disc attack country 
      */
     @Test
     public void attackCountryDicTest() {
