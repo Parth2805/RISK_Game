@@ -3,6 +3,7 @@ package com.models;
 import java.util.*;
 
 import com.config.Commands;
+import com.controller.GameController;
 import com.entity.*;
 import com.config.Config;
 
@@ -626,5 +627,97 @@ public class PlayerModel {
 				break;
 			}
         }
+	}
+
+	public void alloutattackCountry(Hmap map, Player player, String attackingCountry, String defendingCountry, int numOfDice) {
+
+		Country attackCountry = map.getCountryMap().get(attackingCountry);
+		Country defendCountry = map.getCountryMap().get(defendingCountry);
+
+		// check if attacking country belongs to player
+		if (!isCountryBelongToPlayer(map, player, attackingCountry))
+			return;
+
+		// check if defending country does not belongs to same player
+		if (isCountryBelongToPlayer(map, player, defendingCountry)) {
+			System.out.println("Error: Can't attack becuase attacking country: " + attackingCountry + " and defending country " + defendingCountry + " belongs to same" + player);
+			return;
+		}
+
+		// check if defending country belongs to neighbor
+		if (!isCountriesAdjacent(map, attackingCountry, defendingCountry)) {
+			System.out.println("Error: Can't attack to this country as its not your neighbor");
+			return;
+		}
+
+		while(true){
+
+
+			if(attackCountry.getArmy()==1){
+				break;
+			}
+			if(defendCountry.getArmy()<=0){
+				break;
+			}
+			int numOfDefenderDice=2;
+			numOfDice=3;
+
+			// Check armies count
+			if (attackCountry.getArmy() <= 3) {
+
+				numOfDice=attackCountry.getArmy()-1;
+
+			}
+			if(defendCountry.getArmy()<=2){
+
+				numOfDefenderDice=defendCountry.getArmy();
+			}
+
+
+
+			// Do attack now
+			DiceModel diceModel = new DiceModel(attackCountry, defendCountry, numOfDice, numOfDefenderDice);
+			diceModel.rolldice();
+			diceModel.getResultAfterRoll();
+		}
+
+		if(defendCountry.getArmy()==0){
+
+			attackCountry.getPlayer().setCardList(GameController.stackOfCards.pop());
+			modifyDefendingCountryOwnerShip(defendCountry,attackCountry);
+		}
+	}
+
+	public boolean winGame(Player player,List<Country> totalCoutries){
+
+
+		if(player.getAssignedCountry().size()==totalCoutries.size()){
+
+			return true;
+		}
+//		for(Country pc:playerCountryList){
+//
+//			for(Country tc:playerCountryList){
+//
+//				if(pc.getName().equals(tc.getName())){
+//					count++;
+//				}
+//
+//			}
+//
+//		}
+		return false;
+
+	}
+
+	public void modifyDefendingCountryOwnerShip(Country defendingCountry,Country attackingCountry) {
+
+		List<Country> defendersCountries = defendingCountry.getPlayer().getAssignedCountry();
+
+		defendersCountries.remove(defendingCountry);
+
+		defendingCountry.setPlayer(attackingCountry.getPlayer());
+		attackingCountry.getPlayer().getAssignedCountry().add(defendingCountry);
+
 	}
 }

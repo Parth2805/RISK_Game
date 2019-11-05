@@ -20,6 +20,8 @@ import com.mapparser.MapWriter;
 import com.models.CardModel;
 import com.models.PlayerModel;
 
+import static java.lang.System.exit;
+
 /**
  * This class reads, parses the command line string from user input.
  *
@@ -596,9 +598,28 @@ public class GameController extends Observable {
 				// Attack with allout mode
 				if (words[4].equalsIgnoreCase(Commands.MAP_COMMAND_ATTACK_OPTION_ALLOUT)) {
 
+
+					int numOfDice = 0;
+					String attackingCountry = words[1];
+					String defendingCountry = words[2];
+					try {
+						numOfDice = Integer.parseInt(words[3]);
+					} catch (Exception e) {
+						System.out.println("Exception: " + e.toString());
+						return;
+					}
+
+					playerModel.alloutattackCountry(getMap(), getCurrentPlayer(), attackingCountry, defendingCountry, numOfDice);
+					if(playerModel.winGame(getCurrentPlayer(),rootMap.getCountries())){
+						System.out.println("Player:"+getCurrentPlayer().getName()+" won the game!!!!!!!");
+						//exit(0);
+						setChanged();
+						notifyObservers("gameover");
+					}else{
 					// Going to next phase - Update View
 					setChanged();
 					notifyObservers("attackdone");
+					}
 					break;
 				}
 			} else {

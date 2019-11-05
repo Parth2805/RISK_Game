@@ -34,10 +34,10 @@ public class Player {
 
 	/**
 	 * set cards of the player
-	 * @param cardList card list
+	 * @param card card list
 	 */
-	public void setCardList(List <Card> cardList) {
-		this.cardList = cardList;
+	public void setCardList(Card card) {
+		cardList.add(card);
 	}
 	
 	/**

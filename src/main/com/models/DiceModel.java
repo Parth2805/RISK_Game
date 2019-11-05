@@ -47,9 +47,6 @@ public class DiceModel {
             int value = new Random().nextInt(6)+1;
             attackerDiceValues.add(value);
         }
-
-        System.out.println("Defender dice values:");
-        
         for (int i = 0; i < numberOfDiceUsedByDefender; i++) {
 
             int value= new Random().nextInt(6)+1;
@@ -95,26 +92,5 @@ public class DiceModel {
             }
         }
     }
-
-//    public void updateCountriesAndPlayer(){
-//
-//        String defenderplayername=defendCountry.getPlayer().getName();
-//
-//        Player defenderplayer;
-//
-//        for(Player p:playersList){
-//
-//            if(p.getName().equalsIgnoreCase(defenderplayername)){
-//
-//                defenderplayer=p;
-//            }
-//
-//        }
-//
-//        Player attackplayer=getCurrentPlayer();
-//
-//
-//
-//
-//    }
+    
 }

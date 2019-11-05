@@ -117,6 +117,9 @@ public class Main implements Observer {
 		else if (methodValue.equals("fortifydone")) {
 			setGamePhase(GameState.RISK_STATE_GAMEPLAY_REINFORCEMENT_PHASE);
 			System.out.println("----------------------------------");
+		}else if (methodValue.equals("gameover")) {
+			setGamePhase(GameState.RISK_STATE_MAP_EDITING);
+			System.out.println("----------------------------------");
 		}
 	}
 }
