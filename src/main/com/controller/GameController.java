@@ -24,35 +24,34 @@ import static java.lang.System.exit;
 
 /**
  * This class reads, parses the command line string from user input.
- *
  * @author Parth
  * @author Mehul
  */
 public class GameController extends Observable {
 
 	Hmap rootMap;
-	MapWriter mapWriter;
-	String editFilePath = "";
-	boolean isReinfoceArmiesAssigned = false;
+    MapWriter mapWriter;
+    String editFilePath = "";
+    boolean isReinfoceArmiesAssigned = false;
 
-	PlayerModel playerModel;
-	CardModel cardModel;
-	Player currentPlayer;
-	public static Stack<Card> stackOfCards;
+    PlayerModel playerModel;
+    CardModel cardModel;
+    Player currentPlayer;
+    public static Stack<Card> stackOfCards;
 
-	// default constructor to initialize members
-	public GameController(Main mainView) {
-		this.mapWriter = new MapWriter();
-		this.playerModel = new PlayerModel();
-		this.cardModel = new CardModel();
-		this.rootMap = new Hmap();
-		this.addObserver(mainView);
-		this.stackOfCards = new Stack<Card>();
-	}
+ // default constructor to initialize members
+    public GameController(Main mainView) {
+        this.mapWriter = new MapWriter();
+        this.playerModel = new PlayerModel();
+        this.cardModel = new CardModel();
+        this.rootMap = new Hmap();
+        this.addObserver(mainView);
+        this.stackOfCards = new Stack<Card>();
+    }
+
 
 	/**
 	 * Get the current player.
-	 * 
 	 * @return player playing
 	 */
 	public Stack<Card> getCardsStack() {
@@ -61,7 +60,6 @@ public class GameController extends Observable {
 
 	/**
 	 * Get the current player.
-	 * 
 	 * @return player playing
 	 */
 	public Player getCurrentPlayer() {
@@ -70,9 +68,7 @@ public class GameController extends Observable {
 
 	/**
 	 * This method is to set the current player.
-	 * 
-	 * @param player
-	 *            Current player.
+	 * @param player Current player.
 	 */
 	public void setCurrentPlayer(Player player) {
 		currentPlayer = player;
@@ -80,9 +76,7 @@ public class GameController extends Observable {
 
 	/**
 	 * Setter method for the map object.
-	 *
-	 * @param map
-	 *            object
+	 * @param map object      
 	 * @return root map
 	 */
 	private Hmap setMap(Hmap map) {
