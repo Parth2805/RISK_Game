@@ -25,7 +25,7 @@ public class Commands {
 	public static final String MAP_COMMAND_REINFORCE = "reinforce";
 	public static final String MAP_COMMAND_FORTIFY = "fortify";
 
-	public static final String MAP_COMMAND_FORTIFY_OPTION_NONE = "none";
+	public static final String MAP_COMMAND_FORTIFY_OPTION_NONE = "-none";
 
 	public static final String MAP_COMMAND_OPTION_ADD = "-add";
 	public static final String MAP_COMMAND_OPTION_REMOVE = "-remove";
