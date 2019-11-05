@@ -104,33 +104,33 @@ public class GameController extends Observable {
 
 		switch (commandType) {
 
-		case Commands.MAP_COMMAND_EDIT_CONTINENT:
+			case Commands.MAP_COMMAND_EDIT_CONTINENT:
 
-			for (int idx = 1; idx < words.length; idx++) {
+				for (int idx = 1; idx < words.length; idx++) {
 
-				if (words[idx].equals(Commands.MAP_COMMAND_OPTION_ADD)) {
+					if (words[idx].equals(Commands.MAP_COMMAND_OPTION_ADD)) {
 
-					if (words.length < idx + 3) {
+						if (words.length < idx + 3) {
 						System.out.println("Invalid command, Try again !!!");
 						return;
-					}
+						}
 
-					MapContoller.addContinent(getMap(), words[idx + 1], words[idx + 2], "");
-					idx = idx + 2;
+						MapContoller.addContinent(getMap(), words[idx + 1], words[idx + 2], "");
+						idx = idx + 2;
 
-				} else if (words[idx].equals(Commands.MAP_COMMAND_OPTION_REMOVE)) {
+					} else if (words[idx].equals(Commands.MAP_COMMAND_OPTION_REMOVE)) {
 
-					if (words.length < idx + 2) {
+						if (words.length < idx + 2) {
+							System.out.println("Invalid command, Try again !!!");
+							return;
+						}
+						MapContoller.removeContinent(getMap(), words[idx + 1]);
+						idx = idx + 1;
+
+					} else {
 						System.out.println("Invalid command, Try again !!!");
-						return;
 					}
-					MapContoller.removeContinent(getMap(), words[idx + 1]);
-					idx = idx + 1;
-
-				} else {
-					System.out.println("Invalid command, Try again !!!");
 				}
-			}
 			break;
 
 		case Commands.MAP_COMMAND_EDIT_COUNTRY:
