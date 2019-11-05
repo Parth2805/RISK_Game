@@ -491,8 +491,8 @@ public class PlayerModel {
         Country attackCountry;
         Country defendCountry;
 
-        if (attackerNumOfDice > 3) {
-            System.out.println("Error: Can't attack with more than 3 dice");
+		if (attackerNumOfDice > 3 || attackerNumOfDice <= 0) {
+			System.out.println("Error: Can't attack with more than 3 or 0 dice");
             return false;
         }
 
@@ -552,12 +552,13 @@ public class PlayerModel {
         if (defendCountry.getArmy() <= 0) {
             attackCountry.getPlayer().setCardList(cardStack.pop());
             modifyDefendingCountryOwnerShip(defendCountry, attackCountry);
-
+            
+            System.out.println("------" + defenderPlayer + 
+					" has lost the country: " + defendCountry + "------");
+            
             if (!isPlayerWonGame(player, map.getCountries())) {
-
                 attackmove(attackCountry, defendCountry);
             }
-
         }
 
         // Is game over for defender player?
@@ -662,41 +663,48 @@ public class PlayerModel {
     }
 
     /**
-     * This gets the Dice values of defender.
-     *
-     * @return Dice value of defender
-     */
-    public void allOutAttackCountry(Hmap map, Player player, String attackingCountry, String defendingCountry,
-                                    Stack<Card> cardStack) {
+	 * This gets the Dice values of defender.
+	 * 
+	 * @return Dice value of defender
+	 */
+	public Boolean allOutAttackCountry(Hmap map, Player player, String attackingCountry, String defendingCountry,
+			Stack<Card> cardStack) {
 
-        Country attackCountry = map.getCountryMap().get(attackingCountry);
-        Country defendCountry = map.getCountryMap().get(defendingCountry);
+		Country attackCountry = map.getCountryMap().get(attackingCountry);
+		Country defendCountry = map.getCountryMap().get(defendingCountry);
 
-        while (true) {
+		while (true) {
 
-            int numOfDefenderDice = 2;
-            int numOfAttackerDice = 3;
+			int numOfDefenderDice = 2;
+			int numOfAttackerDice = 3;
 
-            // Check armies count
-            if (attackCountry.getArmy() <= 3) {
-                numOfAttackerDice = attackCountry.getArmy() - 1;
-            }
+			// Check armies count
+			if (attackCountry.getArmy() <= 3) {
+				numOfAttackerDice = attackCountry.getArmy() - 1;
+			}
 
-            if (defendCountry.getArmy() <= 2) {
-                numOfDefenderDice = defendCountry.getArmy();
-            }
+			if (defendCountry.getArmy() <= 2) {
+				numOfDefenderDice = defendCountry.getArmy();
+			}
 
-            if (!attackCountry(map, player, attackingCountry, defendingCountry, numOfAttackerDice, numOfDefenderDice,
-                    cardStack))
-                break;
+			if (numOfDefenderDice == 0) {
+				System.out.println("Error: Can't do allout with 0 defender dice");
+				return false;
+			}
+			
+			if (!attackCountry(map, player, attackingCountry, defendingCountry, 
+					numOfAttackerDice, numOfDefenderDice, cardStack))
+				return false;
 
-            if (attackCountry.getArmy() <= 1)
-                break;
+			if (attackCountry.getArmy() <= 1)
+				break;
 
-            if (defendCountry.getArmy() <= 0)
-                break;
-        }
-    }
+			if (defendCountry.getArmy() <= 0)
+				break;
+		}
+		
+		return true;
+	}
 
     /**
      * This gets the Dice values of defender.

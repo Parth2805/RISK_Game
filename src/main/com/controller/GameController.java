@@ -494,8 +494,6 @@ public class GameController extends Observable {
 		System.out.println("Current Player: " + getCurrentPlayer().getName() + ", Armies left for reinforcement = "
 				+ getCurrentPlayer().getArmies());
 
-		cardModel.checkMaxCards(getCurrentPlayer(), stackOfCards);
-
 		String command = sc.nextLine();
 		String[] words = command.split(" ");
 		String commandType = words[0];
@@ -620,9 +618,6 @@ public class GameController extends Observable {
 					System.out.println("Player: " + getCurrentPlayer().getName()+ " has won the game :)");
 					setChanged();
 					notifyObservers("gameover");
-				} else {
-					// Going to next phase - Update View
-					//function call
 				}
 			} else {
 
@@ -654,12 +649,6 @@ public class GameController extends Observable {
 							" has won the game !!!");
 					setChanged();
 					notifyObservers("gameover");
-				}else{
-					//function call to check attack possible
-
-
-
-
 				}
 			}
 			break;
@@ -707,11 +696,7 @@ public class GameController extends Observable {
 
 			if (words[1].equalsIgnoreCase(Commands.MAP_COMMAND_FORTIFY_OPTION_NONE)) {
 				System.out.println(getCurrentPlayer() + " has chosen to skip fortify.");
-				// Update View
-				setChanged();
-				notifyObservers("fortifydone");
-				isForifyDone = true;
-				
+				isForifyDone = true;		
 			} else {
 
 				if (words.length < 4) {
@@ -742,13 +727,12 @@ public class GameController extends Observable {
 				// check all players have played
 				if (playerModel.isLastPlayer(getCurrentPlayer())) {
 					isReinfoceArmiesAssigned = false;
-					System.out.println("***** All players have played. Going back to reinforcement again *****");
-					
-					// Update View
-					setChanged();
-					notifyObservers("fortifydone");
+					System.out.println("******* All players have played in their turn **********");
 				}
 				
+				// Update View
+				setChanged();
+				notifyObservers("fortifydone");
 				changeCurrentPlayer();
 			}
 			break;
