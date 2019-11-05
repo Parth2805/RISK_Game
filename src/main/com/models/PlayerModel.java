@@ -618,40 +618,40 @@ public class PlayerModel {
 
 			switch (words[0]) {
 
-			case Commands.MAP_COMMAND_DEFEND:
-
-				if (words.length < 2) {
+				case Commands.MAP_COMMAND_DEFEND:
+	
+					if (words.length < 2) {
+						System.out.println("Invalid command, Try again !!!");
+					}
+	
+					try {
+						numOfDice = Integer.parseInt(words[1]);
+					} catch (Exception e) {
+						System.out.println("Exception: " + e.toString());
+						break;
+					}
+	
+					if (numOfDice <= 0) {
+						System.out.println("Error: number of dice should greater than 0");
+						break;
+					}
+	
+					if (numOfDice > 2) {
+						System.out.println("Error: number of dice should be less than 3");
+						break;
+					}
+	
+					if (player.getArmies() < numOfDice) {
+						System.out.println("Error: Can't defend with your (defend armies " + "count = "
+								+ (defendCountry.getArmy()) + ") < (num of dice = " + numOfDice + ")");
+						break;
+					}
+	
+					return numOfDice;
+	
+				default:
 					System.out.println("Invalid command, Try again !!!");
-				}
-
-				try {
-					numOfDice = Integer.parseInt(words[1]);
-				} catch (Exception e) {
-					System.out.println("Exception: " + e.toString());
 					break;
-				}
-
-				if (numOfDice <= 0) {
-					System.out.println("Error: number of dice should greater than 0");
-					break;
-				}
-
-				if (numOfDice > 2) {
-					System.out.println("Error: number of dice should be less than 3");
-					break;
-				}
-
-				if (player.getArmies() < numOfDice) {
-					System.out.println("Error: Can't defend with your (defend armies " + "count = "
-							+ (defendCountry.getArmy()) + ") < (num of dice = " + numOfDice + ")");
-					break;
-				}
-
-				return numOfDice;
-
-			default:
-				System.out.println("Invalid command, Try again !!!");
-				break;
 			}
 		}
 	}

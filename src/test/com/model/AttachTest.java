@@ -18,7 +18,7 @@ public class AttachTest {
     public static Player player;
     public static PlayerModel playerModel;
     public static Stack<Card> cardStack;
-    static Country count11 = new Country();
+    public static Country count1 = new Country();
     static Country count12 = new Country();
     int currentArmies ;
     public ArrayList<Player> playersList;
@@ -63,10 +63,10 @@ public class AttachTest {
     }
 
     /**
-     * This method test the disc attack country 
+     * This method test the dice attack country 
      */
     @Test
-    public void attackCountryDicTest() {
+    public void attackCountryDiceTest() {
 
         boolean armies = playerModel.attackCountry(map,player, "Finland","Norway",10,3,cardStack);
         assertFalse(false);
@@ -78,9 +78,18 @@ public class AttachTest {
      */
     @Ignore
     public void fortifyTest() {
-
-        boolean armies = playerModel.fortifyCurrentPlayer(map, player, "India","Norway", 80);
-        assertTrue(armies);
+    	String fromCountry=null;
+    	String toCountry=null;
+    	int armiesCount=10;
+    	int fromCountryArmyCount =0;
+		int toCountryArmyCount = 0;
+		//assertSame(fromCountryArmyCount,toCountryArmyCount);
+		boolean p=playerModel.isCountryBelongToPlayer(map, player, fromCountry);
+		//playerModel.isCountriesAdjacent(map, fromCountry, toCountry);
+		//boolean p=playerModel.fortifyCurrentPlayer(map, player, fromCountry, toCountry, armiesCount);
+		
+       // boolean armies = playerModel.fortifyCurrentPlayer(map, player, fromCountry,toCountry, armiesCount);
+        assertNotEquals(p,true);
 
     }
     /**
@@ -134,6 +143,16 @@ public class AttachTest {
     	player.getArmies() ;
     	boolean p=playerModel.reinforceArmiesForCurrentPlayer( player,  countryName, numberOfArmies);
     	assertTrue(p);
+    }
+    
+    /**
+     * This method test get Defender Dice
+     */
+    @Test
+    public void getDefenderDiceTest() {
+    	int numOfDice = 0;
+    	int p=playerModel. getDefenderDice( player, count1);
+    	assertNotEquals(p,10);
     }
 
 
