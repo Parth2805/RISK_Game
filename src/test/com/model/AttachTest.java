@@ -9,7 +9,7 @@ import com.entity.*;
 /**
  * This class test the attack phase
  * @author Maryam
- * @author Mahmoud Reza
+ * @author MahmoudReza
  *
  */
 public class AttachTest {
@@ -77,7 +77,7 @@ public class AttachTest {
     @Ignore
     public void fortifyTest() {
 
-        boolean armies = playerModel.fortifyCurrentPlayer(map, player, "India","Norway", 10);
+        boolean armies = playerModel.fortifyCurrentPlayer(map, player, "India","Norway", 80);
         assertTrue(armies);
 
     }
