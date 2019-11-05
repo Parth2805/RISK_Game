@@ -50,7 +50,12 @@ public class WorldDominationView implements Observer {
         return continentList;
     }
 
-
+    /**
+     * This method Update Observable and Argument
+     * @param o Observable object
+     * @param arg an object of Object
+     * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
+     */
     @Override
     public void update(Observable o, Object arg) {
 
