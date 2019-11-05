@@ -21,6 +21,8 @@ public class AttachTest {
     static Country count11 = new Country();
     static Country count12 = new Country();
     int currentArmies ;
+    public ArrayList<Player> playersList;
+    String countryName;
 
 
     /**
@@ -80,6 +82,58 @@ public class AttachTest {
         boolean armies = playerModel.fortifyCurrentPlayer(map, player, "India","Norway", 80);
         assertTrue(armies);
 
+    }
+    /**
+     * This method test assign armies to all players
+     */
+    @Test
+    public void assignArmiesTest() {
+    	
+    	int armiesCount = 0;
+		int numPlayers = 20;
+    	boolean assignarmy= playerModel.assignArmiesToAllPlayers();
+    	assertFalse(assignarmy);
+    }
+    
+//    @Test 
+//    public void placeArmyTest () {
+//    	int playerArmies=10;
+//    	boolean p= playerModel. placeArmy( map,  player, countryName);
+//    	assertTrue(p);
+//    	
+//    }
+    /**
+     * This method test is all player armies exhausted
+     */
+    @Test
+    public void playerArmiesTest() {
+    	playerModel.getPlayersList();
+    	boolean p=playerModel.isAllPlayersArmiesExhausted();
+    	assertTrue(p);
+    }
+    
+    /**
+     * This method test the count reinforcement armies
+     */
+    @Test
+    public void countReinforcementArmiesTest() {
+    	int currentArmies =10;
+		int countryCount = 12;
+    	int count=playerModel.countReinforcementArmies(player);
+    	assertNotEquals(count,10);
+    	
+    }
+    
+    /**
+     * This method test reinforce Armies For CurrentPlayer
+     */
+    @Test
+    public void reinforceArmiesForCurrentPlayerTest() {
+    	String countryName=null;
+    	int numberOfArmies=0;
+    	player.getArmies() ;
+    	boolean p=playerModel.reinforceArmiesForCurrentPlayer( player,  countryName, numberOfArmies);
+    	assertTrue(p);
     }
 
 
