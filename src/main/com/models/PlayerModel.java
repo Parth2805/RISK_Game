@@ -296,14 +296,12 @@ public class PlayerModel {
 	public int countReinforcementArmies(Player player) {
 		int currentArmies = player.getArmies();
 		int countryCount = player.getAssignedCountry().size();
-		System.out.println("Number of Countires for Player : " + player.getName() + " = " + countryCount);
+
 		if (countryCount < 9) {
 			currentArmies = currentArmies + 3;
 		} else {
 			currentArmies += Math.floor(countryCount / 3);
 		}
-		System.out.println("After reinforcement, current number of Armies for Player : " + player.getName() + " = "
-				+ currentArmies);
 
 		return currentArmies;
 	}
@@ -525,8 +523,8 @@ public class PlayerModel {
 		Country attackCountry;
 		Country defendCountry;
 
-		if (attackerNumOfDice > 3) {
-			System.out.println("Error: Can't attack with more than 3 dice");
+		if (attackerNumOfDice > 3 || attackerNumOfDice <= 0) {
+			System.out.println("Error: Can't attack with more than 3 or 0 dice");
 			return false;
 		}
 
@@ -584,6 +582,8 @@ public class PlayerModel {
 
 		// Change ownership of country
 		if (defendCountry.getArmy() <= 0) {
+			System.out.println("------" + defenderPlayer + 
+					" has lost the country: " + defendCountry + "------");
 			attackCountry.getPlayer().setCardList(cardStack.pop());
 			modifyDefendingCountryOwnerShip(defendCountry, attackCountry);
 		}
@@ -661,7 +661,7 @@ public class PlayerModel {
 	 * 
 	 * @return Dice value of defender
 	 */
-	public void allOutAttackCountry(Hmap map, Player player, String attackingCountry, String defendingCountry,
+	public Boolean allOutAttackCountry(Hmap map, Player player, String attackingCountry, String defendingCountry,
 			Stack<Card> cardStack) {
 
 		Country attackCountry = map.getCountryMap().get(attackingCountry);
@@ -681,9 +681,14 @@ public class PlayerModel {
 				numOfDefenderDice = defendCountry.getArmy();
 			}
 
-			if (!attackCountry(map, player, attackingCountry, defendingCountry, numOfAttackerDice, numOfDefenderDice,
-					cardStack))
-				break;
+			if (numOfDefenderDice == 0) {
+				System.out.println("Error: Can't do allout with 0 defender dice");
+				return false;
+			}
+			
+			if (!attackCountry(map, player, attackingCountry, defendingCountry, 
+					numOfAttackerDice, numOfDefenderDice, cardStack))
+				return false;
 
 			if (attackCountry.getArmy() <= 1)
 				break;
@@ -691,6 +696,8 @@ public class PlayerModel {
 			if (defendCountry.getArmy() <= 0)
 				break;
 		}
+		
+		return true;
 	}
 
 	/**

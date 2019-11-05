@@ -55,25 +55,25 @@ public class CardModel {
     public void allocateCardsToCountry(Hmap map, Stack<Card> stackOfCards) {
 
         ArrayList<Country> countryList = map.getCountries();
-        ArrayList<CardType> cardlist = new ArrayList<>();
+        ArrayList<CardType> cardList = new ArrayList<>();
         int eachUniqueCards = countryList.size() / 3;
-        cardlist.addAll(Collections.nCopies(eachUniqueCards, CardType.valueOf("CAVALRY")));
-        cardlist.addAll(Collections.nCopies(eachUniqueCards, CardType.valueOf("ARTILLERY")));
-        cardlist.addAll(Collections.nCopies(eachUniqueCards, CardType.valueOf("INFANTRY")));
+        
+        cardList.addAll(Collections.nCopies(eachUniqueCards, CardType.valueOf("CAVALRY")));
+        cardList.addAll(Collections.nCopies(eachUniqueCards, CardType.valueOf("ARTILLERY")));
+        cardList.addAll(Collections.nCopies(eachUniqueCards, CardType.valueOf("INFANTRY")));
 
-        int left = countryList.size() - cardlist.size();
+        int left = countryList.size() - cardList.size();
 
         if (left > 0) {
             for (int i = 0; i < left; i++) {
-                //System.out.println("inside");
-                cardlist.add(CardType.values()[(int) (Math.random() * CardType.values().length)]);
+                cardList.add(CardType.values()[(int) (Math.random() * CardType.values().length)]);
             }
         }
 
         int i = 0;
 
         for (Country country : countryList) {
-            Card card = new Card(cardlist.get(i++));
+            Card card = new Card(cardList.get(i++));
             card.setCountryToWhichCardBelong(country);
             stackOfCards.push(card);
         }
