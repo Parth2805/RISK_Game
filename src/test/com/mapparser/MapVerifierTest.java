@@ -120,27 +120,12 @@ public class MapVerifierTest {
 	}
 
 	/**
-	 * This method is used to test the continent is connected to graph.
+	 * This method is used to test the continent is connected to graph or not.
 	 */
 	@Test
-	public void isContinentConnectedGraphTestFirst() {
-		List<Country> countryList = new ArrayList<>();
-		countryList.add(country);
-		Country country2 = new Country();
-		country2.setName("India");
-		country2.setxCoordinate(1);
-		country2.setyCoordinate(2);
-		countryList.add(country);
-		continent.setCountries(countryList);
-		assertEquals(true, MapVerifier.isContinentConnectedGraph(continent, map));
-		System.out.println("The First Unit Test for Continent_Connected_Graph is performed");
-	}
+	public void isContinentConnectedGraphTest() {
 
-	/**
-	 * This method is used to test the continent is not connected to graph.
-	 */
-	@Test
-	public void isContinentConnectedGraphTestSecond () {
+		System.out.println("This is a test for Continent Connected Graph");
 		List<Country> countryList = new ArrayList<>();
 		countryList.add(country);
 		Country country2 = new Country();
@@ -149,7 +134,10 @@ public class MapVerifierTest {
 		country2.setyCoordinate(2);
 		countryList.add(country);
 		continent.setCountries(countryList);
-		assertNotEquals(MapVerifier.isContinentConnectedGraph(continent, map), false);
-		System.out.println("The Second Unit Test for Continent_Connected_Graph is performed");
+		assertEquals(true, MapVerifier.isContinentConnectedGraph(continent, map));
+		countryList.add(country);
+		continent.setCountries(countryList);
+		assertEquals(MapVerifier.isContinentConnectedGraph(continent, map), true);
+		System.out.println("The Unit Test for Continent_Connected_Graph is performed");
 	}
 }

@@ -1,4 +1,4 @@
-package com.playerparser;
+package com.model;
 
 import static org.junit.Assert.*;
 import org.junit.*;
@@ -14,7 +14,7 @@ import com.models.PlayerModel;
  * @author Mehul
  * @version 0.0.1
  */
-public class PlayerCommandsTest {
+public class PlayerModelTest {
 	Player player;
 	PlayerModel playerCmd;
 	

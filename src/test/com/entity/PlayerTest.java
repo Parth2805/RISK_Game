@@ -13,10 +13,13 @@ import static org.junit.Assert.*;
  * 
  * @author Maryam
  * @author Mahmoudreza
+ * @author Komal
  * @version 0.0.1
  */
 public class PlayerTest {
-	Player ply;
+	Player player;
+	int id1 = 10;
+	int id2 = 12;
 
 	/**
 	 * This method runs before all test methods only one times
@@ -31,7 +34,7 @@ public class PlayerTest {
 	 */
 	@Before
 	public void beforeTest() {
-		ply = new Player(10, "Player");
+		player = new Player(id1, "Player");
 	}
 
 	/**
@@ -47,13 +50,13 @@ public class PlayerTest {
 	 */
 	@Test
 	public void testGetId() {
-		assertEquals(10, ply.getId());
+		assertEquals(id1, player.getId());
 		System.out.println("'assertEquals' test for getId method is passed");
 
-		assertTrue(ply.getId() == 10);
+		assertTrue(player.getId() == id1);
 		System.out.println("'assertTrue' test for getId method is passed");
 
-		assertNotEquals(12, ply.getId());
+		assertNotEquals(id2, player.getId());
 		System.out.println("'assertNotEquals' test for getId method is passed");
 	}
 
