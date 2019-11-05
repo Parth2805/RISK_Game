@@ -23,15 +23,26 @@ public class Main implements Observer {
 
 	/**
 	 * Setter method for the game state.
-	 * @param gamePhase current phase
+	 * @param gameState current phase
 	 */
 	public static void setGamePhase(GameState gameState) {
 		gamePhase = gameState;
+	}
+
+	/**
+	 * Get Game Controller
+	 * @return gameController
+	 */
+	public GameController getGameController() {
+		return gameController;
 	}
 	
 	public static void main(String[] args) {
 		
 		Main mainView = new Main();
+		WorldDominationView worldDomination = new WorldDominationView();
+		mainView.getGameController().addObserver(worldDomination);
+
 		setGamePhase(GameState.RISK_STATE_MAP_EDITING);
 		
 		Scanner sc = new Scanner(System.in);
