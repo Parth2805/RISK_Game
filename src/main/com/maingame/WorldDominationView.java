@@ -50,4 +50,30 @@ public class WorldDominationView implements Observer {
         return continentList;
     }
 
+
+    @Override
+    public void update(Observable o, Object arg) {
+
+        String methodValue = (String) arg;
+        GameController gameController = (GameController) o;
+        Hmap map = gameController.getMap();
+
+        if (methodValue.equals("show-world-domination")) {
+
+            System.out.println("-------- World Domination View ----------");
+
+            for (Player p: gameController.getPlayerModel().getPlayersList()) {
+
+                System.out.println("+++++++++++++++++++++++++++");
+
+                float mapPercent = ((float)p.getAssignedCountry().size() / (float)map.getCountries().size()) * 100;
+
+                System.out.println("Player: " + p.getName() + " has " + mapPercent + "% of map");
+                System.out.println("Player: " + p.getName() + " has continents = " + getContinentOwnedByPlayer(p));
+                System.out.println("Player: " + p.getName() + " has total armies = " + p.getArmies());
+            }
+
+            System.out.println("--------------------------------------");
+        }
+    }
 }
