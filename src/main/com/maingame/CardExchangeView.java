@@ -46,18 +46,25 @@ public class CardExchangeView implements Observer {
 
 			System.out.println("++++++++++ Card Exchange View ++++++++++");
 			System.out.println("Current game phase: Gameplay reinforcement (exchangecards)");
-			System.out.println(
-					gameController.getCurrentPlayer() + " has " + gameController.getCurrentPlayer().getCardList() 
+			System.out.println(gameController.getCurrentPlayer() + " has " + gameController.getCurrentPlayer().getCardList() 
 					+ " cards");
 
 			if (cardSize >= 3) {
 
-				if (gameController.getCardModel().checkMaxCards(gameController.getCurrentPlayer(),
-						gameController.getCardsStack()))
-					return;
+				int i = 1;
+	            for (Card card : gameController.getCurrentPlayer().getCardList()) {
+	                System.out.println(i + "." + card);
+	                i++;
+	            }
 
 				while (true) {
 
+					Boolean forcefulExchange = false;
+					if (cardSize >= 5) {
+			            System.out.println("You have 5(max) cards, you need to exchange !!!");
+			            forcefulExchange = true;
+					}
+		
 					String command = sc.nextLine();
 					String[] words = command.split(" ");
 					String commandType = words[0];
@@ -67,8 +74,13 @@ public class CardExchangeView implements Observer {
 					case Commands.MAP_COMMAND_REINFORCE_OPTION_EXCHANGECARDS:
 
 						if (words[1].equalsIgnoreCase("-none")) {
-							System.out.println(gameController.getCurrentPlayer() + " has chosen not to exchange cards");
-							return;
+							
+							if (forcefulExchange) {
+								break;
+							} else {
+								System.out.println(gameController.getCurrentPlayer() + " has chosen not to exchange cards");
+								return;
+							}
 						}
 
 						if (words.length < 4) {
@@ -86,18 +98,29 @@ public class CardExchangeView implements Observer {
 							System.out.println("Exception: " + e.toString());
 							break;
 						}
-
+						
 						List<Card> cardsChoosen = new ArrayList<>();
 						List<Card> cardList = gameController.getCurrentPlayer().getCardList();
 
 						for (int index : idx) {
-							cardsChoosen.add(cardList.get(index));
+							
+							if (index <= 0) {
+								System.out.println("Error: cannot accept negative index");
+								break;
+							}
+							
+							try {
+								cardsChoosen.add(cardList.get(index));
+							} catch (Exception e) {
+								System.out.println("Exception: " + e.toString());
+								break;
+							}
 						}
 
 						Boolean retVal = gameController.getCardModel().areCardsvalidForExchange(cardsChoosen);
 
 						if (retVal) {
-							gameController.getCardModel().exchangeCards(gameController.getCurrentPlayer(), idx,
+							gameController.getCardModel().exchangeCards(gameController.getCurrentPlayer(),
 									cardsChoosen, gameController.getCardsStack());
 							return;
 						} else
@@ -112,5 +135,7 @@ public class CardExchangeView implements Observer {
 				}
 			}
 		}
+		
+		System.out.println("+++++++++++++++++++++++++");
 	}
 }

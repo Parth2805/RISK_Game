@@ -46,8 +46,9 @@ public class WorldDominationView implements Observer {
 
                 System.out.println("+++++++++++++++++++++++++++");
 
-                float mapPercent = ((float)p.getAssignedCountry().size() / (float)map.getCountries().size()) * 100;
+                double mapPercent = ((float)p.getAssignedCountry().size() / (float)map.getCountries().size()) * 100;
 
+                mapPercent = Math.round(mapPercent * 100.0) / 100.0;
                 System.out.println("Player: " + p.getName() + " has " + mapPercent + "% of map");
                 System.out.println("Player: " + p.getName() + " has continents = " + 
                 		gameController.getPlayerModel().getContinentOwnedByPlayer(p));

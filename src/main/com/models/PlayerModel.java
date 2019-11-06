@@ -554,7 +554,12 @@ public class PlayerModel {
 
         // Change ownership of country
         if (defendCountry.getArmy() <= 0) {
-            attackCountry.getPlayer().setCardList(cardStack.pop());
+        	
+        	Card wonCard = cardStack.pop();
+            attackCountry.getPlayer().setCardList(wonCard);
+            
+            System.out.println(player + "has won: " + wonCard);
+            
             modifyDefendingCountryOwnerShip(defendCountry, attackCountry);
             
             System.out.println("------" + defenderPlayer + 
@@ -683,25 +688,26 @@ public class PlayerModel {
 		Country attackCountry = map.getCountryMap().get(attackingCountry);
 		Country defendCountry = map.getCountryMap().get(defendingCountry);
 
+		if (attackCountry.getArmy() <= 1) {
+		    System.out.println("Error: Can't attack with " + attackingCountry
+                    + " country as it has only one army (need > 1 army to attack)");
+			return false;
+		}
+		
 		while (true) {
 
 			int numOfDefenderDice = 2;
 			int numOfAttackerDice = 3;
 
-			if (attackCountry.getArmy() <= 1) {
-			    System.out.println("Error: Can't attack with " + attackingCountry
-	                    + " country as it has only one army (need > 1 army to attack)");
+			if (attackCountry.getArmy() <= 1)
 				break;
-			}
 			
 			// Check armies count
-			if (attackCountry.getArmy() <= 3) {
+			if (attackCountry.getArmy() <= 3)
 				numOfAttackerDice = attackCountry.getArmy() - 1;
-			}
 
-			if (defendCountry.getArmy() <= 2) {
+			if (defendCountry.getArmy() <= 2)
 				numOfDefenderDice = defendCountry.getArmy();
-			}
 
 			if (numOfDefenderDice == 0) {
 				System.out.println("Error: Can't do allout with 0 defender dice");

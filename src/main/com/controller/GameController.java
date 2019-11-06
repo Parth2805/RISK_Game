@@ -454,7 +454,6 @@ public class GameController extends Observable {
 			playerModel.placeAll();
 			
 			// Allocate cards to countries
-			System.out.println("---- Assigning Cards to Countries ----");
 			cardModel.allocateCardsToCountry(getMap(), getCardsStack());
 			setCurrentPlayer(playerModel.getPlayersList().get(0));
 			
@@ -477,9 +476,13 @@ public class GameController extends Observable {
 	 */
 	public void processGamePlayReinforcementCommands(Scanner sc) {
 
-		// Card exchange view
-		setChanged();
-		notifyObservers("card-exchange");
+		Boolean isShowMapCommand = false;
+		
+		if (!isShowMapCommand) {
+			// Card exchange view
+			setChanged();
+			notifyObservers("card-exchange");
+		}
 		
 		if (!isReinfoceArmiesAssigned) {
 		
@@ -503,11 +506,13 @@ public class GameController extends Observable {
 		switch (commandType) {
 
 		case Commands.MAP_COMMAND_SHOWMAP:
+			isShowMapCommand = true;
 			playerModel.gamePlayShowmap(getMap());
 			break;
 
 		case Commands.MAP_COMMAND_REINFORCE:
 
+			isShowMapCommand = false;
 			if (words.length < 3) {
 				System.out.println("Invalid command, Try again !!!");
 				break;
@@ -545,6 +550,7 @@ public class GameController extends Observable {
 			break;
 		
 		default:
+			isShowMapCommand = false;
 			System.out.println("Invalid command, Try again !!!");
 			break;
 		}
