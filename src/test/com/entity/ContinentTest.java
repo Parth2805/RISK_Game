@@ -9,7 +9,7 @@ import org.junit.*;
 import com.entity.Continent;
 
 /**
- * This is a Test Class for testing card
+ * This is a Test Class for testing continent
  * 
  * @author Maryam
  * @author Mahmoudreza

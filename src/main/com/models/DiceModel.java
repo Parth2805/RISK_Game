@@ -1,7 +1,6 @@
 package com.models;
 
 import com.entity.Country;
-import com.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,40 +11,35 @@ import java.util.Random;
  * This class is handles the dice.
  *
  * @author Parth
+ * @author Mehul
  */
 public class DiceModel {
 	
-	
-    public int numberOfDiceUsedByAttacker;
 
-    public int numberOfDiceUsedByDefender;
+	public int numberOfDiceUsedByAttacker;
+	public int numberOfDiceUsedByDefender;
 
-    public Country attackingCountry;
+	public Country attackingCountry;
+	public Country defendingCountry;
 
-    public Country defendingCountry;
+	public List<Integer> attackerDiceValues;
+	public List<Integer> defenderDiceValues;
 
-    public List<Integer> attackerDiceValues;
+	public DiceModel(Country attackingCountry, Country defendingCountry, int numberOfDiceUsedByAttacker,
+			int numberOfDiceUsedByDefender) {
 
-    public List<Integer> defenderDiceValues;
-
-    public ArrayList<Player> playerslist;
-
-    public DiceModel(Country attackingCountry, Country defendingCountry, int numberOfDiceUsedByAttacker, int numberOfDiceUsedByDefender){
-        
-    	this.attackingCountry=attackingCountry;
-        this.defendingCountry=defendingCountry;
-        this.attackerDiceValues= new ArrayList<>();
-        this.defenderDiceValues = new ArrayList<>();
-        this.numberOfDiceUsedByAttacker=numberOfDiceUsedByAttacker;
-        this.numberOfDiceUsedByDefender=numberOfDiceUsedByDefender;
-        //this.playerslist=playersList;
-    }
+		this.attackingCountry = attackingCountry;
+		this.defendingCountry = defendingCountry;
+		this.attackerDiceValues = new ArrayList<>();
+		this.defenderDiceValues = new ArrayList<>();
+		this.numberOfDiceUsedByAttacker = numberOfDiceUsedByAttacker;
+		this.numberOfDiceUsedByDefender = numberOfDiceUsedByDefender;
+	}
 
     /**
-     * This roll the Dices of attacker and defender 
-     * 
+     * This roll the Dices of attacker and defender
      */
-    public void rolldice(){
+    public void rolldice() {
 
         this.attackerDiceValues= new ArrayList<>();
         this.defenderDiceValues = new ArrayList<>();
@@ -60,13 +54,20 @@ public class DiceModel {
             int value= new Random().nextInt(6)+1;
             defenderDiceValues.add(value);
         }
+
+//        for(int i=0;i<numberOfDiceUsedByAttacker;i++){
+//            System.out.println("DICE"+i+attackerDiceValues.get(i));
+//        }
+//        for(int i=0;i<numberOfDiceUsedByDefender;i++){
+//            System.out.println("DICE"+i+defenderDiceValues.get(i));
+//        }
     }
 
     /**
      * This gets the dice values of attacker and defender after roll.
      *
      */
-    public void getResultAfterRoll(){
+    public void getResultAfterRoll() {
 
         Collections.sort(attackerDiceValues, Collections.reverseOrder());
         Collections.sort(defenderDiceValues, Collections.reverseOrder());
