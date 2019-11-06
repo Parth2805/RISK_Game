@@ -19,13 +19,9 @@ import com.entity.Card;
  */
 public class CardExchangeView implements Observer {
 
-	/**
-	 * This method Update Observable and Argument
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @param o
-	 *            Observable object
-	 * @param arg
-	 *            an object of Object
 	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
 	 */
 	@Override

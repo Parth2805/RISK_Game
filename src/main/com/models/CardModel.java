@@ -50,6 +50,8 @@ public class CardModel {
 
     /**
      * Allocate cards to country 
+     * @param map current Hashmap object
+     * @param stackOfCards stack of cards
      * 
      */
     public void allocateCardsToCountry(Hmap map, Stack<Card> stackOfCards) {
@@ -84,6 +86,9 @@ public class CardModel {
     /**
      * exchange of cards between players
      * @param cardlist list of cards
+     * @param player current Player object 
+     * @param idx index 
+     * @param cardStack current stack of cards
      * 
      */    
     public void exchangeCards(Player player, List<Card> cardlist, Stack<Card> cardStack) {
@@ -116,8 +121,8 @@ public class CardModel {
 
     /**
     * validates card for exchange
-    * @param player scanner object
-    * @return number of cards 
+    * @param cardlist list of cards
+    * @return true if cards are valid for exchange, false otherwise 
   	*
     */
     public boolean areCardsvalidForExchange(List<Card> cardlist) {
@@ -144,6 +149,5 @@ public class CardModel {
         }
         
         return false;
-    }
+    }   
 }
-   
