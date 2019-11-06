@@ -9,7 +9,7 @@ import org.junit.*;
 import static org.junit.Assert.*;
 
 /**
- * This is a Test Class for testing card
+ * This is a Test Class for testing Country Class
  * 
  * @author Maryam
  * @author Mahmoudreza
