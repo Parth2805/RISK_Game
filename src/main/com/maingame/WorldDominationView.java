@@ -26,33 +26,6 @@ import com.entity.Player;
 public class WorldDominationView implements Observer {
 
     /**
-     * Get list of continents owned by player
-     *
-     * @param player player object
-     * @return continentList continent List
-     */
-    public Set<String> getContinentOwnedByPlayer(Player player) {
-    	Set<String> continentList = new HashSet<String>();
-        Boolean isAllCountriesOwned;
-
-        for (Country c : player.getAssignedCountry()) {
-
-            isAllCountriesOwned = true;
-            Continent continent = c.getBelongToContinent();
-
-            for (Country country : continent.getCountries()) {
-                if (!country.getPlayer().getName().equalsIgnoreCase(player.getName()))
-                    isAllCountriesOwned = false;
-            }
-
-            if (isAllCountriesOwned)
-                continentList.add(continent.getName());
-        }
-
-        return continentList;
-    }
-
-    /**
      * This method Update Observable and Argument
      * @param o Observable object
      * @param arg an object of Object
@@ -76,7 +49,8 @@ public class WorldDominationView implements Observer {
                 float mapPercent = ((float)p.getAssignedCountry().size() / (float)map.getCountries().size()) * 100;
 
                 System.out.println("Player: " + p.getName() + " has " + mapPercent + "% of map");
-                System.out.println("Player: " + p.getName() + " has continents = " + getContinentOwnedByPlayer(p));
+                System.out.println("Player: " + p.getName() + " has continents = " + 
+                		gameController.getPlayerModel().getContinentOwnedByPlayer(p));
                 System.out.println("Player: " + p.getName() + " has current armies = " + p.getArmies());
               
                 int armiesOnMap = 0;

@@ -290,6 +290,10 @@ public class PlayerModel {
             currentArmies += Math.floor(countryCount / 3);
         }
 
+        for (Continent c: getContinentOwnedByPlayer(player)) {
+        	currentArmies += c.getCountries().size();
+        }
+        
         return currentArmies;
     }
 
@@ -574,12 +578,11 @@ public class PlayerModel {
 
     public void attackMove(Country attackCountry, Country defendCountry) {
 
-        System.out.println("You conquered the " + attackCountry.getName() + " "
-        		+ "country successfully");
-        System.out.println("You need to move armies to conquered Country, max armies: " + (attackCountry.getArmy() - 1) + ", min armies: 1");
-        System.out.println("Command \"attackmove num\":  ");
-
         while (true) {
+            System.out.println("You conquered the " + attackCountry.getName() + " "
+            		+ "country successfully");
+            System.out.println("You need to move armies to conquered Country, max armies: " + (attackCountry.getArmy() - 1) + ", min armies: 1");
+            System.out.println("Command \"attackmove num\":  ");
 
             Scanner sc1 = new Scanner(System.in);
             String command = sc1.nextLine();
@@ -592,7 +595,7 @@ public class PlayerModel {
             		 armyToMove = Integer.parseInt(words[1]);
                  } catch (Exception e) {
                      System.out.println("Exception: " + e.toString());
-                     break;
+                     continue;
                  }
 
                 if (armyToMove < 1) {
@@ -785,5 +788,32 @@ public class PlayerModel {
         }
 
         return true;
+    }
+    
+    /**
+     * Get list of continents owned by player
+     *
+     * @param player player object
+     * @return continentList continent List
+     */
+    public Set<Continent> getContinentOwnedByPlayer(Player player) {
+    	Set<Continent> continentList = new HashSet<Continent>();
+        Boolean isAllCountriesOwned;
+
+        for (Country c : player.getAssignedCountry()) {
+
+            isAllCountriesOwned = true;
+            Continent continent = c.getBelongToContinent();
+
+            for (Country country : continent.getCountries()) {
+                if (!country.getPlayer().getName().equalsIgnoreCase(player.getName()))
+                    isAllCountriesOwned = false;
+            }
+
+            if (isAllCountriesOwned)
+                continentList.add(continent);
+        }
+
+        return continentList;
     }
 }
