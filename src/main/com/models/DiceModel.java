@@ -54,6 +54,13 @@ public class DiceModel {
             int value= new Random().nextInt(6)+1;
             defenderDiceValues.add(value);
         }
+
+//        for(int i=0;i<numberOfDiceUsedByAttacker;i++){
+//            System.out.println("DICE"+i+attackerDiceValues.get(i));
+//        }
+//        for(int i=0;i<numberOfDiceUsedByDefender;i++){
+//            System.out.println("DICE"+i+defenderDiceValues.get(i));
+//        }
     }
 
     /**

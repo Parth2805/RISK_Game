@@ -50,6 +50,8 @@ public class CardModel {
 
     /**
      * Allocate cards to country 
+     * @param map current Hashmap object
+     * @param stackOfCards stack of cards
      * 
      */
     public void allocateCardsToCountry(Hmap map, Stack<Card> stackOfCards) {
@@ -79,25 +81,31 @@ public class CardModel {
         }
 
         Collections.shuffle(stackOfCards);
-        for (Card cards : stackOfCards) {
-            System.out.println(cards);
-        }
     }
 
     /**
      * exchange of cards between players
      * @param cardlist list of cards
+     * @param player current Player object 
+     * @param idx index 
+     * @param cardStack current stack of cards
      * 
      */    
-    public void exchangeCards(Player player, int idx[], List<Card> cardlist, Stack<Card> cardStack) {
+    public void exchangeCards(Player player, List<Card> cardlist, Stack<Card> cardStack) {
 
-        for (int index : idx) {
-            for (Country c : player.getAssignedCountry()) {
-                if (c.getName().equalsIgnoreCase(cardlist.get(index).getCountryToWhichCardBelong().getName())) {
-                    player.setArmies(player.getArmies() + 2);
-                    break;
+    	Boolean isCardArmiesAssigned = false;
+    	
+        for (Country c : player.getAssignedCountry()) {
+	    	for (Card cardChosen: cardlist) {
+                if (c.getName().equalsIgnoreCase(cardChosen.getCountryToWhichCardBelong().getName())) {
+            	   player.setArmies(player.getArmies() + 2);
+                   isCardArmiesAssigned = true;
+                   break;
                 }
-            }
+	    	}
+	    	
+	        if (isCardArmiesAssigned)
+            	break;
         }
 
         player.setArmies(player.getArmies() + getCardExchanged());
@@ -113,8 +121,8 @@ public class CardModel {
 
     /**
     * validates card for exchange
-    * @param player scanner object
-    * @return number of cards 
+    * @param cardlist list of cards
+    * @return true if cards are valid for exchange, false otherwise 
   	*
     */
     public boolean areCardsvalidForExchange(List<Card> cardlist) {
@@ -141,72 +149,5 @@ public class CardModel {
         }
         
         return false;
-    }
-
-    /**
-    * Parses the String and calls the related game play startup commands.
-    * @param player scanner object
-    * 
-    */
-    public boolean checkMaxCards(Player player, Stack<Card> cardStack) {
-
-        // Check if player has 5 cards and tells to exchange until less than 5 cards
-        if (player.getCardList().size() >= 5) {
-
-            int i = 1;
-
-            System.out.println("You have 5(max) cards, need to exchange!!");
-            System.out.println("Cards List:");
-
-            for (Card cards : player.getCardList()) {
-                System.out.println(i + "." + cards);
-                i++;
-            }
-            System.out.println("Countries owned::");
-
-            for (Country c : player.getAssignedCountry()) {
-                System.out.println(c.getName());
-            }
-
-            Scanner sc1 = new Scanner(System.in);
-
-            while (player.getCardList().size() == 5) {
-                System.out.println("Enter the cards(index) to exchange:");
-                String input = sc1.nextLine();
-                String tempwords[] = input.split(" ");
-
-                if (tempwords[0].equalsIgnoreCase(Commands.MAP_COMMAND_REINFORCE_OPTION_EXCHANGECARDS)) {
-
-                    if (tempwords[1].equalsIgnoreCase("-none")) {
-                        System.out.println("Need to Exchange Cards!!");
-                    } else {
-                        if (player.getCardList().size() < 3) {
-                            System.out.println("Have less than 3 cards, cant exchange");
-                            return false;
-                        }
-                        int idx[] = new int[3];
-                        idx[0] = Integer.parseInt(tempwords[1]) - 1;
-                        idx[1] = Integer.parseInt(tempwords[2]) - 1;
-                        idx[2] = Integer.parseInt(tempwords[3]) - 1;
-                        List<Card> cardschoosen = new ArrayList<>();
-
-                        List<Card> cardlist = player.getCardList();
-
-                        for (int index : idx) {
-                            cardschoosen.add(cardlist.get(index));
-                        }
-
-                        if (areCardsvalidForExchange(cardschoosen)) {
-                            exchangeCards(player, idx, cardschoosen, cardStack);
-                        } else {
-                            System.out.println("Only exchange 1.Cards of all same type or 2.Cards of all different type");
-                        }
-                    }
-                } else {
-                	System.out.println("Invalid Input Command!!");
-                }
-            }
-        }
-        return false;
-    }
+    }   
 }

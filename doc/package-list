@@ -1,7 +1,8 @@
-com.commandparser
 com.config
+com.controller
 com.entity
 com.exception
-com.main
+com.maingame
 com.mapparser
-com.playerparser
+com.model
+com.models

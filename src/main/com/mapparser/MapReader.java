@@ -36,7 +36,6 @@ public class MapReader {
 
 	/**
 	 * Get map object after processing the map file
-	 * 
 	 * @return the map
 	 */
 	private Hmap getMap() {
@@ -45,7 +44,6 @@ public class MapReader {
 
 	/**
 	 * This method reads the map file and verifies if the map is valid.
-	 * 
 	 * @param file The map file to be read.
 	 * @return map The map object returned after reading the file.
 	 * @throws InvalidMap Throws IOException if the map is invalid.
@@ -60,7 +58,6 @@ public class MapReader {
 
 	/**
 	 * This method is used to read and process map data
-	 * 
 	 * @param file file path
 	 * @return map returns the map object after processing the file data
 	 * @throws InvalidMap Throws InvalidMapException if map is not valid

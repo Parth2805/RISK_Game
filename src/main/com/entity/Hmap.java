@@ -57,7 +57,6 @@ public class Hmap {
 	
 	/**
 	 * Setter method for the country hash-map.
-	 *
 	 * @param countryMap hash-map of country
 	 */
 	public void setCountryMap(Map<String, Country> countryMap) {
@@ -66,7 +65,6 @@ public class Hmap {
 
 	/**
 	 * Get method for country hash-map.
-	 *
 	 * @return map of countries
 	 */
 	public Map<String, Country> getCountryMap() {
