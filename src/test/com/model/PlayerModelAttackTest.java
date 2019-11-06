@@ -12,7 +12,7 @@ import com.entity.*;
  * @author MahmoudReza
  *
  */
-public class AttachTest {
+public class PlayerModelAttackTest {
 
     public static Hmap map;
     public static Player player;
@@ -144,11 +144,8 @@ public class AttachTest {
      */
     @Test
     public void getDefenderDiceTest() {
-    	int numOfDice = 0;
-    	int diceTest=playerModel. getDefenderDice( player, count1);
+    	int diceTest=playerModel.getDefenderDice(player, count1);
     	assertNotEquals(diceTest,10);
     }
-
-   
 
 }

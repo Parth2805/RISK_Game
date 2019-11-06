@@ -291,7 +291,7 @@ public class PlayerModel {
         }
 
         for (Continent c: getContinentOwnedByPlayer(player)) {
-        	currentArmies += c.getCountries().size();
+        	currentArmies += c.getValue();
         }
         
         return currentArmies;
@@ -563,15 +563,16 @@ public class PlayerModel {
         // Change ownership of country
         if (defendCountry.getArmy() <= 0) {
         	
-        	Card wonCard = cardStack.pop();
-            attackCountry.getPlayer().setCardList(wonCard);
-            
-            System.out.println(player + "has won: " + wonCard);
-            
             modifyDefendingCountryOwnerShip(defendCountry, attackCountry);
+            System.out.println(defenderPlayer + " has lost the country: " + defendCountry);
             
-            System.out.println("------" + defenderPlayer + 
-					" has lost the country: " + defendCountry + "------");
+            player.setnumOfAttacks(player.getnumOfAttacks() + 1);
+
+        	if (player.getnumOfAttacks() == 1) {
+	        	Card wonCard = cardStack.pop();
+	            attackCountry.getPlayer().setCardList(wonCard);
+	            System.out.println(player + " has won: " + wonCard);
+        	}        	
             
             if (!isPlayerWonGame(player, map.getCountries())) {
                 attackMove(attackCountry, defendCountry);
@@ -598,10 +599,10 @@ public class PlayerModel {
     public void attackMove(Country attackCountry, Country defendCountry) {
 
         while (true) {
-            System.out.println("You conquered the " + attackCountry.getName() + " "
-            		+ "country successfully");
+            System.out.println(defendCountry.getPlayer()+ " conquered the " 
+            		+ defendCountry.getName() + " " + "country successfully");
             System.out.println("You need to move armies to conquered Country, max armies: " + (attackCountry.getArmy() - 1) + ", min armies: 1");
-            System.out.println("Command \"attackmove num\":  ");
+            System.out.println("Command \"attackmove num\" ");
 
             Scanner sc1 = new Scanner(System.in);
             String command = sc1.nextLine();
@@ -618,7 +619,7 @@ public class PlayerModel {
                  }
 
                 if (armyToMove < 1) {
-                    System.out.println("Need to move atleast 1 army to conquered country");
+                    System.out.println("Error: you need to move atleast 1 army to conquered country");
 
                 } else if (armyToMove >= attackCountry.getArmy()) {
                     System.out.println("Can't move more than: " + (attackCountry.getArmy() - 1));

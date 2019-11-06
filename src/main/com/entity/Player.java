@@ -23,7 +23,23 @@ public class Player {
 
 	private List <Country> assignedCountry;
 	private List <Card> cardList;
-	
+	private int numOfAttacks;
+
+	/**
+	 * Player parameterized constructor.
+	 * @param id of Player
+	 * @param name of Player
+	 */
+	public Player(int id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.assignedCountry = new ArrayList <Country>();
+		this.cardList = new ArrayList<>();
+		this.numeberOfCardsExchanged = 0;
+		this.numOfAttacks = 0;
+	}
+
 	/**
 	 * get cards of player
 	 * @return the cardList
@@ -41,19 +57,22 @@ public class Player {
 	}
 	
 	/**
-	 * Player parameterized constructor.
-	 * @param id of Player
-	 * @param name of Player
+	 * Get the number of attacks.
+	 * 
+	 * @return number of attacks
 	 */
-	public Player(int id, String name) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.assignedCountry = new ArrayList <Country>();
-		this.cardList = new ArrayList<>();
-		this.numeberOfCardsExchanged = 0;
+	public int getnumOfAttacks() {
+		return numOfAttacks;
 	}
-
+	
+	/**
+	 * @param numAttack number of attacks.
+	 * 
+	 */
+	public void setnumOfAttacks(int numAttack) {
+		this.numOfAttacks = numAttack;
+	}
+	
 	/**
 	 * Getter method for the player ID.
 	 * @return id of Player

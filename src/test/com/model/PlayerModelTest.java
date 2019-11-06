@@ -3,6 +3,7 @@ package com.model;
 import static org.junit.Assert.*;
 import org.junit.*;
 
+import com.entity.Continent;
 import com.entity.Country;
 import com.entity.Player;
 import com.mapparser.MapVerifier;
@@ -32,7 +33,7 @@ public class PlayerModelTest {
 	@Before
 	public void beforeTest() {
 		player = new Player(4, "TestPlayer");
-		playerCmd = new PlayerModel();
+		playerCmd = new PlayerModel();		
 	}
 
 	/**
@@ -49,10 +50,15 @@ public class PlayerModelTest {
 	@Test
 	public void testThreeReinforceArmiesForPLayer() {
 		
-		for (int idx = 0; idx < 8; idx++)
-			player.getAssignedCountry().add(new Country());
+		for (int idx = 0; idx < 8; idx++) {
+			Country c1 = new Country();
+			Continent con1 = new Continent();			
+			c1.setBelongToContinent(con1);
+			player.getAssignedCountry().add(c1);
+		}
 		
 		int armies = playerCmd.countReinforcementArmies(player);
+
 		assertEquals(3, armies);
 	}
 
@@ -62,8 +68,12 @@ public class PlayerModelTest {
 	@Test
 	public void testReinforceArmiesCountForPLayer() {
 		
-		for (int idx = 0; idx < 25; idx++)
-			player.getAssignedCountry().add(new Country());
+		for (int idx = 0; idx < 25; idx++) {
+			Country c1 = new Country();
+			Continent con1 = new Continent();			
+			c1.setBelongToContinent(con1);
+			player.getAssignedCountry().add(c1);
+		}
 		
 		int armies = playerCmd.countReinforcementArmies(player);
 		assertEquals(8, armies);

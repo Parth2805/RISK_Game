@@ -41,11 +41,12 @@ public class CardExchangeView implements Observer {
 			int cardSize = gameController.getCurrentPlayer().getCardList().size();
 
 			System.out.println("++++++++++ Card Exchange View ++++++++++");
-			System.out.println("Current game phase: Gameplay reinforcement (exchangecards)");
 			System.out.println(gameController.getCurrentPlayer() + " has " + gameController.getCurrentPlayer().getCardList() 
 					+ " cards");
 
 			if (cardSize >= 3) {
+
+				System.out.println("Current game phase: Gameplay reinforcement (exchangecards)");
 
 				int i = 1;
 	            for (Card card : gameController.getCurrentPlayer().getCardList()) {
@@ -70,7 +71,6 @@ public class CardExchangeView implements Observer {
 					case Commands.MAP_COMMAND_REINFORCE_OPTION_EXCHANGECARDS:
 
 						if (words[1].equalsIgnoreCase("-none")) {
-							
 							if (forcefulExchange) {
 								break;
 							} else {
@@ -84,6 +84,7 @@ public class CardExchangeView implements Observer {
 							break;
 						}
 
+						boolean retVal = true;
 						int idx[] = new int[3];
 
 						try {
@@ -100,8 +101,9 @@ public class CardExchangeView implements Observer {
 
 						for (int index : idx) {
 							
-							if (index <= 0) {
+							if (index < 0) {
 								System.out.println("Error: cannot accept negative index");
+								retVal = false;
 								break;
 							}
 							
@@ -109,11 +111,15 @@ public class CardExchangeView implements Observer {
 								cardsChoosen.add(cardList.get(index));
 							} catch (Exception e) {
 								System.out.println("Exception: " + e.toString());
+								retVal = false;
 								break;
 							}
 						}
 
-						Boolean retVal = gameController.getCardModel().areCardsvalidForExchange(cardsChoosen);
+						if (!retVal)
+							break;
+						
+						retVal = gameController.getCardModel().areCardsvalidForExchange(cardsChoosen);
 
 						if (retVal) {
 							gameController.getCardModel().exchangeCards(gameController.getCurrentPlayer(),
@@ -130,8 +136,7 @@ public class CardExchangeView implements Observer {
 					}
 				}
 			}
-		}
-		
-		System.out.println("+++++++++++++++++++++++++");
+			System.out.println("++++++++++++++++++++++++++");
+		}		
 	}
 }

@@ -58,6 +58,6 @@ public class Card {
 	 */
 	@Override
 	public String toString() {
-		return "[cardType = " + cardType + ", CountryofCard = " + countryToWhichCardBelong + "], ";
+		return "cardType = " + cardType + ", CountryofCard = " + countryToWhichCardBelong;
 	}
 }

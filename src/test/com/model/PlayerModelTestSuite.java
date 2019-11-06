@@ -12,7 +12,7 @@ import org.junit.runners.Suite.SuiteClasses;
  */
 @RunWith(Suite.class)
 @SuiteClasses({PlayerModelTest.class,
-				AttachTest.class})
+				PlayerModelAttackTest.class})
 
 public class PlayerModelTestSuite {
 }

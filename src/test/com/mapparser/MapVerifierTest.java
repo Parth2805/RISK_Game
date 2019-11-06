@@ -143,14 +143,16 @@ public class MapVerifierTest {
 
 		System.out.println("This is a test for Continent Connected Graph");
 		List<Country> countryList = new ArrayList<>();
+		
 		countryList.add(country1);
+		
 		country2 = new Country();
 		country2.setName(count2);
-		country2.setxCoordinate(x2);
-		country2.setyCoordinate(y2);
 		countryList.add(country2);
+		
 		country2.getAdjacentCountries().add(country1);
 		country1.getAdjacentCountries().add(country2);
+		
 		continent1.setCountries(countryList);
 		assertEquals(true, MapVerifier.isContinentConnectedGraph(continent1, map));
 		System.out.println("The Unit Test for Continent_Connected_Graph is performed");
