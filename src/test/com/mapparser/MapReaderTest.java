@@ -27,7 +27,7 @@ public class MapReaderTest {
 			"country_without_continent.map", "countries_in_same_continent.map" };
 
 	/**
-	 * This method runs before running all methods in the class.
+	 * This method runs only once before running all methods in the class.
 	 */
 	@BeforeClass
 	public static void beforeClass() {
@@ -46,7 +46,7 @@ public class MapReaderTest {
 	}
 
 	/**
-	 * This method runs after all testing methods.
+	 * This method runs only once after all testing methods.
 	 */
 	@AfterClass
 	public static void afterAllTests() {
