@@ -298,6 +298,7 @@ public class PlayerModel {
     }
 
     /**
+     * This method initialize armies for all the countries
      * @param map main map It will put one army on every country
      */
     public void intitializeArmiesForAllCountries(Hmap map) {
@@ -414,9 +415,9 @@ public class PlayerModel {
     /**
      * This method will fortify for current player
      *
-     * @param map           main map
+     * @param map  main map
      * @param currentPlayer current player
-     * @param country       name of to country
+     * @param country name of to country
      * @return true if country belong to given player
      */
     public boolean isCountryBelongToPlayer(Hmap map, Player currentPlayer, String country) {
@@ -487,6 +488,13 @@ public class PlayerModel {
     /**
      * This implements attach phase.
      *
+     * @param map current Hmap object
+     * @param player current Player object
+     * @param attackingCountryName Name of attacking country
+     * @param defendingCountryName Name of defending country
+     * @param attackerNumOfDice number of dice given by attacker
+     * @param defenderNumOfDice number of dice given by defender
+     * @param cardStack Current stack of card
      * @return true if current player is the last player, false otherwise
      */
     public boolean attackCountry(Hmap map, Player player, String attackingCountryName, String defendingCountryName,
@@ -581,6 +589,12 @@ public class PlayerModel {
         return true;
     }
 
+    /**
+     * This method is to implement attackmove command
+     * 
+     * @param attackCountry name of the attacker country name
+     * @param defendCountry name of the defender country name
+     */
     public void attackMove(Country attackCountry, Country defendCountry) {
 
         while (true) {
@@ -623,6 +637,8 @@ public class PlayerModel {
     /**
      * This gets the Dice values of defender.
      *
+     * @param player Player object
+     * @param defendCountry name of the defender country
      * @return Dice value of defender
      */
     public int getDefenderDice(Player player, Country defendCountry) {
@@ -678,9 +694,14 @@ public class PlayerModel {
     }
 
     /**
-	 * This gets the Dice values of defender.
+	 * This method will attack the countries until country is won by attacker or cannot attack anymore.
 	 * 
-	 * @return Dice value of defender
+	 * @param map Hmap object
+	 * @param player Player object
+	 * @param attackingCountry name of the attacking country
+	 * @param defendingCountry name of the defending country
+	 * @param cardStack stack of cards
+	 * @return true is allout command is done successfully, false otherwise
 	 */
 	public Boolean allOutAttackCountry(Hmap map, Player player, String attackingCountry, String defendingCountry,
 			Stack<Card> cardStack) {
@@ -726,9 +747,11 @@ public class PlayerModel {
 	}
 
     /**
-     * This gets the Dice values of defender.
+     * This returns
      *
-     * @return Dice value of defender
+     * @param player Player object
+     * @param totalCoutries list of total countries
+     * @return true if player won the game, false otherwise
      */
     public boolean isPlayerWonGame(Player player, List<Country> totalCoutries) {
 
@@ -739,9 +762,10 @@ public class PlayerModel {
     }
 
     /**
-     * This gets the Dice values of defender.
+     * This modify the ownership of defending country
      *
-     * @return Dice value of defender
+     * @param defendingCountry name of the defending country
+     * @param attackingCountry name of the attacking country
      */
     public void modifyDefendingCountryOwnerShip(Country defendingCountry, Country attackingCountry) {
 
@@ -752,6 +776,11 @@ public class PlayerModel {
         attackingCountry.getPlayer().getAssignedCountry().add(defendingCountry);
     }
 
+    /**
+     * This method check for possibility of attack
+     * @param currentPlayer Current Player name
+     * @return true if attack is possible, false otherwise
+     */
     public boolean checkAttackPossible(Player currentPlayer) {
 
         int count = 0;
@@ -800,7 +829,7 @@ public class PlayerModel {
      * Get list of continents owned by player
      *
      * @param player player object
-     * @return continentList continent List
+     * @return continentList continent List owned by player
      */
     public Set<Continent> getContinentOwnedByPlayer(Player player) {
     	Set<Continent> continentList = new HashSet<Continent>();

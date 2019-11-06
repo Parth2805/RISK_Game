@@ -73,9 +73,9 @@ public class GameController extends Observable {
 	}
 
 	/**
-	 * Get the current player.
+	 * Get the stack of cards.
 	 * 
-	 * @return player playing
+	 * @return stack of cards
 	 */
 	public Stack<Card> getCardsStack() {
 		return stackOfCards;
@@ -93,8 +93,7 @@ public class GameController extends Observable {
 	/**
 	 * This method is to set the current player.
 	 * 
-	 * @param player
-	 *            Current player.
+	 * @param player Current player.
 	 */
 	public void setCurrentPlayer(Player player) {
 		currentPlayer = player;
@@ -103,8 +102,7 @@ public class GameController extends Observable {
 	/**
 	 * Setter method for the map object.
 	 *
-	 * @param map
-	 *            object
+	 * @param map object
 	 * @return root map
 	 */
 	private Hmap setMap(Hmap map) {
@@ -123,8 +121,7 @@ public class GameController extends Observable {
 	/**
 	 * Parses the String and calls the related map edit commands.
 	 * 
-	 * @param command
-	 *            User input Command/String
+	 * @param command User input Command/String
 	 */
 	public void processMapEditCommands(String command) {
 
@@ -330,8 +327,7 @@ public class GameController extends Observable {
 	/**
 	 * Parses the String and calls the related player commands.
 	 * 
-	 * @param command
-	 *            User input Command/String
+	 * @param command User input Command/String
 	 */
 	public void processGamePlayCreatePlayerCommands(String command) {
 
@@ -410,8 +406,7 @@ public class GameController extends Observable {
 	/**
 	 * Parses the String and calls the related game play startup commands.
 	 * 
-	 * @param sc
-	 *            scanner object
+	 * @param sc scanner object
 	 */
 	public void processGamePlayStartupCommands(Scanner sc) {
 
@@ -471,8 +466,7 @@ public class GameController extends Observable {
 	/**
 	 * Parses the String and calls the related game play reinforcement commands.
 	 * 
-	 * @param sc
-	 *            scanner object
+	 * @param sc scanner object
 	 */
 	public void processGamePlayReinforcementCommands(Scanner sc) {
 
@@ -557,11 +551,9 @@ public class GameController extends Observable {
 	}
 
 	/**
-	 * Parses the String and calls the related game play fortify commands.
+	 * Parses the String and calls the related game play attack commands.
 	 * 
-	 * @param sc
-	 *            scanner object
-	 * @return true if command is processed correctly, false otherwise
+	 * @param sc scanner object
 	 */
 	public void processGamePlayAttackCommands(Scanner sc) {
 
@@ -672,9 +664,7 @@ public class GameController extends Observable {
 	/**
 	 * Parses the String and calls the related game play fortify commands.
 	 * 
-	 * @param sc
-	 *            scanner object
-	 * @return true if command is processed correctly, false otherwise
+	 * @param sc scanner object
 	 */
 	public void processGamePlayFortifyCommands(Scanner sc) {
 		
