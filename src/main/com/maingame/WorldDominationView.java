@@ -77,7 +77,15 @@ public class WorldDominationView implements Observer {
 
                 System.out.println("Player: " + p.getName() + " has " + mapPercent + "% of map");
                 System.out.println("Player: " + p.getName() + " has continents = " + getContinentOwnedByPlayer(p));
-                System.out.println("Player: " + p.getName() + " has total armies = " + p.getArmies());
+                System.out.println("Player: " + p.getName() + " has current armies = " + p.getArmies());
+              
+                int armiesOnMap = 0;
+                
+                for (Country c: p.getAssignedCountry()) {
+                	armiesOnMap += c.getArmy();
+                }
+                
+                System.out.println("Player: " + p.getName() + " has armies on map = " + armiesOnMap);
             }
 
             System.out.println("+++++++++++++++++++++++++++");

@@ -557,7 +557,7 @@ public class PlayerModel {
 					" has lost the country: " + defendCountry + "------");
             
             if (!isPlayerWonGame(player, map.getCountries())) {
-                attackmove(attackCountry, defendCountry);
+                attackMove(attackCountry, defendCountry);
             }
         }
 
@@ -572,7 +572,7 @@ public class PlayerModel {
         return true;
     }
 
-    public void attackmove(Country attackCountry, Country defendCountry) {
+    public void attackMove(Country attackCountry, Country defendCountry) {
 
         System.out.println("You conquered the " + attackCountry.getName() + " "
         		+ "country successfully");
@@ -584,9 +584,16 @@ public class PlayerModel {
             Scanner sc1 = new Scanner(System.in);
             String command = sc1.nextLine();
             String words[] = command.split(" ");
-            int armyToMove = Integer.parseInt(words[1]);
 
             if (words[0].equalsIgnoreCase(Commands.MAP_COMMAND_ATTACKMOVE)) {
+
+            	 int armyToMove = 0;
+            	 try {
+            		 armyToMove = Integer.parseInt(words[1]);
+                 } catch (Exception e) {
+                     System.out.println("Exception: " + e.toString());
+                     break;
+                 }
 
                 if (armyToMove < 1) {
                     System.out.println("Need to move atleast 1 army to conquered country");
@@ -647,7 +654,7 @@ public class PlayerModel {
                         break;
                     }
 
-                    if (player.getArmies() < numOfDice) {
+                    if (defendCountry.getArmy() < numOfDice) {
                         System.out.println("Error: Can't defend with your (defend armies " + "count = "
                                 + (defendCountry.getArmy()) + ") < (num of dice = " + numOfDice + ")");
                         break;
@@ -678,6 +685,12 @@ public class PlayerModel {
 			int numOfDefenderDice = 2;
 			int numOfAttackerDice = 3;
 
+			if (attackCountry.getArmy() <= 1) {
+			    System.out.println("Error: Can't attack with " + attackingCountry
+	                    + " country as it has only one army (need > 1 army to attack)");
+				break;
+			}
+			
 			// Check armies count
 			if (attackCountry.getArmy() <= 3) {
 				numOfAttackerDice = attackCountry.getArmy() - 1;
@@ -695,9 +708,6 @@ public class PlayerModel {
 			if (!attackCountry(map, player, attackingCountry, defendingCountry, 
 					numOfAttackerDice, numOfDefenderDice, cardStack))
 				return false;
-
-			if (attackCountry.getArmy() <= 1)
-				break;
 
 			if (defendCountry.getPlayer() == player)
 				break;
