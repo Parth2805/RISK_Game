@@ -34,7 +34,6 @@ public class CardExchangeView implements Observer {
 		String methodValue = (String) arg;
 		GameController gameController = (GameController) o;
 		Scanner sc = new Scanner(System.in);
-		int cardSize = gameController.getCurrentPlayer().getCardList().size();
 
 		// If the player selects cards, they are given the appropriate number of armies
 		// as reinforcement. The player can choose
@@ -43,10 +42,13 @@ public class CardExchangeView implements Observer {
 		// exchange view should cease to exist after the cards exchange.
 		if (methodValue.equals("card-exchange")) {
 
-			System.out.println("-------- Card Exchange View ----------");
+			int cardSize = gameController.getCurrentPlayer().getCardList().size();
+
+			System.out.println("++++++++++ Card Exchange View ++++++++++");
 			System.out.println("Current game phase: Gameplay reinforcement (exchangecards)");
 			System.out.println(
-					gameController.getCurrentPlayer() + " has " + gameController.getCurrentPlayer().getCardList());
+					gameController.getCurrentPlayer() + " has " + gameController.getCurrentPlayer().getCardList() 
+					+ " cards");
 
 			if (cardSize >= 3) {
 
