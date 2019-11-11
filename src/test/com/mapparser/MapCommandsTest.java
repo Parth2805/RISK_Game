@@ -124,14 +124,4 @@ public class MapCommandsTest {
 		assertNotNull(mpcom.mapCountryToContinent(continent, country));
 		System.out.println("This is a test for mapCountry to Continent");
 	}
-
-	@Ignore
-	public void shouldNotBeRunThisTime() throws InvalidMap {
-		continent = mpcom.updateContinent(continent, mp, nameContinent, String.valueOf(7));
-		mpcom.updateContinent(continent, mp, nameContinent, String.valueOf(controlVal));
-		assertEquals(continent.getValue(), controlVal);
-		assertEquals(continent.getValue(), controlVal);
-		assertEquals(continent.getName(), nameContinent);
-	}
-
 }

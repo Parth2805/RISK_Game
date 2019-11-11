@@ -29,6 +29,7 @@ public class Continent {
 	public Continent() {
 		this.countriesList = new ArrayList<>();
 		this.countryMap = new HashMap<>();
+		this.value = 0;
 	}
 
 	/**

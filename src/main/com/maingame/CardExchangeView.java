@@ -96,6 +96,11 @@ public class CardExchangeView implements Observer {
 							break;
 						}
 						
+						if (idx[0] == idx[1] || idx[1] == idx[2] || idx[2] == idx[0]) {
+							System.out.println("Error: same card numbers entered");
+							break;
+						}
+						
 						List<Card> cardsChoosen = new ArrayList<>();
 						List<Card> cardList = gameController.getCurrentPlayer().getCardList();
 
@@ -127,7 +132,7 @@ public class CardExchangeView implements Observer {
 							return;
 						} else
 							System.out.println(
-									"You can only exchange when \n1.Cards of all same type or \n2.Cards of all different type");
+									"Error: You can only exchange when \n1.Cards of all same type or \n2.Cards of all different type");
 						break;
 
 					default:

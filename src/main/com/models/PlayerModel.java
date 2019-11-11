@@ -291,7 +291,11 @@ public class PlayerModel {
         }
 
         for (Continent c: getContinentOwnedByPlayer(player)) {
-        	currentArmies += c.getValue();
+        	
+        	if (c.getValue() > 0)
+        		currentArmies += c.getValue();
+        	else
+        		currentArmies += c.getCountries().size();
         }
         
         return currentArmies;
@@ -544,13 +548,7 @@ public class PlayerModel {
             return false;
         }
 
-        String defenderPlayerName = defendCountry.getPlayer().getName();
-        Player defenderPlayer = null;
-
-        for (Player p : playersList) {
-            if (p.getName().equalsIgnoreCase(defenderPlayerName))
-                defenderPlayer = p;
-        }
+        Player defenderPlayer = defendCountry.getPlayer();
 
         // Roll the dice and attack
         if (defenderNumOfDice == 0)
@@ -710,6 +708,16 @@ public class PlayerModel {
 		Country attackCountry = map.getCountryMap().get(attackingCountry);
 		Country defendCountry = map.getCountryMap().get(defendingCountry);
 
+		if (attackCountry == null) {
+			System.out.println("Error: Invalid country: " + attackingCountry);
+			return false;
+		}
+		
+		if (defendCountry == null) {
+			System.out.println("Error: Invalid country: " + defendingCountry);
+			return false;
+		}
+		
 		if (attackCountry.getArmy() <= 1) {
 		    System.out.println("Error: Can't attack with " + attackingCountry
                     + " country as it has only one army (need > 1 army to attack)");

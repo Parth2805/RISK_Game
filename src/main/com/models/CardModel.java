@@ -87,7 +87,6 @@ public class CardModel {
      * exchange of cards between players
      * @param cardlist list of cards
      * @param player current Player object 
-     * @param idx index 
      * @param cardStack current stack of cards
      * 
      */    

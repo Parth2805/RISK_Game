@@ -21,6 +21,8 @@ public class Commands {
 
 	public static final String MAP_COMMAND_PLACE_ARMY = "placearmy";
 	public static final String MAP_COMMAND_PLACE_ALL = "placeall";
+
+	public static final String MAP_COMMAND_SKIP = "skip";
 	
 	public static final String MAP_COMMAND_REINFORCE = "reinforce";
 	public static final String MAP_COMMAND_FORTIFY = "fortify";

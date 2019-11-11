@@ -1,9 +1,12 @@
 package com.model;
 
+import com.models.CardModel;
 import com.models.PlayerModel;
 import org.junit.*;
 import static org.junit.Assert.*;
 import java.util.*;
+
+import com.config.CardType;
 import com.entity.*;
 
 /**
@@ -17,6 +20,7 @@ public class PlayerModelAttackTest {
     public static Hmap map;
     public static Player player;
     public static PlayerModel playerModel;
+    public static CardModel cardModel;
     public static Stack<Card> cardStack;
     public static Country count1 = new Country();
     static Country count12 = new Country();
@@ -41,9 +45,10 @@ public class PlayerModelAttackTest {
     public void beforeTest () {
         player = new Player(4,"playerTest");
         playerModel = new PlayerModel();
-        cardStack =new Stack<Card>();
+        cardModel = new CardModel();
+        cardStack = new Stack<Card>();
         currentArmies = player.getArmies();
-
+        map = new Hmap();
     }
     /**
      * This method runs after all test just one time
@@ -59,8 +64,42 @@ public class PlayerModelAttackTest {
     @Test
     public void attackCountryTest() {
 
-        boolean armies = playerModel.attackCountry(map,player, "Swiss","Finland",10,3,cardStack);
-        assertTrue(true);
+    	Player p1 = new Player(1, "Maryam");
+    	Player p2 = new Player(2, "parth");
+    	Card card = new Card(CardType.CAVALRY);
+
+    	Continent c1 = new Continent("Asia", 2);
+
+    	Country fromCountry = new Country();
+    	fromCountry.setName("India");
+    	fromCountry.setArmy(2);
+    	fromCountry.setPlayer(p1);
+    	
+    	Country toCountry = new Country();
+    	toCountry.setName("China");
+    	toCountry.setArmy(12);
+    	toCountry.setPlayer(p2);
+
+    	c1.getCountries().add(fromCountry);
+    	c1.getCountries().add(toCountry);
+    	
+    	map.getContinents().add(c1);    	
+    	map.getCountryMap().put("India", fromCountry);
+    	map.getCountryMap().put("China", toCountry);
+    	
+    	fromCountry.getNeighborCountries().add("China");
+    	toCountry.getNeighborCountries().add("India");
+    	
+    	p1.getAssignedCountry().add(fromCountry);
+    	p2.getAssignedCountry().add(toCountry);
+    	
+    	playerModel.getPlayersList().add(p1);
+    	playerModel.getPlayersList().add(p2);
+    	
+    	cardStack.add(card);
+    	playerModel.allOutAttackCountry(map, p1, "India", "China", cardStack);
+        
+    	assertEquals(fromCountry.getArmy(), 1);
     }
 
     /**
@@ -77,22 +116,41 @@ public class PlayerModelAttackTest {
     /**
      * This method test the fortify 
      */
-    @Ignore
+    @Test
     public void fortifyTest() {
-    	String fromCountry=null;
-    	String toCountry=null;
-    	int armiesCount=10;
-    	int fromCountryArmyCount =0;
-		int toCountryArmyCount = 0;
-		//assertSame(fromCountryArmyCount,toCountryArmyCount);
-		boolean p=playerModel.isCountryBelongToPlayer(map, player, fromCountry);
-		//playerModel.isCountriesAdjacent(map, fromCountry, toCountry);
-		//boolean p=playerModel.fortifyCurrentPlayer(map, player, fromCountry, toCountry, armiesCount);
-		
-       // boolean armies = playerModel.fortifyCurrentPlayer(map, player, fromCountry,toCountry, armiesCount);
-        assertNotEquals(p,true);
+    	Player p = new Player(1, "Maryam");
+    	
+    	Continent c1 = new Continent("Asia", 2);
 
+    	Country fromCountry = new Country();
+    	fromCountry.setName("India");
+    	fromCountry.setArmy(10);
+    	fromCountry.setPlayer(p);
+    	
+    	Country toCountry = new Country();
+    	toCountry.setName("China");
+    	toCountry.setArmy(13);
+    	toCountry.setPlayer(p);
+
+    	c1.getCountries().add(fromCountry);
+    	c1.getCountries().add(toCountry);
+    	
+    	map.getContinents().add(c1);    	
+    	map.getCountryMap().put("India", fromCountry);
+    	map.getCountryMap().put("China", toCountry);
+    	
+    	fromCountry.getNeighborCountries().add("China");
+    	toCountry.getNeighborCountries().add("India");
+    	
+    	p.getAssignedCountry().add(fromCountry);
+    	p.getAssignedCountry().add(toCountry);
+    	
+		playerModel.fortifyCurrentPlayer(map, p, fromCountry.getName(), toCountry.getName(), 3);
+		
+        assertEquals(toCountry.getArmy(), 16);
+        assertEquals(fromCountry.getArmy(), 7);
     }
+    
     /**
      * This method test assign armies to all players
      */
@@ -137,15 +195,6 @@ public class PlayerModelAttackTest {
     	player.getArmies() ;
     	boolean p=playerModel.reinforceArmiesForCurrentPlayer( player,  countryName, numberOfArmies);
     	assertTrue(p);
-    }
-    
-    /**
-     * This method test get Defender Dice
-     */
-    @Test
-    public void getDefenderDiceTest() {
-    	int diceTest=playerModel.getDefenderDice(player, count1);
-    	assertNotEquals(diceTest,10);
     }
 
 }

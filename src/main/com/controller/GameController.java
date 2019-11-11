@@ -500,6 +500,11 @@ public class GameController extends Observable {
 
 		switch (commandType) {
 
+		case Commands.MAP_COMMAND_SKIP:
+			//isReinfoceArmiesAssigned = false;
+			changeCurrentPlayer();
+			break;
+		
 		case Commands.MAP_COMMAND_SHOWMAP:
 			isShowMapCommand = true;
 			playerModel.gamePlayShowmap(getMap());
@@ -562,7 +567,7 @@ public class GameController extends Observable {
 		System.out.println("Current Player: " + getCurrentPlayer().getName());
 
 		if (!playerModel.checkAttackPossible(getCurrentPlayer())){
-			System.out.println("Attack not possible for player:");
+			System.out.println("Attack not possible for " + getCurrentPlayer());
 			setChanged();
 			notifyObservers("attackdone");
 			return;
