@@ -17,7 +17,7 @@ import com.exception.InvalidMap;
  * This class is responsible to write the map file when user creates the map.
  * 
  */
-public class MapWriter implements MapWriteInterface{
+public class MapWriter{
 
 	/**
 	 * This method processes the map by calling three different methods and makes a
@@ -38,8 +38,7 @@ public class MapWriter implements MapWriteInterface{
 	 * @param map object of the map which is being processed
 	 * @param file file path
 	 */
-	 @Override
-	public void writeDominationMapFile(Hmap map, File file) {
+	 public void writeDominationMapFile(Hmap map, File file) {
 
 		FileWriter fileWriter;
 		
@@ -169,7 +168,6 @@ public class MapWriter implements MapWriteInterface{
 	 * @param map object of the map which is being processed
 	 * @param file file path
 	 */
-	@Override
 	public void writeConquestMapFile(Hmap map, File file) {
 
 		FileWriter fileWriter;

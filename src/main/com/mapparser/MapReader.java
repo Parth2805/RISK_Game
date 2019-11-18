@@ -14,8 +14,13 @@ import com.entity.Continent;
 import com.entity.Country;
 import com.entity.Hmap;
 import com.exception.InvalidMap;
-
-public class MapReader implements MapReadInterface{
+/**
+ * This class reads, parses the map file and sets data in corresponding objects.
+ * 
+ * @author Mehul
+ * @author Komal
+ */
+public class MapReader{
 
 	// Map class to return, once map is processed successfully.
 	private Hmap map;
@@ -42,7 +47,6 @@ public class MapReader implements MapReadInterface{
 	 * @return map The map object returned after reading the file.
 	 * @throws InvalidMap Throws IOException if the map is invalid.
 	 */
-	@Override
 	public Hmap readDominationMapFile(final File file) throws InvalidMap {
 
 		this.map = processDominationMapFile(file);
@@ -345,7 +349,6 @@ public class MapReader implements MapReadInterface{
 	 * @return map The map object returned after reading the file.
 	 * @throws InvalidMap Throws IOException if the map is invalid.
 	 */
-	@Override
 	public Hmap readConquestMapFile(final File file) throws InvalidMap {
 
 		this.map = processConquestMapFile(file);
