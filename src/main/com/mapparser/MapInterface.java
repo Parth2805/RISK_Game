@@ -10,7 +10,7 @@ import com.exception.InvalidMap;
  * @author Komal
  */
 public interface MapInterface {
-	public void DominationMapParser(String fileType, File file);
-	public void ConquestMapParser(String fileType, File file, Hmap map);
+	public Hmap mapReader(String fileType, File file) throws InvalidMap;
+	public void mapWriter(String fileType, File file, Hmap map);
 
 }

@@ -20,7 +20,7 @@ import com.exception.InvalidMap;
  * @author Mehul
  * @author Komal
  */
-public class MapReader{
+public class MapReader {
 
 	// Map class to return, once map is processed successfully.
 	private Hmap map;

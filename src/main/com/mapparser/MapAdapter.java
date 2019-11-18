@@ -14,38 +14,39 @@ public class MapAdapter implements MapInterface{
 	DominationMapParser dominationParser;
 	ConquestMapParser conquestParser; 
 	Hmap map;
-	
-	public MapAdapter(String fileType){
-		   
-	      if(fileType.equalsIgnoreCase("DominationFile") ){
-	         DominationMapParser = new MapReader();			
-	         
-	      }else if (audioType.equalsIgnoreCase("ConquestFile")){
-	         advancedMusicPlayer = new Mp4Player();
-	      }	
-	   }
+
 	/**
-	 * Read and write domination map file
+	 * Read domination and conquest map file
 	 * @param fileType Identified file type which can be domination or conquest
 	 * @param file File to read
-	 * @param map Object of the map which is being processed
+	 * @return the map
+	 * @throws InvalidMap 
 	 */
 	@Override
-	public void DominationMapParser(String fileType, File file) {
-		
-		
+	public Hmap mapReader(String fileType, File file) throws InvalidMap {
+		if(fileType.equalsIgnoreCase("DominationFile")) {
+			dominationParser = new DominationMapParser();
+			map = dominationParser.readDominationMapFile(map, file);
+		} else if (fileType.equalsIgnoreCase("ConquestFile")) {
+			conquestParser = new ConquestMapParser();
+			map = conquestParser.readConquestMapFile(map, file);
+		}
+		return map;
 	}
-	
 	/**
-	 * Read and Write conquest map file
+	 * Write domination and conquest map file
 	 * @param fileType Identified file type which can be domination or conquest
 	 * @param file File to read
 	 * @param map Object of the map which is being processed
 	 */
 	@Override
-	public void ConquestMapParser(String fileType, File file, Hmap map) {
-		// TODO Auto-generated method stub
-		
+	public void mapWriter(String fileType, File file, Hmap map) {
+		if(fileType.equalsIgnoreCase("DominationFile")) {
+			dominationParser = new DominationMapParser();
+			dominationParser.writeDominationFile(map, file);
+		} else if (fileType.equalsIgnoreCase("ConquestFile")) {
+			conquestParser.writeConquestMapFile(map, file);
+		}		
 	}
 	
 	
