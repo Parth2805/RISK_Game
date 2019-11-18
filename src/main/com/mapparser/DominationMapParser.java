@@ -10,7 +10,7 @@ import com.exception.InvalidMap;
  *  
  * @author Komal
  */
-public interface DominationMapParser  {
+public interface DominationMapParser{
 	public Hmap readDominationMapFile(final File file) throws InvalidMap;
 	public Hmap writeDominationMapFile(final File file) throws InvalidMap;
 	
