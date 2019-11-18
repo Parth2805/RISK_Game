@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import com.entity.Continent;
 import com.entity.Country;
 import com.entity.Hmap;
+import com.exception.InvalidMap;
 
 /**
  * @author Komal
@@ -16,7 +17,7 @@ import com.entity.Hmap;
  * This class is responsible to write the map file when user creates the map.
  * 
  */
-public class MapWriter {
+public class MapWriter implements MapWriteInterface{
 
 	/**
 	 * This method processes the map by calling three different methods and makes a
@@ -26,10 +27,9 @@ public class MapWriter {
 	 */
 	private String parseHmapAndGetString(Hmap map) {
 		StringBuilder mapAttrContent = new StringBuilder();
-		mapAttrContent = parseMapAttribute(map);
-		mapAttrContent.append(parseContinent(map));
-		mapAttrContent.append(parseCountries(map));
-		mapAttrContent.append(parseBorders(map));
+		mapAttrContent = parseConquestMapAttribute(map);
+		mapAttrContent.append(parseConquestContinent(map));
+		mapAttrContent.append(parseConquestCountries(map));
 		return mapAttrContent.toString();
 	}
 	
@@ -38,7 +38,8 @@ public class MapWriter {
 	 * @param map object of the map which is being processed
 	 * @param file file path
 	 */
-	public void writeMapFile(Hmap map, File file) {
+	 @Override
+	public void writeDominationMapFile(Hmap map, File file) {
 
 		FileWriter fileWriter;
 		
@@ -63,7 +64,7 @@ public class MapWriter {
 	 * @param map object of the map which is being processed
 	 * @return a String that contains the map properties.
 	 */
-	private StringBuilder parseMapAttribute(Hmap map) {
+	private StringBuilder parseDominationMapAttribute(Hmap map) {
 		StringBuilder mapAttribute = new StringBuilder();
 		mapAttribute.append("[files]");
 		mapAttribute.append("\n");
@@ -82,7 +83,7 @@ public class MapWriter {
 	 * @return a string that contains details of the continents that will eventually
 	 *         be written in the map file.
 	 */
-	private StringBuilder parseContinent(Hmap map) {
+	private StringBuilder parseDominationContinent(Hmap map) {
 		StringBuilder continentData = new StringBuilder();
 		continentData.append("\n");
 		continentData.append("[continents]");
@@ -109,9 +110,8 @@ public class MapWriter {
 	 * @return a string that contains details of the countries that will eventually
 	 *         be written in the map file.
 	 */
-	private StringBuilder parseCountries(Hmap map) {
+	private StringBuilder parseDominationCountries(Hmap map) {
 		StringBuilder countryData = new StringBuilder();
-
 		countryData.append("\n");
 		countryData.append("[countries]");
 		countryData.append("\n");
@@ -139,7 +139,7 @@ public class MapWriter {
 	 * @return a string that contains details of the countries that will eventually
 	 *         be written in the map file.
 	 */
-	private StringBuilder parseBorders(Hmap map) {
+	private StringBuilder parseDominationBorders(Hmap map) {
 		StringBuilder borderData = new StringBuilder();
 		borderData.append("\n");
 		borderData.append("[borders]");
@@ -163,4 +163,102 @@ public class MapWriter {
 		
 		return borderData;
 	}
+	
+	/**
+	 * This method writes the map details to the map file.
+	 * @param map object of the map which is being processed
+	 * @param file file path
+	 */
+	@Override
+	public void writeConquestMapFile(Hmap map, File file) {
+
+		FileWriter fileWriter;
+		
+		try {
+			if (map == null) {
+				System.out.println("Map Object is NULL!");
+				return;
+			}
+
+			String content = parseHmapAndGetString(map);
+			fileWriter = new FileWriter(file, false);
+			fileWriter.write(content);
+			fileWriter.close();
+
+		} catch (IOException e) {
+			System.err.println(e.getMessage());
+		}
+	}
+
+	/**
+	 * This method process the map attributes.
+	 * @param map object of the map which is being processed
+	 * @return a String that contains the map properties.
+	 */
+	private StringBuilder parseConquestMapAttribute(Hmap map) {
+		StringBuilder mapAttribute = new StringBuilder();
+		mapAttribute.append("[Map]");
+		mapAttribute.append("\n");
+
+		for (Entry<String, String> keymap : map.getMapData().entrySet()) {
+			mapAttribute.append(keymap.getKey() + " " + keymap.getValue());
+			mapAttribute.append("\n");
+		}
+
+		return mapAttribute;
+	}
+
+	/**
+	 * This method processes the continents.
+	 * @param map object of the map which is being processed
+	 * @return a string that contains details of the continents that will eventually
+	 *         be written in the map file.
+	 */
+	private StringBuilder parseConquestContinent(Hmap map) {
+		StringBuilder continentData = new StringBuilder();
+		continentData.append("\n");
+		continentData.append("[Continents]");
+		continentData.append("\n");
+
+		for (Continent continent : map.getContinents()) {
+			
+			continentData.append(continent.getName() + "=" + continent.getValue());
+			continentData.append("\n");
+		}
+		
+		return continentData;
+	}
+
+	/**
+	 * This method processes the countries.
+	 * @param map object of the map that is being processed
+	 * @return a string that contains details of the countries that will eventually
+	 *         be written in the map file.
+	 */
+	private StringBuilder parseConquestCountries(Hmap map) {
+		StringBuilder countryData = new StringBuilder();
+
+		countryData.append("\n");
+		countryData.append("[Territories]");
+		countryData.append("\n");
+
+		for (Continent continent : map.getContinents()) {
+			List<Country> countriesList = continent.getCountries();
+			if (countriesList != null) {
+				for (Country country : countriesList) {
+					
+					
+					countryData.append(country.getName() + "," +  + country.getxCoordinate() + ","
+							+ country.getyCoordinate() + "," + country.getBelongToContinent().getName());
+					for (Country adjacentCountries : country.getAdjacentCountries()) {
+						countryData.append(",");
+						countryData.append(adjacentCountries.getName());
+					}
+					countryData.append("\n");
+				}
+				countryData.append("\n");
+			}			}
+		return countryData;
+	}
+	
 }
