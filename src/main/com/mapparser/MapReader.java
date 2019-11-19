@@ -392,7 +392,6 @@ public class MapReader {
 				}
 			}
 			//set map attributes
-			System.out.println(mapString);
 			mapFileReader = new Scanner(mapString.toString());
 			map = processConquestFilesAttribute(mapFileReader);
 
@@ -423,7 +422,6 @@ public class MapReader {
 		while (tokensForMapAttribute.hasMoreTokens()) {
 			
 			String str = tokensForMapAttribute.nextToken();
-			System.out.println(str);
 			if (str.equalsIgnoreCase("[Map]")) {
 				continue;
 			} else {
