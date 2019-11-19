@@ -19,19 +19,6 @@ import com.exception.InvalidMap;
  */
 public class MapWriter{
 
-	/**
-	 * This method processes the map by calling three different methods and makes a
-	 * string to be written in the map file.
-	 * @param map object of the map which is being processed
-	 * @return String to be written in the map file
-	 */
-	private String parseHmapAndGetString(Hmap map) {
-		StringBuilder mapAttrContent = new StringBuilder();
-		mapAttrContent = parseConquestMapAttribute(map);
-		mapAttrContent.append(parseConquestContinent(map));
-		mapAttrContent.append(parseConquestCountries(map));
-		return mapAttrContent.toString();
-	}
 	
 	/**
 	 * This method writes the map details to the map file.
@@ -48,7 +35,7 @@ public class MapWriter{
 				return;
 			}
 
-			String content = parseHmapAndGetString(map);
+			String content = parseDominationHmapAndGetString(map);
 			fileWriter = new FileWriter(file, false);
 			fileWriter.write(content);
 			fileWriter.close();
@@ -57,6 +44,22 @@ public class MapWriter{
 			System.err.println(e.getMessage());
 		}
 	}
+	 
+	 /**
+		 * This method processes the map by calling three different methods and makes a
+		 * string to be written in the map file.
+		 * @param map object of the map which is being processed
+		 * @return String to be written in the map file
+		 */
+		private String parseDominationHmapAndGetString(Hmap map) {
+			StringBuilder mapAttrContent = new StringBuilder();
+			mapAttrContent = parseDominationMapAttribute(map);
+			mapAttrContent.append(parseDominationContinent(map));
+			mapAttrContent.append(parseDominationCountries(map));
+			mapAttrContent.append(parseDominationBorders(map));
+			return mapAttrContent.toString();
+		}
+		
 
 	/**
 	 * This method process the map attributes.
@@ -178,7 +181,7 @@ public class MapWriter{
 				return;
 			}
 
-			String content = parseHmapAndGetString(map);
+			String content = parseConquestMapAndReturnString(map);
 			fileWriter = new FileWriter(file, false);
 			fileWriter.write(content);
 			fileWriter.close();
@@ -188,6 +191,20 @@ public class MapWriter{
 		}
 	}
 
+	/**
+	 * This method processes the map by calling three different methods and makes a string to be written in the map file.
+	 * @param map object of the map which is being processed
+	 * @return String to be written in the map file
+	 */
+	private String parseConquestMapAndReturnString(Hmap map){
+		StringBuilder content = new StringBuilder();
+		content = parseConquestMapAttribute(map);
+		content.append(parseConquestContinent(map));
+		content.append(parseConquestCountries(map));
+		return content.toString();
+	}
+	
+	
 	/**
 	 * This method process the map attributes.
 	 * @param map object of the map which is being processed
