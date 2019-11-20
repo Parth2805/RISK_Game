@@ -2,29 +2,20 @@ package com.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Observable;
 import java.util.Scanner;
-import java.util.Set;
 import java.util.Stack;
 
 import com.config.Commands;
 import com.entity.Card;
-import com.entity.Continent;
-import com.entity.Country;
 import com.entity.Hmap;
 import com.entity.Player;
 import com.exception.InvalidMap;
 import com.maingame.Main;
-import com.mapparser.MapReader;
+import com.mapparser.MapAdapter;
 import com.mapparser.MapVerifier;
-import com.mapparser.MapWriter;
 import com.models.CardModel;
 import com.models.PlayerModel;
-
-import static java.lang.System.exit;
 
 /**
  * This class reads, parses the command line string from user input.
@@ -35,7 +26,8 @@ import static java.lang.System.exit;
 public class GameController extends Observable {
 
 	Hmap rootMap;
-	MapWriter mapWriter;
+	MapAdapter mapAdapter;
+
 	String editFilePath = "";
 
 	boolean isReinfoceArmiesAssigned = false;
@@ -48,7 +40,7 @@ public class GameController extends Observable {
 
 	// default constructor to initialize members
 	public GameController(Main mainView) {
-		this.mapWriter = new MapWriter();
+		this.mapAdapter = new MapAdapter(new MapAdapter().getConquestMapParser());
 		this.playerModel = new PlayerModel();
 		this.cardModel = new CardModel();
 		this.rootMap = new Hmap();
@@ -129,7 +121,6 @@ public class GameController extends Observable {
 
 		String[] words = command.split(" ");
 		String commandType = words[0], filePath = "";
-		MapReader mapReader;
 		ClassLoader classloader = Thread.currentThread().getContextClassLoader();
 
 		switch (commandType) {
@@ -253,8 +244,7 @@ public class GameController extends Observable {
 
 			System.out.println("Saving File at: " + filePath);
 			File outputMapFile = new File(filePath);
-
-			mapWriter.writeMapFile(getMap(), outputMapFile);
+			mapAdapter.writeMapFile(outputMapFile, getMap());
 			break;
 
 		case Commands.MAP_COMMAND_EDITMAP:
@@ -266,13 +256,12 @@ public class GameController extends Observable {
 
 			editFilePath = System.getProperty("user.dir") + "\\src\\main\\resources\\" + words[1];
 			File editMapFile = new File(editFilePath);
-			mapReader = new MapReader();
 
 			if (editMapFile.exists()) {
 				try {
-					setMap(mapReader.readMapFile(editMapFile));
+					setMap(mapAdapter.readMapFile(editMapFile));
 				} catch (InvalidMap e) {
-					System.out.println("Exception: " + e.toString());
+					System.out.println("Exception: " + e.toString());				
 				}
 			} else {
 				try {
@@ -306,15 +295,12 @@ public class GameController extends Observable {
 			}
 
 			File inputMapFile = new File(classloader.getResource(words[1]).getFile().replace("%20", " "));
-			mapReader = new MapReader();
 
 			try {
-				setMap(mapReader.readMapFile(inputMapFile));
-
+				setMap(mapAdapter.readMapFile(inputMapFile));
 				// Update View
 				setChanged();
 				notifyObservers("loadmap");
-
 			} catch (InvalidMap e) {
 				System.out.println("Exception: " + e.toString());
 			}

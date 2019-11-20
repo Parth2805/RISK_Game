@@ -86,6 +86,7 @@ public class MapVerifier {
 			
 			if (t.isVisited() == false) {
 				message = t.getName() + " is not forming connected graph inside continent " + continent.getName() + ".";
+				System.out.println("Error: " + message);
 				returnValue = false;
 				break;
 			}
@@ -144,8 +145,8 @@ public class MapVerifier {
 	 */
 	public static boolean isMapConnectedGraph(Hmap map) {
 				
-		if (map.getContinents().size() < 2) {
-			System.out.println("There is only one continent in given map");
+		if (map.getContinents().size() < 1) {
+			System.out.println("Error: There are no continents in given map");
 			return false;
 		}
 		
@@ -155,7 +156,7 @@ public class MapVerifier {
 		for (Continent continent : map.getContinents()) {
 			
 			if (continent.isVisited() == false) {
-				System.out.println(continent.getName() + "xxxxxxxxxxxxxx");
+				System.out.println("Error: " + continent.getName() + " is not connected in the graph");
 				returnValue = false;
 				break;
 			}
