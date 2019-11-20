@@ -12,23 +12,23 @@ import com.entity.Hmap;
 import com.exception.InvalidMap;
 
 /**
- * @author Komal
- * @author Mehul
  * This class is responsible to write the map file when user creates the map.
  * 
+ * @author Komal
+ * @author Mehul 
  */
-public class MapWriter{
+public class MapWriter {
 
-	
 	/**
 	 * This method writes the map details to the map file.
+	 * 
 	 * @param map object of the map which is being processed
 	 * @param file file path
 	 */
-	 public void writeDominationMapFile(Hmap map, File file) {
+	public void writeDominationMapFile(Hmap map, File file) {
 
 		FileWriter fileWriter;
-		
+
 		try {
 			if (map == null) {
 				System.out.println("Map Object is NULL!");
@@ -44,25 +44,26 @@ public class MapWriter{
 			System.err.println(e.getMessage());
 		}
 	}
-	 
-	 /**
-		 * This method processes the map by calling three different methods and makes a
-		 * string to be written in the map file.
-		 * @param map object of the map which is being processed
-		 * @return String to be written in the map file
-		 */
-		private String parseDominationHmapAndGetString(Hmap map) {
-			StringBuilder mapAttrContent = new StringBuilder();
-			mapAttrContent = parseDominationMapAttribute(map);
-			mapAttrContent.append(parseDominationContinent(map));
-			mapAttrContent.append(parseDominationCountries(map));
-			mapAttrContent.append(parseDominationBorders(map));
-			return mapAttrContent.toString();
-		}
-		
+
+	/**
+	 * This method processes the map by calling three different methods and makes a
+	 * string to be written in the map file.
+	 * 
+	 * @param map object of the map which is being processed
+	 * @return String to be written in the map file
+	 */
+	private String parseDominationHmapAndGetString(Hmap map) {
+		StringBuilder mapAttrContent = new StringBuilder();
+		mapAttrContent = parseDominationMapAttribute(map);
+		mapAttrContent.append(parseDominationContinent(map));
+		mapAttrContent.append(parseDominationCountries(map));
+		mapAttrContent.append(parseDominationBorders(map));
+		return mapAttrContent.toString();
+	}
 
 	/**
 	 * This method process the map attributes.
+	 * 
 	 * @param map object of the map which is being processed
 	 * @return a String that contains the map properties.
 	 */
@@ -81,6 +82,7 @@ public class MapWriter{
 
 	/**
 	 * This method processes the continents.
+	 * 
 	 * @param map object of the map which is being processed
 	 * @return a string that contains details of the continents that will eventually
 	 *         be written in the map file.
@@ -92,9 +94,9 @@ public class MapWriter{
 		continentData.append("\n");
 
 		for (Continent continent : map.getContinents()) {
-			
+
 			String color = continent.getColor();
-			
+
 			if (null != color)
 				continentData.append(continent.getName() + " " + continent.getValue() + " " + continent.getColor());
 			else
@@ -102,12 +104,13 @@ public class MapWriter{
 
 			continentData.append("\n");
 		}
-		
+
 		return continentData;
 	}
 
 	/**
 	 * This method processes the countries.
+	 * 
 	 * @param map object of the map that is being processed
 	 * @return a string that contains details of the countries that will eventually
 	 *         be written in the map file.
@@ -123,20 +126,20 @@ public class MapWriter{
 			if (countriesList != null) {
 				for (Country country : countriesList) {
 					int continentIdx = map.getContinents().indexOf(country.getBelongToContinent()) + 1;
-					
+
 					countryData.append(map.getCountriesIdxMap().get(country.getName()) + " " + country.getName() + " "
-							+ continentIdx  + " " + country.getxCoordinate()
-							+ " " + country.getyCoordinate());
+							+ continentIdx + " " + country.getxCoordinate() + " " + country.getyCoordinate());
 					countryData.append("\n");
 				}
 			}
 		}
-		
+
 		return countryData;
 	}
 
 	/**
 	 * This method processes the borders.
+	 * 
 	 * @param map object of the map that is being processed
 	 * @return a string that contains details of the countries that will eventually
 	 *         be written in the map file.
@@ -146,14 +149,14 @@ public class MapWriter{
 		borderData.append("\n");
 		borderData.append("[borders]");
 		borderData.append("\n");
-		
-		for (Continent continent: map.getContinents()) {
-		
+
+		for (Continent continent : map.getContinents()) {
+
 			List<Country> countriesList = continent.getCountries();
 			if (countriesList != null) {
 				for (Country country : countriesList) {
 					borderData.append(map.getCountriesIdxMap().get(country.getName()));
-					
+
 					for (Country adjacentCountries : country.getAdjacentCountries()) {
 						borderData.append(" ");
 						borderData.append(map.getCountriesIdxMap().get(adjacentCountries.getName()));
@@ -162,19 +165,20 @@ public class MapWriter{
 				}
 			}
 		}
-		
+
 		return borderData;
 	}
-	
+
 	/**
 	 * This method writes the map details to the map file.
+	 * 
 	 * @param map object of the map which is being processed
 	 * @param file file path
 	 */
 	public void writeConquestMapFile(Hmap map, File file) {
 
 		FileWriter fileWriter;
-		
+
 		try {
 			if (map == null) {
 				System.out.println("Map Object is NULL!");
@@ -192,21 +196,23 @@ public class MapWriter{
 	}
 
 	/**
-	 * This method processes the map by calling three different methods and makes a string to be written in the map file.
+	 * This method processes the map by calling three different methods and makes a
+	 * string to be written in the map file.
+	 * 
 	 * @param map object of the map which is being processed
 	 * @return String to be written in the map file
 	 */
-	private String parseConquestMapAndReturnString(Hmap map){
+	private String parseConquestMapAndReturnString(Hmap map) {
 		StringBuilder content = new StringBuilder();
 		content = parseConquestMapAttribute(map);
 		content.append(parseConquestContinent(map));
 		content.append(parseConquestCountries(map));
 		return content.toString();
 	}
-	
-	
+
 	/**
 	 * This method process the map attributes.
+	 * 
 	 * @param map object of the map which is being processed
 	 * @return a String that contains the map properties.
 	 */
@@ -225,6 +231,7 @@ public class MapWriter{
 
 	/**
 	 * This method processes the continents.
+	 * 
 	 * @param map object of the map which is being processed
 	 * @return a string that contains details of the continents that will eventually
 	 *         be written in the map file.
@@ -236,16 +243,17 @@ public class MapWriter{
 		continentData.append("\n");
 
 		for (Continent continent : map.getContinents()) {
-			
+
 			continentData.append(continent.getName() + "=" + continent.getValue());
 			continentData.append("\n");
 		}
-		
+
 		return continentData;
 	}
 
 	/**
 	 * This method processes the countries.
+	 * 
 	 * @param map object of the map that is being processed
 	 * @return a string that contains details of the countries that will eventually
 	 *         be written in the map file.
@@ -261,9 +269,8 @@ public class MapWriter{
 			List<Country> countriesList = continent.getCountries();
 			if (countriesList != null) {
 				for (Country country : countriesList) {
-					
-					
-					countryData.append(country.getName() + "," +  + country.getxCoordinate() + ","
+
+					countryData.append(country.getName() + "," + country.getxCoordinate() + ","
 							+ country.getyCoordinate() + "," + country.getBelongToContinent().getName());
 					for (Country adjacentCountries : country.getAdjacentCountries()) {
 						countryData.append(",");
@@ -272,8 +279,8 @@ public class MapWriter{
 					countryData.append("\n");
 				}
 				countryData.append("\n");
-			}			}
+			}
+		}
 		return countryData;
 	}
-	
 }

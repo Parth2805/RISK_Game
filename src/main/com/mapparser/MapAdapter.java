@@ -3,134 +3,127 @@ package com.mapparser;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Scanner;
 
 import com.entity.Hmap;
 import com.exception.InvalidMap;
 
+
 /**
  * This Class for implementing adapter for domination map & conquest map.
  * @author Komal
  */
-public class MapAdapter implements MapInterface {
+public class MapAdapter extends DominationMapParser implements MapInterface {
 
-	DominationMapParser dominationParser;
-	ConquestMapParser conquestParser;
-	Hmap map;
+	ConquestMapParser conquestMapParser;
 	
 	/**
-	 * default constructor to initialize members
-	 */
-	public MapAdapter() {
-		this.dominationParser = new DominationMapParser();
-		this.conquestParser = new ConquestMapParser();
+	 * This is parameterized constructor for Map Adapter.
+	 * @param conquestParser Conquest Map Parser object.
+	 */	
+	public MapAdapter(ConquestMapParser conquestParser) {
+		this.conquestMapParser = conquestParser;
 	}
 	
 	/**
-	 * default constructor to initialize members
-	 * @throws FileNotFoundException 
+	 * This is the default constructor of Map Adapter.
+	 */	
+	public MapAdapter() {
+		this.conquestMapParser = new ConquestMapParser();
+	}
+	
+	/**
+	 * Returns conquest Map Parser object.
+	 * @return conquestMapParser
 	 */
-	public static String identifyFileType(File file)  throws InvalidMap {
+	public ConquestMapParser getConquestMapParser() {
+		return conquestMapParser;
+	}
+	
+	/**
+	 * This method identifies the domination map file format.
+	 * 
+	 * @return true if file is Domination Map File, false otherwise
+	 */
+	public static boolean isDominationMapFile(File file) {
 		
-		String mapType;
-		Scanner mapFileReader;
-		StringBuilder mapString = new StringBuilder();
+		String fileContent = new String();
+		Scanner sc = null;
+		
 		try {
-			mapFileReader = new Scanner(new FileInputStream(file));
-			while (mapFileReader.hasNext()) {
-				String line = mapFileReader.nextLine();
-				mapString.append(line);
-			}
-		} catch (IOException e) {
-			System.out.println("Exception: " + e.toString() + " Map File is not selected");
-		}
+			sc = new Scanner(new FileInputStream(file));
+			fileContent = sc.useDelimiter("\\Z").next();
+			
+		} catch (FileNotFoundException e1) {
+			System.out.println("Exception: " + e1.toString());
+		}			
 		
-		if(mapString.toString().contains("[borders]")) {
-			mapType = "DominationMapFile";
-		} else {
-			mapType = "ConquestMapFile";
-		}
+		if (fileContent.contains("[borders]"))
+			return true;
 		
-		return mapType;
+		return false;
 	}
 	
 	/**
 	 * Read domination and conquest map file
-	 * @param fileType Identified file type which can be domination or conquest
+	 * 
 	 * @param file File to read
 	 * @return the map
 	 * @throws InvalidMap
 	 * @throws FileNotFoundException 
 	 */
 	@Override
-	public Hmap mapReader(File file) throws InvalidMap {
+	public Hmap readMapFile(File file) throws InvalidMap {
 		
-		String fileType;
-		
-			fileType = MapAdapter.identifyFileType(file);
-		
-		if (fileType.equalsIgnoreCase("DominationMapFile")) {
-			map = dominationParser.readDominationMapFile(file);
-		} else if (fileType.equalsIgnoreCase("ConquestMapFile")) {
-			map = conquestParser.readConquestMapFile(file);
-		}
-		
-		return map;
+		if (MapAdapter.isDominationMapFile(file)) {
+			return readDominationMapFile(file);
+		} else {
+			return conquestMapParser.readConquestMapFile(file);
+		}		
 	}
 
 	/**
 	 * Write domination and conquest map file
 	 * 
-	 * @param fileType Identified file type which can be domination or conquest
 	 * @param file File to read
 	 * @param map Object of the map which is being processed
 	 */
 	@Override
-	public void mapWriter(File file, Hmap map) throws InvalidMap{
-		
-		String fileType;
-		fileType = MapAdapter.identifyFileType(file);
-		
-		if (fileType.equalsIgnoreCase("DominationMapFile")) {
-			dominationParser.writeDominationFile(map, file);
-		} else if (fileType.equalsIgnoreCase("ConquestMapFile")) {
-			conquestParser.writeConquestMapFile(map, file);
+	public void writeMapFile(File file, Hmap map) {
+	
+		if (MapAdapter.isDominationMapFile(file)) {
+			writeDominationFile(map, file);
+		} else {
+			conquestMapParser.writeConquestMapFile(map, file);
 		}
 	}
 }
 
 /**
- * 
- * @author user
- * This class is to Parse Domination Map
+ *  This class is to Parse Domination Map
  */
 class DominationMapParser {
 
-	Hmap map;
 	MapReader mapReader;
 	MapWriter mapWriter;
 
 	/**
-	* default constructor to initialize members
-	*/
+	 * default constructor to initialize members
+	 */
 	public DominationMapParser() {
 		this.mapReader = new MapReader();
 		this.mapWriter = new MapWriter();
-		this.map = new Hmap();
 	}
 
 	/**
 	 * This method read Domination map
 	 * 
-	 * @param map Hmap object
 	 * @param file File to be read
-	 * @return map returns the map object after processing the file data
+	 * @return map the map object after processing the file data
 	 * @throws InvalidMap
 	 */
 	public Hmap readDominationMapFile(File file) throws InvalidMap {
-		map = mapReader.readDominationMapFile(file);
-		return map;
+		return mapReader.readDominationMapFile(file);
 	}
 
 	/**
@@ -154,8 +147,6 @@ class ConquestMapParser {
 
 	MapReader mapReader;
 	MapWriter mapWriter;
-	Hmap map;
-	String mapType;
 	
 	/**
 	 * default constructor to initialize members
@@ -168,14 +159,12 @@ class ConquestMapParser {
 	/**
 	 * This method read conquest map
 	 * 
-	 * @param map Hmap object
 	 * @param file File to be read
 	 * @return map returns the map object after processing the file data
 	 * @throws InvalidMap
 	 */
 	public Hmap readConquestMapFile(File file) throws InvalidMap {
-		map = mapReader.readConquestMapFile(file);
-		return map;
+		return mapReader.readConquestMapFile(file);
 	}
 
 	/**
@@ -188,3 +177,21 @@ class ConquestMapParser {
 		mapWriter.writeConquestMapFile(map, file);
 	}
 }
+
+/**
+ * This is a interface for MapAdapter class which has Map Reader and Map Writer methods
+ */
+interface MapInterface {
+	
+	/**
+	 * Method description to Read domination and conquest map file 
+	 * @throws InvalidMap 
+	 */
+	public Hmap readMapFile(File file) throws InvalidMap;
+	
+	/**
+	 * Method description to Write domination and conquest map file
+	 */
+	public void writeMapFile(File file, Hmap map);
+}
+

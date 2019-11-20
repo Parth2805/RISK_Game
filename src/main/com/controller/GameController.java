@@ -26,7 +26,8 @@ import com.models.PlayerModel;
 public class GameController extends Observable {
 
 	Hmap rootMap;
-	MapAdapter mapAdaptor;
+	MapAdapter mapAdapter;
+
 	String editFilePath = "";
 
 	boolean isReinfoceArmiesAssigned = false;
@@ -39,7 +40,7 @@ public class GameController extends Observable {
 
 	// default constructor to initialize members
 	public GameController(Main mainView) {
-		this.mapAdaptor = new MapAdapter();
+		this.mapAdapter = new MapAdapter(new MapAdapter().getConquestMapParser());
 		this.playerModel = new PlayerModel();
 		this.cardModel = new CardModel();
 		this.rootMap = new Hmap();
@@ -115,9 +116,8 @@ public class GameController extends Observable {
 	 * Parses the String and calls the related map edit commands.
 	 * 
 	 * @param command User input Command/String
-	 * @throws InvalidMap 
 	 */
-	public void processMapEditCommands(String command) throws InvalidMap {
+	public void processMapEditCommands(String command) {
 
 		String[] words = command.split(" ");
 		String commandType = words[0], filePath = "";
@@ -244,7 +244,7 @@ public class GameController extends Observable {
 
 			System.out.println("Saving File at: " + filePath);
 			File outputMapFile = new File(filePath);
-			mapAdaptor.mapWriter(outputMapFile, getMap());
+			mapAdapter.writeMapFile(outputMapFile, getMap());
 			break;
 
 		case Commands.MAP_COMMAND_EDITMAP:
@@ -258,7 +258,11 @@ public class GameController extends Observable {
 			File editMapFile = new File(editFilePath);
 
 			if (editMapFile.exists()) {
-				setMap(mapAdaptor.mapReader(editMapFile));
+				try {
+					setMap(mapAdapter.readMapFile(editMapFile));
+				} catch (InvalidMap e) {
+					System.out.println("Exception: " + e.toString());				
+				}
 			} else {
 				try {
 					editMapFile.createNewFile();
@@ -292,11 +296,14 @@ public class GameController extends Observable {
 
 			File inputMapFile = new File(classloader.getResource(words[1]).getFile().replace("%20", " "));
 
-			setMap(mapAdaptor.mapReader(inputMapFile));
-
-			// Update View
-			setChanged();
-			notifyObservers("loadmap");
+			try {
+				setMap(mapAdapter.readMapFile(inputMapFile));
+				// Update View
+				setChanged();
+				notifyObservers("loadmap");
+			} catch (InvalidMap e) {
+				System.out.println("Exception: " + e.toString());
+			}
 			break;
 
 		default:
