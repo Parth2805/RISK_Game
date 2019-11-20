@@ -16,7 +16,6 @@ import com.entity.Hmap;
 import com.exception.InvalidMap;
 
 
-
 /**
  * This class reads, parses the map file and sets data in corresponding objects.
  * 
@@ -457,9 +456,9 @@ public class MapReader {
 		map.setContinentMap(continentMap);
 		map.setContinents(continentList);
 
-		// // Set Hashmap Country Name: Country object
+		// Set Hashmap Country Name: Country object
 		Map<String, Country> countryMap = map.getCountryMap();
-		//
+
 		// Set country list
 		ArrayList<Country> countryList = map.getCountries();
 
