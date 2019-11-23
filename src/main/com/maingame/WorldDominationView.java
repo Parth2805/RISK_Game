@@ -11,6 +11,7 @@ import com.entity.Continent;
 import com.entity.Country;
 import com.entity.Hmap;
 import com.entity.Player;
+import com.utilities.GameUtilities;
 
 
 /**
@@ -50,8 +51,7 @@ public class WorldDominationView implements Observer {
 
                 mapPercent = Math.round(mapPercent * 100.0) / 100.0;
                 System.out.println("Player: " + p.getName() + " has " + mapPercent + "% of map");
-                System.out.println("Player: " + p.getName() + " has continents = " + 
-                		gameController.getPlayerModel().getContinentOwnedByPlayer(p));
+                System.out.println("Player: " + p.getName() + " has continents = " + GameUtilities.getContinentOwnedByPlayer(p));
                 System.out.println("Player: " + p.getName() + " has current armies = " + p.getArmies());
               
                 int armiesOnMap = 0;

@@ -38,4 +38,10 @@ public class Commands {
 	public static final String MAP_COMMAND_ATTACKMOVE = "attackmove";
 	public static final String MAP_COMMAND_ATTACK_OPTION_ALLOUT = "-allout";
 	public static final String MAP_COMMAND_ATTACK_OPTION_NOATTACK = "-noattack";
+	
+	public static final String PLAYER_STRATEGY_OPTION_HUMAN = "human";
+	public static final String PLAYER_STRATEGY_OPTION_AGGRESSIVE = "aggressive";
+	public static final String PLAYER_STRATEGY_OPTION_RANDOM = "random";
+	public static final String PLAYER_STRATEGY_OPTION_BENELOENT = "benevolent";
+	public static final String PLAYER_STRATEGY_OPTION_CHEATER = "cheater";
 }

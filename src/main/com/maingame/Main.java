@@ -7,7 +7,11 @@ import java.util.Scanner;
 import com.config.GameState;
 import com.controller.GameController;
 
-
+/**
+ * This class implements the phase view of the game.
+ *
+ * @author Mehul
+ */
 public class Main implements Observer {
 
 	static GameState gamePhase;
@@ -29,6 +33,11 @@ public class Main implements Observer {
 		gamePhase = gameState;
 	}
 	
+	/**
+	 * This method controls all phases of the game.
+	 * 
+	 * @param args command line arguments
+	 */
 	public static void main(String[] args) {
 		
 		Main mainView = new Main();
@@ -64,7 +73,7 @@ public class Main implements Observer {
 
 			case RISK_STATE_GAMEPLAY_CREATE_PLAYERS:
 				
-				System.out.println("Current game phase: Gameplay create players (gameplayer -add playername -remove playername, populatecountries, showmap)");
+				System.out.println("Current game phase: Gameplay create players (gameplayer -add playername strategy -remove playername, populatecountries, showmap)");
 				System.out.println("Use \"populatecountries\" command to allocate initial armies to players");
 				System.out.println("Please enter any commands to continue ...");
 				

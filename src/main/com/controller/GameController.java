@@ -16,6 +16,7 @@ import com.mapparser.MapAdapter;
 import com.mapparser.MapVerifier;
 import com.models.CardModel;
 import com.models.PlayerModel;
+import com.utilities.GameUtilities;
 
 /**
  * This class reads, parses the command line string from user input.
@@ -333,14 +334,17 @@ public class GameController extends Observable {
 			for (int idx = 1; idx < words.length; idx++) {
 				if (words[idx].equals(Commands.MAP_COMMAND_OPTION_ADD)) {
 
-					if (words.length < idx + 2) {
-						System.out.println("Invalid command, Try again !!!");
+					if (words.length < idx + 3) {
+						System.out.println("Error: Invalid command, Try again !!!");
 						return;
 					}
 
 					String playerName = words[idx + 1];
-					playerModel.createPlayer(playerName);
-					idx = idx + 1;
+					String playerStrategy = words[idx + 2]; 
+					
+					playerModel.createPlayer(playerName, playerStrategy);
+					
+					idx = idx + 2;
 
 				} else if (words[idx].equals(Commands.MAP_COMMAND_OPTION_REMOVE)) {
 
@@ -366,7 +370,7 @@ public class GameController extends Observable {
 			if (playerModel.assignArmiesToAllPlayers()) {
 
 				playerModel.populateCountries(getMap());
-				playerModel.intitializeArmiesForAllCountries(getMap());
+				GameUtilities.intitializeArmiesForAllCountries(getMap());
 
 				for (Player p : playerModel.getPlayersList()) {
 					int countryCount = p.getAssignedCountry().size();
@@ -409,7 +413,7 @@ public class GameController extends Observable {
 		switch (commandType) {
 
 		case Commands.MAP_COMMAND_SHOWMAP:
-			playerModel.gamePlayShowmap(getMap());
+			GameUtilities.gamePlayShowmap(getMap());
 			break;
 
 		case Commands.MAP_COMMAND_PLACE_ARMY:
@@ -493,7 +497,7 @@ public class GameController extends Observable {
 		
 		case Commands.MAP_COMMAND_SHOWMAP:
 			isShowMapCommand = true;
-			playerModel.gamePlayShowmap(getMap());
+			GameUtilities.gamePlayShowmap(getMap());
 			break;
 
 		case Commands.MAP_COMMAND_REINFORCE:
@@ -519,7 +523,7 @@ public class GameController extends Observable {
 				return;
 			}
 
-			if (!playerModel.isCountryBelongToPlayer(getMap(), getCurrentPlayer(), countryName)) {
+			if (!GameUtilities.isCountryBelongToPlayer(getMap(), getCurrentPlayer(), countryName)) {
 				System.out.println("Error: Given country " + countryName + " does not belong to " + getCurrentPlayer());
 				return;
 			}
@@ -603,7 +607,7 @@ public class GameController extends Observable {
 				setChanged();
 				notifyObservers("show-world-domination");
 				
-				if (playerModel.isPlayerWonGame(getCurrentPlayer(), rootMap.getCountries())){
+				if (GameUtilities.isPlayerWonGame(getCurrentPlayer(), rootMap)) {
 					System.out.println("Player: " + getCurrentPlayer().getName()+ " has won the game :)");
 					setChanged();
 					notifyObservers("gameover");
@@ -633,8 +637,8 @@ public class GameController extends Observable {
 					notifyObservers("show-world-domination");
 				}
 				
-				if (playerModel.isPlayerWonGame(getCurrentPlayer(), rootMap.getCountries())){
-					System.out.println("Player:" + getCurrentPlayer().getName()+ 
+				if (GameUtilities.isPlayerWonGame(getCurrentPlayer(), rootMap)) {
+					System.out.println("Player:" + getCurrentPlayer().getName() + 
 							" has won the game !!!");
 					setChanged();
 					notifyObservers("gameover");
@@ -643,7 +647,7 @@ public class GameController extends Observable {
 			break;
 
 		case Commands.MAP_COMMAND_SHOWMAP:
-			playerModel.gamePlayShowmap(getMap());
+			GameUtilities.gamePlayShowmap(getMap());
 			break;
 
 		default:
@@ -689,7 +693,7 @@ public class GameController extends Observable {
 		switch (commandType) {
 
 		case Commands.MAP_COMMAND_SHOWMAP:
-			playerModel.gamePlayShowmap(getMap());
+			GameUtilities.gamePlayShowmap(getMap());
 			break;
 
 		case Commands.MAP_COMMAND_FORTIFY:

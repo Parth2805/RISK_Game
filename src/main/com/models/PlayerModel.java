@@ -4,6 +4,7 @@ import java.util.*;
 
 import com.config.Commands;
 import com.entity.*;
+import com.utilities.GameUtilities;
 import com.config.Config;
 
 /**
@@ -13,8 +14,6 @@ import com.config.Config;
 public class PlayerModel {
 
     private ArrayList<Player> playersList;
-    private static int[] numOfArmies = {Config.CONFIG_ARMIES_TWO_PLAYER, Config.CONFIG_ARMIES_THREE_PLAYER,
-            Config.CONFIG_ARMIES_FOUR_PLAYER, Config.CONFIG_ARMIES_FIVE_PLAYER, Config.CONFIG_ARMIES_SIX_PLAYER};
 
     /**
      * This is the default constructor of Player Model.
@@ -66,17 +65,24 @@ public class PlayerModel {
      * This method creates the new player.
      *
      * @param playerName name of the player
+     * @param playerStrategy strategy of the player
+     * 
      * @return true if player gets created, false otherwise
      */
-    public boolean createPlayer(String playerName) {
+    public boolean createPlayer(String playerName, String playerStrategy) {
 
         int id = playersList.size();
 
         if (id >= 6) {
-            System.out.println("Exception: Maximum number of players = 6. Can't create more players");
+            System.out.println("Error: Maximum number of players = 6. Can't create more players");
             return false;
         }
 
+        if (!GameUtilities.isValidStrategy(playerStrategy)) {
+    	   System.out.println("Error: Invalid strategy: " + playerStrategy);
+           return false;
+        }
+        
         Player newPlayer = new Player(id + 1, playerName);
 
         if (playersList.contains(newPlayer)) {
@@ -84,6 +90,7 @@ public class PlayerModel {
             return false;
         }
 
+        newPlayer.setStrategy(GameUtilities.getStrategyObject(playerStrategy));
         playersList.add(newPlayer);
         System.out.println("Player: " + playerName + " is added in the game");
 
@@ -98,6 +105,8 @@ public class PlayerModel {
     public boolean assignArmiesToAllPlayers() {
         int armiesCount = 0;
         int numPlayers = playersList.size();
+        int[] numOfArmies = {Config.CONFIG_ARMIES_TWO_PLAYER, Config.CONFIG_ARMIES_THREE_PLAYER,
+                Config.CONFIG_ARMIES_FOUR_PLAYER, Config.CONFIG_ARMIES_FIVE_PLAYER, Config.CONFIG_ARMIES_SIX_PLAYER};
 
         if (numPlayers >= 2) {
 
@@ -126,22 +135,11 @@ public class PlayerModel {
             System.out.println("Placing armies for player: " + p.getName());
             while (p.getArmies() > 0) {
 
-                Country con = p.getAssignedCountry().get(getRandomNumber(p.getAssignedCountry().size() - 1));
+                Country con = p.getAssignedCountry().get(GameUtilities.getRandomNumber(p.getAssignedCountry().size() - 1));
                 con.setArmy(con.getArmy() + 1);
                 p.setArmies(p.getArmies() - 1);
             }
         }
-    }
-
-    /**
-     * This method generates random number from 1 to number.
-     *
-     * @param number number up to which find random numbers to be generated, from 0 to
-     *               number
-     * @return random number from 1 to number, including number
-     */
-    public static int getRandomNumber(int number) {
-        return new Random().nextInt(number + 1);
     }
 
     /**
@@ -156,7 +154,7 @@ public class PlayerModel {
 
         int playerArmies = player.getArmies();
 
-        if (!isCountryBelongToPlayer(map, player, countryName)) {
+        if (!GameUtilities.isCountryBelongToPlayer(map, player, countryName)) {
             System.out.println("Error: Given country " + countryName + " does not belong to " + player);
             return false;
         }
@@ -202,7 +200,7 @@ public class PlayerModel {
      */
     public void populateCountries(Hmap map) {
 
-        ArrayList<Country> countriesList = getCountryListFromMap(map);
+        ArrayList<Country> countriesList = GameUtilities.getCountryListFromMap(map);
         int playerNum = 0;
         Player currentPlayer;
 
@@ -231,86 +229,6 @@ public class PlayerModel {
                     if (c.getName().equalsIgnoreCase(countryAssigned.getName()))
                         c.setPlayer(currentPlayer);
                 }
-            }
-        }
-    }
-
-    /**
-     * Parses the map and gets country list
-     *
-     * @param map map object
-     * @return list for countries from root Map
-     */
-    public ArrayList<Country> getCountryListFromMap(Hmap map) {
-        ArrayList<Country> countryListfromMap = new ArrayList<Country>();
-
-        for (Continent c : map.getContinents()) {
-            for (Country cont : c.getCountries()) {
-                countryListfromMap.add(cont);
-            }
-        }
-
-        return countryListfromMap;
-    }
-
-    /**
-     * It shows all countries and continents, armies on each country, ownership, and
-     * connectivity
-     *
-     * @param map main map
-     */
-    public void gamePlayShowmap(Hmap map) {
-
-        System.out.println("----------------------------------");
-
-        for (Continent cont : map.getContinents()) {
-            for (Country c : cont.getCountries()) {
-                System.out.println(c.getBelongToContinent().getName() + ": " + c.getName() + ": Army count: "
-                        + c.getArmy() + ", Player: " + c.getPlayer().getName() + ", Adjacent Countries: "
-                        + c.getAdjacentCountries());
-            }
-        }
-
-        System.out.println("----------------------------------");
-    }
-
-    /**
-     * This method counts the number of reinforcement armies for the player.
-     *
-     * @param player current player object
-     * @return the number armies player will get in reinforcement
-     */
-    public int countReinforcementArmies(Player player) {
-        int currentArmies = player.getArmies();
-        int countryCount = player.getAssignedCountry().size();
-
-        if (countryCount < 9) {
-            currentArmies = currentArmies + 3;
-        } else {
-            currentArmies += Math.floor(countryCount / 3);
-        }
-
-        for (Continent c: getContinentOwnedByPlayer(player)) {
-        	
-        	if (c.getValue() > 0)
-        		currentArmies += c.getValue();
-        	else
-        		currentArmies += c.getCountries().size();
-        }
-        
-        return currentArmies;
-    }
-
-    /**
-     * This method initialize armies for all the countries
-     * @param map main map It will put one army on every country
-     */
-    public void intitializeArmiesForAllCountries(Hmap map) {
-
-        for (Continent cont : map.getContinents()) {
-            for (Country c : cont.getCountries()) {
-                c.setArmy(c.getArmy() + 1);
-                c.getPlayer().setArmies(c.getPlayer().getArmies() - 1);
             }
         }
     }
@@ -353,7 +271,7 @@ public class PlayerModel {
     public void assignReinforceArmiesToPlayers() {
 
         for (Player p : getPlayersList()) {
-            int reinforeArmies = countReinforcementArmies(p);
+            int reinforeArmies = GameUtilities.countReinforcementArmies(p);
             p.setArmies(reinforeArmies);
         }
     }
@@ -368,15 +286,14 @@ public class PlayerModel {
      * @param armiesCount number of armies
      * @return true if fortification is successful, false otherwise
      */
-    public boolean fortifyCurrentPlayer(Hmap map, Player player, String fromCountry, String toCountry,
-                                        int armiesCount) {
+    public boolean fortifyCurrentPlayer(Hmap map, Player player, String fromCountry, String toCountry, int armiesCount) {
 
-        if (!isCountryBelongToPlayer(map, player, fromCountry)) {
+        if (!GameUtilities.isCountryBelongToPlayer(map, player, fromCountry)) {
             System.out.println("Error: Given country " + fromCountry + " does not belong to " + player);
             return false;
         }
 
-        if (!isCountryBelongToPlayer(map, player, toCountry)) {
+        if (!GameUtilities.isCountryBelongToPlayer(map, player, toCountry)) {
             System.out.println("Error: Given country " + toCountry + " does not belong to " + player);
             return false;
         }
@@ -390,7 +307,7 @@ public class PlayerModel {
             return false;
         }
 
-        if (isCountriesAdjacent(map, fromCountry, toCountry)) {
+        if (GameUtilities.isCountriesAdjacent(map, fromCountry, toCountry)) {
 
             for (Continent cont : map.getContinents()) {
                 // Update Armies count for fortification
@@ -415,64 +332,7 @@ public class PlayerModel {
 
         return false;
     }
-
-    /**
-     * This method will fortify for current player
-     *
-     * @param map  main map
-     * @param currentPlayer current player
-     * @param country name of to country
-     * @return true if country belong to given player
-     */
-    public boolean isCountryBelongToPlayer(Hmap map, Player currentPlayer, String country) {
-
-        if (map.getCountryMap().get(country) == null) {
-            System.out.println("Error: Given country " + country + " does not exist in map");
-            return false;
-        }
-
-        if (map.getCountryMap().get(country).getPlayer().getName().equalsIgnoreCase(currentPlayer.getName()))
-            return true;
-
-        return false;
-    }
-
-    /**
-     * This method will fortify for current player
-     *
-     * @param map         map object
-     * @param fromCountry name of from country
-     * @param toCountry   name of to country
-     * @return true if countries are adjacent, false otherwise
-     */
-    public boolean isCountriesAdjacent(Hmap map, String fromCountry, String toCountry) {
-
-        for (String nbrCountry : map.getCountryMap().get(fromCountry).getNeighborCountries()) {
-            if (nbrCountry.equalsIgnoreCase(toCountry)) {
-                for (String origCountry : map.getCountryMap().get(toCountry).getNeighborCountries()) {
-                    if (origCountry.equalsIgnoreCase(fromCountry))
-                        return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    /**
-     * This method will formulate country hashmap.
-     *
-     * @param countryList list of countries
-     * @return country hashmap
-     */
-    public Map<String, Country> getCountryMapFromList(ArrayList<Country> countryList) {
-        Map<String, Country> countryMap = new TreeMap<String, Country>(String.CASE_INSENSITIVE_ORDER);
-
-        for (Country c : countryList)
-            countryMap.put(c.getName(), c);
-
-        return countryMap;
-    }
-
+    
     /**
      * This method checks whether current player is the last player or not.
      *
@@ -513,20 +373,20 @@ public class PlayerModel {
         }
 
         // check if attacking country belongs to player
-        if (!isCountryBelongToPlayer(map, player, attackingCountryName)) {
+        if (!GameUtilities.isCountryBelongToPlayer(map, player, attackingCountryName)) {
             System.out.println("Error: Given country " + attackingCountryName + " does not belong to " + player);
             return false;
         }
 
         // check if defending country does not belongs to same player
-        if (isCountryBelongToPlayer(map, player, defendingCountryName)) {
+        if (GameUtilities.isCountryBelongToPlayer(map, player, defendingCountryName)) {
             System.out.println("Error: Can't attack becuase attacking country: " + attackingCountryName
                     + " and defending country " + defendingCountryName + " belongs to same" + player);
             return false;
         }
 
         // check if defending country belongs to neighbor
-        if (!isCountriesAdjacent(map, attackingCountryName, defendingCountryName)) {
+        if (!GameUtilities.isCountriesAdjacent(map, attackingCountryName, defendingCountryName)) {
             System.out.println("Error: Can't attack to this country as its not your neighbor");
             return false;
         }
@@ -561,7 +421,7 @@ public class PlayerModel {
         // Change ownership of country
         if (defendCountry.getArmy() <= 0) {
         	
-            modifyDefendingCountryOwnerShip(defendCountry, attackCountry);
+            GameUtilities.changeCountryOwnerShip(defendCountry, attackCountry);
             System.out.println(defenderPlayer + " has lost the country: " + defendCountry);
             
             player.setnumOfAttacks(player.getnumOfAttacks() + 1);
@@ -572,9 +432,8 @@ public class PlayerModel {
 	            System.out.println(player + " has won: " + wonCard);
         	}        	
             
-            if (!isPlayerWonGame(player, map.getCountries())) {
+            if (!GameUtilities.isPlayerWonGame(player, map))
                 attackMove(attackCountry, defendCountry);
-            }
         }
 
         // Is game over for defender player?
@@ -589,7 +448,7 @@ public class PlayerModel {
     }
 
     /**
-     * This method is to implement attackmove command
+     * This method implements attack move command
      * 
      * @param attackCountry name of the attacker country name
      * @param defendCountry name of the defender country name
@@ -756,36 +615,6 @@ public class PlayerModel {
 	}
 
     /**
-     * This returns
-     *
-     * @param player Player object
-     * @param totalCoutries list of total countries
-     * @return true if player won the game, false otherwise
-     */
-    public boolean isPlayerWonGame(Player player, List<Country> totalCoutries) {
-
-        if (player.getAssignedCountry().size() == totalCoutries.size())
-            return true;
-
-        return false;
-    }
-
-    /**
-     * This modify the ownership of defending country
-     *
-     * @param defendingCountry name of the defending country
-     * @param attackingCountry name of the attacking country
-     */
-    public void modifyDefendingCountryOwnerShip(Country defendingCountry, Country attackingCountry) {
-
-        List<Country> defendersCountries = defendingCountry.getPlayer().getAssignedCountry();
-
-        defendersCountries.remove(defendingCountry);
-        defendingCountry.setPlayer(attackingCountry.getPlayer());
-        attackingCountry.getPlayer().getAssignedCountry().add(defendingCountry);
-    }
-
-    /**
      * This method check for possibility of attack
      * @param currentPlayer Current Player name
      * @return true if attack is possible, false otherwise
@@ -832,32 +661,5 @@ public class PlayerModel {
         }
 
         return true;
-    }
-    
-    /**
-     * Get list of continents owned by player
-     *
-     * @param player player object
-     * @return continentList continent List owned by player
-     */
-    public Set<Continent> getContinentOwnedByPlayer(Player player) {
-    	Set<Continent> continentList = new HashSet<Continent>();
-        Boolean isAllCountriesOwned;
-
-        for (Country c : player.getAssignedCountry()) {
-
-            isAllCountriesOwned = true;
-            Continent continent = c.getBelongToContinent();
-
-            for (Country country : continent.getCountries()) {
-                if (!country.getPlayer().getName().equalsIgnoreCase(player.getName()))
-                    isAllCountriesOwned = false;
-            }
-
-            if (isAllCountriesOwned)
-                continentList.add(continent);
-        }
-
-        return continentList;
     }
 }

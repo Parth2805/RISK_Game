@@ -8,6 +8,7 @@ import com.entity.Country;
 import com.entity.Player;
 import com.mapparser.MapVerifier;
 import com.models.PlayerModel;
+import com.utilities.GameUtilities;
 
 /**
  * This is the test class for PlayerCommands
@@ -57,7 +58,7 @@ public class PlayerModelTest {
 			player.getAssignedCountry().add(c1);
 		}
 		
-		int armies = playerCmd.countReinforcementArmies(player);
+		int armies = GameUtilities.countReinforcementArmies(player);
 
 		assertEquals(3, armies);
 	}
@@ -75,7 +76,7 @@ public class PlayerModelTest {
 			player.getAssignedCountry().add(c1);
 		}
 		
-		int armies = playerCmd.countReinforcementArmies(player);
+		int armies = GameUtilities.countReinforcementArmies(player);
 		assertEquals(8, armies);
 	}
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import com.entity.Card;
 import com.entity.Country;
 import com.entity.Player;
+import com.strategy.Strategy;
 
 /**
  * @author Mehul
@@ -24,7 +25,9 @@ public class Player {
 	private List <Country> assignedCountry;
 	private List <Card> cardList;
 	private int numOfAttacks;
-
+	private Strategy strategy;
+	
+	
 	/**
 	 * Player parameterized constructor.
 	 * @param id of Player
@@ -38,6 +41,24 @@ public class Player {
 		this.cardList = new ArrayList<>();
 		this.numeberOfCardsExchanged = 0;
 		this.numOfAttacks = 0;
+	}
+	
+		
+	
+	/**
+	 * Getter method for the player strategy.
+	 * @return the strategy
+	 */
+	public Strategy getStrategy() {
+		return strategy;
+	}
+
+	/**
+	 * Setter method for the player strategy.
+	 * @param strategy set strategy
+	 */
+	public void setStrategy(Strategy strategy) {
+		this.strategy = strategy;
 	}
 
 	/**

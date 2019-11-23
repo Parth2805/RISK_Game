@@ -2,6 +2,8 @@ package com.model;
 
 import com.models.CardModel;
 import com.models.PlayerModel;
+import com.utilities.GameUtilities;
+
 import org.junit.*;
 import static org.junit.Assert.*;
 import java.util.*;
@@ -178,11 +180,8 @@ public class PlayerModelAttackTest {
      */
     @Test
     public void countReinforcementArmiesTest() {
-    	int currentArmies =10;
-		int countryCount = 12;
-    	int count=playerModel.countReinforcementArmies(player);
-    	assertNotEquals(count,10);
-    	
+     	int count = GameUtilities.countReinforcementArmies(player);
+    	assertNotEquals(count, 10);   	
     }
     
     /**
