@@ -265,45 +265,8 @@ public class GameUtilities {
     	}
     	
     	return null;
-	}
-    
-    /**
-     * 
-     * @param map
-     * @param sourceCountry
-     * @param destCountry
-     * @return
-     */
-    public static boolean isCountryConnected(Hmap map, Country sourceCountry, Country destCountry) {
-    	
-    	// Initialize before BFS
-    	for (Country con: map.getCountries()) {
-    		con.setVisited(false);
-    	}
-    	
-    	LinkedList<Country> queue = new LinkedList<Country>();
-    	sourceCountry.setVisited(true);
-    	queue.add(sourceCountry);
-    	
-    	// Run BFS
-    	while (queue.size() != 0) {
-    		
-    		Country country = queue.poll();	
-    		for (Country nbrCountry: country.getAdjacentCountries()) {
-    			if (!nbrCountry.isVisited()) {
-    				nbrCountry.setVisited(true);
-    				queue.add(nbrCountry);
-    			}
-    		}
-    	}
-    	
-    	// Destination is connected from source
-    	if (destCountry.isVisited())
-    		return true;
-    	
-    	return false;
-    }
-    
+	}   
+     
 	/**
 	 * This method gives the defending countries for given country.
 	 * @param country Selected country
@@ -345,5 +308,42 @@ public class GameUtilities {
         }
 
         return country;
+    }
+
+    /**
+     *
+     * @param map
+     * @param sourceCountry
+     * @param destCountry
+     * @return
+     */
+    public static boolean isCountryConnected(Hmap map, Country sourceCountry, Country destCountry) {
+
+        // Initialize before BFS
+        for (Country con: map.getCountries()) {
+            con.setVisited(false);
+        }
+
+        LinkedList<Country> queue = new LinkedList<Country>();
+        sourceCountry.setVisited(true);
+        queue.add(sourceCountry);
+
+        // Run BFS
+        while (queue.size() != 0) {
+
+            Country country = queue.poll();
+            for (Country nbrCountry: country.getAdjacentCountries()) {
+                if (!nbrCountry.isVisited()) {
+                    nbrCountry.setVisited(true);
+                    queue.add(nbrCountry);
+                }
+            }
+        }
+
+        // Destination is connected from source
+        if (destCountry.isVisited())
+            return true;
+
+        return false;
     }
 }
