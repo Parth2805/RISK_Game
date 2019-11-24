@@ -13,10 +13,12 @@ import com.entity.Continent;
 import com.entity.Country;
 import com.entity.Hmap;
 import com.entity.Player;
+import com.maingame.CardExchangeView;
 import com.strategy.Cheater;
 import com.strategy.Aggressive;
 import com.strategy.Benevolent;
 import com.strategy.Human;
+import com.strategy.RandomS;
 import com.strategy.Strategy;
 
 
@@ -247,7 +249,10 @@ public class GameUtilities {
     public static Strategy getStrategyObject(String playerStrategy) {
     	
     	switch (playerStrategy) {
-
+		
+    	case PlayerStrategy.PLAYER_STRATEGY_HUMAN:
+    		return new Human(new CardExchangeView());
+    		
 		case PlayerStrategy.PLAYER_STRATEGY_AGGRESSIVE:
 		    return new Aggressive();
 		    
@@ -258,7 +263,7 @@ public class GameUtilities {
 			return new Cheater();
 			
 		case PlayerStrategy.PLAYER_STRATEGY_RANDOM:
-			break;
+			return new RandomS();
 			
 		default:
 			break;

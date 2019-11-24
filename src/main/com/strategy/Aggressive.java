@@ -5,7 +5,6 @@ import com.entity.Card;
 import com.entity.Country;
 import com.entity.Hmap;
 import com.entity.Player;
-import com.maingame.CardExchangeView;
 import com.models.CardModel;
 import com.models.PlayerModel;
 import com.utilities.GameUtilities;

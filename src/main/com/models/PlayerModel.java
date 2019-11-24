@@ -95,12 +95,8 @@ public class PlayerModel {
             return false;
         }
 
-        newPlayer.setPlayerStrategyName(playerStrategy);
-        
-        if (playerStrategy.equalsIgnoreCase(PlayerStrategy.PLAYER_STRATEGY_HUMAN))
-        	newPlayer.setStrategy(new Human(new CardExchangeView()));
-        else
-        	newPlayer.setStrategy(GameUtilities.getStrategyObject(playerStrategy));
+        newPlayer.setPlayerStrategyName(playerStrategy);  
+        newPlayer.setStrategy(GameUtilities.getStrategyObject(playerStrategy));
         
         playersList.add(newPlayer);
         System.out.println("Player: " + playerName + " is added in the game");
