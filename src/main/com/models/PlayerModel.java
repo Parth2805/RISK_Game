@@ -317,18 +317,18 @@ public class PlayerModel {
             return false;
         }
 
-        if (GameUtilities.isCountriesAdjacent(map, fromCountry, toCountry)) {
+        if (GameUtilities.isCountryConnected(map, map.getCountryMap().get(fromCountry), map.getCountryMap().get(toCountry))) {
 
-            for (Continent cont : map.getContinents()) {
-                // Update Armies count for fortification
-                for (Country c : cont.getCountries()) {
-                    if (c.getName().equalsIgnoreCase(toCountry))
-                        c.setArmy(toCountryArmyCount + armiesCount);
-
-                    if (c.getName().equalsIgnoreCase(fromCountry))
-                        c.setArmy(fromCountryArmyCount - armiesCount);
-                }
-            }
+//            for (Continent cont : map.getContinents()) {
+//                // Update Armies count for fortification
+//                for (Country c : cont.getCountries()) {
+//                    if (c.getName().equalsIgnoreCase(toCountry))
+//                        c.setArmy(toCountryArmyCount + armiesCount);
+//
+//                    if (c.getName().equalsIgnoreCase(fromCountry))
+//                        c.setArmy(fromCountryArmyCount - armiesCount);
+//                }
+//            }
 
             map.getCountryMap().get(toCountry).setArmy(toCountryArmyCount + armiesCount);
             map.getCountryMap().get(fromCountry).setArmy(fromCountryArmyCount - armiesCount);
