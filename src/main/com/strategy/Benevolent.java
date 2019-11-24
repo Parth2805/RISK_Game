@@ -48,28 +48,7 @@ public class Benevolent extends Observable implements Strategy  {
     @Override
     public boolean attackPhase(Hmap map, Player player, Stack<Card> cardsStack) {
 
-        Country countryToAttackWith = GameUtilities.getCountryWithMaxArmies(player);
-
-        List<Country> countryList = countryToAttackWith.getAdjacentCountries();
-
-        for(Country c:countryList){
-
-            if(!playerModel.isAttackPossible(player)){
-                System.out.println("No more attack possible");
-                return true;
-            }else
-            if(countryToAttackWith.getArmy()<=1){
-                System.out.println("Cant Attack Anymore with this country");
-                break;
-            }else
-            if(!c.getPlayer().equals(player)){
-
-                String attackingCountry=countryToAttackWith.getName();
-                String defendingCountry=c.getName();
-                playerModel.allOutAttackCountry(map,player,attackingCountry,defendingCountry,cardsStack);
-            }
-        }
-        System.out.println("Out of for loop:");
+        System.out.println("Benevolent player wont attack");
         return true;
     }
 
