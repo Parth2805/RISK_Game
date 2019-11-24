@@ -17,6 +17,7 @@ import com.mapparser.MapAdapter;
 import com.mapparser.MapVerifier;
 import com.models.CardModel;
 import com.models.PlayerModel;
+import com.strategy.Human;
 import com.utilities.GameUtilities;
 
 /**
@@ -402,6 +403,21 @@ public class GameController extends Observable {
 	 */
 	public void processGamePlayStartupCommands(Scanner sc) {
 
+
+		if(!(currentPlayer.getStrategy() instanceof Human)){
+
+			playerModel.placeAll();
+
+			// Allocate cards to countries
+			cardModel.allocateCardsToCountry(getMap(), getCardsStack());
+			setCurrentPlayer(playerModel.getPlayersList().get(0));
+
+			// Update View
+			setChanged();
+			notifyObservers("placeall");
+			return;
+		}
+
 		System.out.println("Current game phase: Gameplay startup phase (placearmy, placeall, showmap)");
 		System.out.println("Current Player: " + getCurrentPlayer().getName() + ", number of armies left = "
 				+ getCurrentPlayer().getArmies());
@@ -499,7 +515,7 @@ public class GameController extends Observable {
 	/**
 	 * Parses the String and calls the related game play attack commands.
 	 * 
-	 * @param sc scanner object
+	 *
 	 */
 	public void processGamePlayAttackCommands() {
 
@@ -515,8 +531,7 @@ public class GameController extends Observable {
 		}
 
 		/* Call Strategy Pattern attack method */
-		if (getCurrentPlayer().getStrategy().attackPhase(
-				getMap(), getCurrentPlayer(), getCardsStack())) {
+		if (getCurrentPlayer().getStrategy().attackPhase(getMap(), getCurrentPlayer(), getCardsStack())) {
 
 			setChanged();
 			notifyObservers("show-world-domination");
