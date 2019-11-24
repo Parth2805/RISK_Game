@@ -309,4 +309,20 @@ public class GameUtilities {
 				.filter(t -> (country.getPlayer() != t.getPlayer())).collect(Collectors.toList());
 		return defCountryList;
 	}
+
+    public static Country getCountryWithMaxArmies(Player currentPlayer){
+
+        Country country=null;
+        int max=0;
+        for(Country c:currentPlayer.getAssignedCountry()){
+
+            if(c.getArmy()>=max){
+
+                country=c;
+
+            }
+        }
+
+        return country;
+    }
 }
