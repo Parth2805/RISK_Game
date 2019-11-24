@@ -36,9 +36,10 @@ public class Benevolent extends Observable implements Strategy  {
     @Override
     public boolean reinforcementPhase(Hmap map, Player player, Stack<Card> cardsStack) {
 
+        GameUtilities.gamePlayShowmap(map);
         System.out.println("-------Reinforcement Phase---------");
         Country countryToReinforce= GameUtilities.getCountryWithMinArmies(player);
-        countryToReinforce.setArmy(player.getArmies());
+        countryToReinforce.setArmy(player.getArmies()+countryToReinforce.getArmy());
 
 
         System.out.println("Reinforced Country:"+countryToReinforce.getName()+" with total army:"+countryToReinforce.getArmy());
@@ -56,6 +57,7 @@ public class Benevolent extends Observable implements Strategy  {
     @Override
     public boolean fortificationPhase(Hmap map, Player player) {
 
+        GameUtilities.gamePlayShowmap(map);
         System.out.println("-----Fortifying---------");
 
         List<Country> countryList = player.getAssignedCountry();
@@ -69,7 +71,7 @@ public class Benevolent extends Observable implements Strategy  {
             if(countryList.get(i).getAdjacentCountries().size()>0){
 
 
-                for(int j=countryList.size();j>i;j--){
+                for(int j=countryList.size()-1;j>i;j--){
 
                     if(GameUtilities.isCountryConnected(map,countryList.get(i),countryList.get(j))){
 
@@ -94,6 +96,7 @@ public class Benevolent extends Observable implements Strategy  {
 //                }
             }
         }
+        GameUtilities.gamePlayShowmap(map);
         System.out.println("Done Fortification");
         return false;
     }
