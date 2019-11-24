@@ -6,6 +6,7 @@ import com.config.Commands;
 import com.entity.*;
 import com.maingame.CardExchangeView;
 import com.strategy.Human;
+import com.strategy.Strategy;
 import com.utilities.GameUtilities;
 import com.config.Config;
 import com.config.PlayerStrategy;
@@ -437,7 +438,7 @@ public class PlayerModel {
             
         	// Player does not need to move army when game is over
             if (!GameUtilities.isPlayerWonGame(player, map))
-                attackMove(attackCountry, defendCountry);
+                attackMove(attackCountry, defendCountry,player.getStrategy());
         }
 
         // Is game over for defender player?
@@ -453,47 +454,58 @@ public class PlayerModel {
 
     /**
      * This method implements attack move command
-     * 
-     * @param attackCountry name of the attacker country name
+     *  @param attackCountry name of the attacker country name
      * @param defendCountry name of the defender country name
+     * @param strategy
      */
-    public void attackMove(Country attackCountry, Country defendCountry) {
+    public void attackMove(Country attackCountry, Country defendCountry, Strategy strategy) {
 
-        while (true) {
-            System.out.println(defendCountry.getPlayer()+ " conquered the " 
-            		+ defendCountry.getName() + " " + "country successfully");
-            System.out.println("You need to move armies to conquered Country, max armies: " + (attackCountry.getArmy() - 1) + ", min armies: 1");
-            System.out.println("Command \"attackmove num\" ");
 
-            Scanner sc1 = new Scanner(System.in);
-            String command = sc1.nextLine();
-            String words[] = command.split(" ");
+        if(strategy instanceof Human){
 
-            if (words[0].equalsIgnoreCase(Commands.MAP_COMMAND_ATTACKMOVE)) {
+            while (true) {
+                System.out.println(defendCountry.getPlayer()+ " conquered the "
+                        + defendCountry.getName() + " " + "country successfully");
+                System.out.println("You need to move armies to conquered Country, max armies: " + (attackCountry.getArmy() - 1) + ", min armies: 1");
+                System.out.println("Command \"attackmove num\" ");
 
-            	 int armyToMove = 0;
-            	 try {
-            		 armyToMove = Integer.parseInt(words[1]);
-                 } catch (Exception e) {
-                     System.out.println("Exception: " + e.toString());
-                     continue;
-                 }
+                Scanner sc1 = new Scanner(System.in);
+                String command = sc1.nextLine();
+                String words[] = command.split(" ");
 
-                if (armyToMove < 1) {
-                    System.out.println("Error: you need to move atleast 1 army to conquered country");
+                if (words[0].equalsIgnoreCase(Commands.MAP_COMMAND_ATTACKMOVE)) {
 
-                } else if (armyToMove >= attackCountry.getArmy()) {
-                    System.out.println("Can't move more than: " + (attackCountry.getArmy() - 1));
-                    
+                    int armyToMove = 0;
+                    try {
+                        armyToMove = Integer.parseInt(words[1]);
+                    } catch (Exception e) {
+                        System.out.println("Exception: " + e.toString());
+                        continue;
+                    }
+
+                    if (armyToMove < 1) {
+                        System.out.println("Error: you need to move atleast 1 army to conquered country");
+
+                    } else if (armyToMove >= attackCountry.getArmy()) {
+                        System.out.println("Can't move more than: " + (attackCountry.getArmy() - 1));
+
+                    } else {
+                        attackCountry.setArmy(attackCountry.getArmy() - armyToMove);
+                        defendCountry.setArmy(defendCountry.getArmy() + armyToMove);
+                        break;
+                    }
                 } else {
-                    attackCountry.setArmy(attackCountry.getArmy() - armyToMove);
-                    defendCountry.setArmy(defendCountry.getArmy() + armyToMove);
-                    break;
+                    System.out.println("Invalid Command!!");
                 }
-            } else {
-                System.out.println("Invalid Command!!");
             }
+
+        }else{
+
+            attackCountry.setArmy(attackCountry.getArmy()-1);
+            defendCountry.setArmy(defendCountry.getArmy()+1);
+
         }
+
     }
 
     /**
@@ -628,7 +640,7 @@ public class PlayerModel {
         int count = 0;
         List<Country> countryList = new ArrayList<>();
         
-        for (Country c : currentPlayer.getAssignedCountry()) {
+            for (Country c : currentPlayer.getAssignedCountry()) {
             if (c.getArmy() == 1)
                 count++;
             

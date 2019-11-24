@@ -14,7 +14,7 @@ import com.entity.Country;
 import com.entity.Hmap;
 import com.entity.Player;
 import com.strategy.Cheater;
-import com.strategy.Human;
+import com.strategy.Aggressive;
 import com.strategy.Strategy;
 
 
@@ -247,6 +247,8 @@ public class GameUtilities {
     	switch (playerStrategy) {
 
 		case PlayerStrategy.PLAYER_STRATEGY_AGGRESSIVE:
+		    return new Aggressive();
+		    
 		case PlayerStrategy.PLAYER_STRATEGY_BENELOENT:
 		
 		case PlayerStrategy.PLAYER_STRATEGY_CHEATER:

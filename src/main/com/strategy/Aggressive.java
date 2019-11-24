@@ -5,6 +5,8 @@ import com.entity.Card;
 import com.entity.Country;
 import com.entity.Hmap;
 import com.entity.Player;
+import com.maingame.CardExchangeView;
+import com.models.CardModel;
 import com.models.PlayerModel;
 import com.utilities.GameUtilities;
 
@@ -19,17 +21,30 @@ import java.util.Stack;
  */
 public class Aggressive extends Observable implements Strategy {
 
+    boolean isShowMapCommand = false;
+    PlayerModel playerModel;
+//    Player currentPlayer;
+    CardModel cardModel;
+    Stack<Card> cardsStack;
 
+    public Aggressive() {
+//        this.addObserver(cardExchange);
+        this.playerModel = new PlayerModel();
+        this.cardsStack = new Stack<Card>();
+        this.cardModel = new CardModel();
+    }
 
     @Override
     public boolean reinforcementPhase(Hmap map, Player player, Stack<Card> cardsStack) {
 
+        System.out.println("-------Reinforcement Phase---------");
         Country countryToReinforce= GameUtilities.getCountryWithMaxArmies(player);
-
         countryToReinforce.setArmy(player.getArmies());
+
+
         System.out.println("Reinforced Country:"+countryToReinforce.getName()+" with total army:"+countryToReinforce.getArmy());
         System.out.println("------Reinforcement complete-------");
-        return false;
+        return true;
     }
 
     @Override
@@ -41,6 +56,10 @@ public class Aggressive extends Observable implements Strategy {
 
         for(Country c:countryList){
 
+            if(!playerModel.isAttackPossible(player)){
+                System.out.println("No more attack possible");
+                return true;
+            }else
             if(countryToAttackWith.getArmy()<=1){
                 System.out.println("Cant Attack Anymore with this country");
                 break;
@@ -49,16 +68,23 @@ public class Aggressive extends Observable implements Strategy {
 
                 String attackingCountry=countryToAttackWith.getName();
                 String defendingCountry=c.getName();
-                playerModel.allOutAttackCountry(map,player,attackingCountry,defendingCountry,cards);
+                playerModel.allOutAttackCountry(map,player,attackingCountry,defendingCountry,cardsStack);
             }
-
         }
-
+        System.out.println("Out of for loop:");
         return false;
     }
 
     @Override
     public boolean fortificationPhase(Hmap map, Player player) {
+
+        System.out.println("-----Fortifying---------");
+
+        List<Country> countryToFortify = player.getAssignedCountry();
+
+        //To find country with greatest number of armoes and to reinforce with any of its neighbors
+
+        System.out.println("Done Fortification");
         return false;
     }
 }
