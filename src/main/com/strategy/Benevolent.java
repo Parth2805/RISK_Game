@@ -9,6 +9,7 @@ import com.models.CardModel;
 import com.models.PlayerModel;
 import com.utilities.GameUtilities;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Observable;
 import java.util.Stack;
@@ -57,10 +58,42 @@ public class Benevolent extends Observable implements Strategy  {
 
         System.out.println("-----Fortifying---------");
 
-        List<Country> countryToFortify = player.getAssignedCountry();
+        List<Country> countryList = player.getAssignedCountry();
 
-        //To find country with greatest number of armoes and to reinforce with any of its neighbors
+        Collections.sort(countryList);
+        System.out.println(countryList);
 
+        //To find country with greatest number of armies and to reinforce with any of its neighbors
+        for(int i=0;i<countryList.size();i++){
+
+            if(countryList.get(i).getAdjacentCountries().size()>0){
+
+
+                for(int j=countryList.size();j>i;j--){
+
+                    if(GameUtilities.isCountryConnected(map,countryList.get(i),countryList.get(j))){
+
+                        System.out.println("Fortified country:"+countryList.get(j).getName()+" from "+countryList.get(i).getName()+" with armies:"+(countryList.get(i).getArmy()-1));
+                        countryList.get(j).setArmy(countryList.get(j).getArmy()+countryList.get(i).getArmy()-1);
+                        countryList.get(i).setArmy(1);
+                        return true;
+
+                    }
+                }
+
+//                List<Country> adjacentCountries = c.getAdjacentCountries();
+//                Collections.sort(adjacentCountries);
+//
+//                if(adjacentCountries.get(0).getArmy()==1){
+//
+//                }else{
+//                    System.out.println("Fortified country:"+c.getName()+" from "+adjacentCountries.get(0).getName()+" with armies:"+(adjacentCountries.get(0).getArmy()-1));
+//                    c.setArmy(c.getArmy()+adjacentCountries.get(0).getArmy()-1);
+//                    adjacentCountries.get(0).setArmy(1);
+//                    return true;
+//                }
+            }
+        }
         System.out.println("Done Fortification");
         return false;
     }
