@@ -4,8 +4,11 @@ import java.util.*;
 
 import com.config.Commands;
 import com.entity.*;
+import com.maingame.CardExchangeView;
+import com.strategy.Human;
 import com.utilities.GameUtilities;
 import com.config.Config;
+import com.config.PlayerStrategy;
 
 /**
  * @author Mehul
@@ -90,7 +93,13 @@ public class PlayerModel {
             return false;
         }
 
-        newPlayer.setStrategy(GameUtilities.getStrategyObject(playerStrategy));
+        newPlayer.setPlayerStrategyName(playerStrategy);
+        
+        if (playerStrategy.equalsIgnoreCase(PlayerStrategy.PLAYER_STRATEGY_HUMAN))
+        	newPlayer.setStrategy(new Human(new CardExchangeView()));
+        else
+        	newPlayer.setStrategy(GameUtilities.getStrategyObject(playerStrategy));
+        
         playersList.add(newPlayer);
         System.out.println("Player: " + playerName + " is added in the game");
 
@@ -246,7 +255,7 @@ public class PlayerModel {
         int currentArmies = player.getArmies();
 
         if (currentArmies < numberOfArmies) {
-            System.out.println("You dont have enough army to reinforce: Your armies count = " + player.getArmies());
+            System.out.println("You don't have enough army to reinforce: Your armies count = " + player.getArmies());
             return false;
         }
 

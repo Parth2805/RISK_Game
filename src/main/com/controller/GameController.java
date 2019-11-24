@@ -7,6 +7,7 @@ import java.util.Scanner;
 import java.util.Stack;
 
 import com.config.Commands;
+import com.config.PlayerStrategy;
 import com.entity.Card;
 import com.entity.Hmap;
 import com.entity.Player;
@@ -32,7 +33,6 @@ public class GameController extends Observable {
 	String editFilePath = "";
 
 	boolean isReinfoceArmiesAssigned = false;
-	boolean isShowMapCommand = false;
 
 	PlayerModel playerModel;
 	CardModel cardModel;
@@ -91,7 +91,7 @@ public class GameController extends Observable {
 	 * @param player Current player.
 	 */
 	public void setCurrentPlayer(Player player) {
-		currentPlayer = player;
+		this.currentPlayer = player;
 	}
 
 	/**
@@ -457,17 +457,9 @@ public class GameController extends Observable {
 
 	/**
 	 * Parses the String and calls the related game play reinforcement commands.
-	 * 
-	 * @param sc scanner object
 	 */
-	public void processGamePlayReinforcementCommands(Scanner sc) {
-		
-		if (!isShowMapCommand) {
-			// Card exchange view
-			setChanged();
-			notifyObservers("card-exchange");
-		}
-		
+	public void processGamePlayReinforcementCommands() {
+				
 		if (!isReinfoceArmiesAssigned) {
 		
 			getCurrentPlayer().setnumOfAttacks(0);
@@ -480,69 +472,25 @@ public class GameController extends Observable {
 			isReinfoceArmiesAssigned = true;
 		}
 
-		System.out.println("Current game phase: Gameplay reinforcement phase (reinforce, showmap)");
-		System.out.println("Current Player: " + getCurrentPlayer().getName() + ", Armies left for reinforcement = "
-				+ getCurrentPlayer().getArmies());
-
-		String command = sc.nextLine();
-		String[] words = command.split(" ");
-		String commandType = words[0];
-
-		switch (commandType) {
-
-		case Commands.MAP_COMMAND_SKIP:
-			//isReinfoceArmiesAssigned = false;
-			changeCurrentPlayer();
-			break;
+		if (!getCurrentPlayer().getPlayerStrategyName().equalsIgnoreCase(PlayerStrategy.PLAYER_STRATEGY_HUMAN)) {
+			
+			System.out.println("Current game phase: Gameplay reinforcement phase");
+			System.out.println("Current Player: " + getCurrentPlayer().getName() + 
+					" (" + getCurrentPlayer().getPlayerStrategyName() + ")"  
+					+ ", Armies left for reinforcement = " + getCurrentPlayer().getArmies());
+		}
 		
-		case Commands.MAP_COMMAND_SHOWMAP:
-			isShowMapCommand = true;
-			GameUtilities.gamePlayShowmap(getMap());
-			break;
-
-		case Commands.MAP_COMMAND_REINFORCE:
-
-			isShowMapCommand = false;
-			if (words.length < 3) {
-				System.out.println("Invalid command, Try again !!!");
-				break;
-			}
-
-			String countryName = words[1];
-			int numberOfArmies = 0;
-
-			try {
-				numberOfArmies = Integer.parseInt(words[2]);
-			} catch (Exception e) {
-				System.out.println("Exception: " + e.toString());
-				return;
-			}
-
-			if (numberOfArmies <= 0) {
-				System.out.println("Error: You have entered negative number of armies.");
-				return;
-			}
-
-			if (!GameUtilities.isCountryBelongToPlayer(getMap(), getCurrentPlayer(), countryName)) {
-				System.out.println("Error: Given country " + countryName + " does not belong to " + getCurrentPlayer());
-				return;
-			}
-
-			if (playerModel.reinforceArmiesForCurrentPlayer(getCurrentPlayer(), countryName, numberOfArmies)) {
-				// Update View
-				setChanged();
-				notifyObservers("show-world-domination");
-				
-				// Update View
-				setChanged();
-				notifyObservers("reinforcedone");
-			}
-			break;
-		
-		default:
-			isShowMapCommand = false;
-			System.out.println("Invalid command, Try again !!!");
-			break;
+		/* Call to Strategy Pattern method */
+		if (getCurrentPlayer().getStrategy().reinforcementPhase(
+				getMap(), getCurrentPlayer(), getCardsStack())) {
+			
+			// Update View
+			setChanged();
+			notifyObservers("show-world-domination");
+			
+			// Update View
+			setChanged();
+			notifyObservers("reinforcedone");
 		}
 	}
 

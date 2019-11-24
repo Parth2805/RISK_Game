@@ -2,7 +2,9 @@ package com.strategy;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
+import com.entity.Card;
 import com.entity.Country;
 import com.entity.Hmap;
 import com.entity.Player;
@@ -17,15 +19,13 @@ import com.models.PlayerModel;
 public interface Strategy {
 
 	/**
-	 * This method will responsible for reinforcement phase.
-	 * @param countryList  list of country
-	 * @param country Selected country.
-	 * @param currentPlayer Current player.
-	 * @param countryArList List of countries available to player.
-	 * @param adjCountryArList List of neighbour countries.
+	 * This method is responsible for reinforcement phase.
+	 * 
+	 * @param Hmap map object
+	 * @param player current player
+	 * @param cardsStack stack of cards
 	 */
-	public void reinforcementPhase(ArrayList<Country> countryList, Country country,Player currentPlayer,
-				ArrayList<Country> countryArList, ArrayList<Country> adjCountryArList);
+	public boolean reinforcementPhase(Hmap map, Player player, Stack<Card> cardsStack);
 	
 	
 	/**

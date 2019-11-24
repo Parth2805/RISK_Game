@@ -242,9 +242,6 @@ public class GameUtilities {
     public static Strategy getStrategyObject(String playerStrategy) {
     	
     	switch (playerStrategy) {
-    	
-		case PlayerStrategy.PLAYER_STRATEGY_HUMAN:
-			return new Human();
 
 		case PlayerStrategy.PLAYER_STRATEGY_AGGRESSIVE:
 		case PlayerStrategy.PLAYER_STRATEGY_BENELOENT:

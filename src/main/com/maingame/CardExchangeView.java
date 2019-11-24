@@ -9,6 +9,7 @@ import java.util.Scanner;
 import com.config.Commands;
 import com.controller.GameController;
 import com.entity.Card;
+import com.strategy.Human;
 
 /**
  * This class controls the behavior of the Card Exchange View. It will display
@@ -28,7 +29,7 @@ public class CardExchangeView implements Observer {
 	public void update(Observable o, Object arg) {
 
 		String methodValue = (String) arg;
-		GameController gameController = (GameController) o;
+		Human humanStrategy = (Human) o;
 		Scanner sc = new Scanner(System.in);
 
 		// If the player selects cards, they are given the appropriate number of armies
@@ -38,30 +39,30 @@ public class CardExchangeView implements Observer {
 		// exchange view should cease to exist after the cards exchange.
 		if (methodValue.equals("card-exchange")) {
 
-			int cardSize = gameController.getCurrentPlayer().getCardList().size();
+			int cardSize = humanStrategy.getCurrentPlayer().getCardList().size();
 
 			System.out.println("++++++++++ Card Exchange View ++++++++++");
-			System.out.println(gameController.getCurrentPlayer() + " has " + gameController.getCurrentPlayer().getCardList() 
-					+ " cards");
+			System.out.println(humanStrategy.getCurrentPlayer() + " has "
+					+ humanStrategy.getCurrentPlayer().getCardList() + " cards");
 
 			if (cardSize >= 3) {
 
 				System.out.println("Current game phase: Gameplay reinforcement (exchangecards)");
 
 				int i = 1;
-	            for (Card card : gameController.getCurrentPlayer().getCardList()) {
-	                System.out.println(i + "." + card);
-	                i++;
-	            }
+				for (Card card : humanStrategy.getCurrentPlayer().getCardList()) {
+					System.out.println(i + "." + card);
+					i++;
+				}
 
 				while (true) {
 
 					Boolean forcefulExchange = false;
 					if (cardSize >= 5) {
-			            System.out.println("You have 5(max) cards, you need to exchange !!!");
-			            forcefulExchange = true;
+						System.out.println("You have 5(max) cards, you need to exchange !!!");
+						forcefulExchange = true;
 					}
-		
+
 					String command = sc.nextLine();
 					String[] words = command.split(" ");
 					String commandType = words[0];
@@ -74,7 +75,8 @@ public class CardExchangeView implements Observer {
 							if (forcefulExchange) {
 								break;
 							} else {
-								System.out.println(gameController.getCurrentPlayer() + " has chosen not to exchange cards");
+								System.out.println(
+										humanStrategy.getCurrentPlayer() + " has chosen not to exchange cards");
 								return;
 							}
 						}
@@ -95,23 +97,23 @@ public class CardExchangeView implements Observer {
 							System.out.println("Exception: " + e.toString());
 							break;
 						}
-						
+
 						if (idx[0] == idx[1] || idx[1] == idx[2] || idx[2] == idx[0]) {
 							System.out.println("Error: same card numbers entered");
 							break;
 						}
-						
+
 						List<Card> cardsChoosen = new ArrayList<>();
-						List<Card> cardList = gameController.getCurrentPlayer().getCardList();
+						List<Card> cardList = humanStrategy.getCurrentPlayer().getCardList();
 
 						for (int index : idx) {
-							
+
 							if (index < 0) {
 								System.out.println("Error: cannot accept negative index");
 								retVal = false;
 								break;
 							}
-							
+
 							try {
 								cardsChoosen.add(cardList.get(index));
 							} catch (Exception e) {
@@ -123,16 +125,17 @@ public class CardExchangeView implements Observer {
 
 						if (!retVal)
 							break;
-						
-						retVal = gameController.getCardModel().areCardsvalidForExchange(cardsChoosen);
+
+						retVal = humanStrategy.getCardModel().isCardsListValidForExchange(cardsChoosen);
 
 						if (retVal) {
-							gameController.getCardModel().exchangeCards(gameController.getCurrentPlayer(),
-									cardsChoosen, gameController.getCardsStack());
+							humanStrategy.getCardModel().exchangeCards(humanStrategy.getCurrentPlayer(), cardsChoosen,
+									humanStrategy.getCardsStack());
 							return;
-						} else
+						} else {
 							System.out.println(
 									"Error: You can only exchange when \n1.Cards of all same type or \n2.Cards of all different type");
+						}
 						break;
 
 					default:
@@ -142,6 +145,6 @@ public class CardExchangeView implements Observer {
 				}
 			}
 			System.out.println("++++++++++++++++++++++++++");
-		}		
+		}
 	}
 }

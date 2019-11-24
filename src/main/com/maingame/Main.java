@@ -42,7 +42,6 @@ public class Main implements Observer {
 		
 		Main mainView = new Main();
 		WorldDominationView worldDominationView = new WorldDominationView();
-		CardExchangeView cardExchangeView = new CardExchangeView();
 		
 		setGamePhase(GameState.RISK_STATE_INIT);
 		Scanner sc = new Scanner(System.in);
@@ -56,7 +55,6 @@ public class Main implements Observer {
 				System.out.println("---------- Welcome to Risk game ----------");
 				mainView.gameController = new GameController(mainView);
 				mainView.gameController.addObserver(worldDominationView);
-				mainView.gameController.addObserver(cardExchangeView);
 				setGamePhase(GameState.RISK_STATE_MAP_EDITING);
 				break;
 				
@@ -86,7 +84,7 @@ public class Main implements Observer {
 				break;
 				
 			case RISK_STATE_GAMEPLAY_REINFORCEMENT_PHASE:
-				mainView.gameController.processGamePlayReinforcementCommands(sc);
+				mainView.gameController.processGamePlayReinforcementCommands();
 				break;
 				
 			case RISK_STATE_GAMEPLAY_ATTACK_PHASE:
