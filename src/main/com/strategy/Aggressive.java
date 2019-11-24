@@ -10,10 +10,7 @@ import com.models.CardModel;
 import com.models.PlayerModel;
 import com.utilities.GameUtilities;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Observable;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * 
@@ -37,19 +34,23 @@ public class Aggressive extends Observable implements Strategy {
     @Override
     public boolean reinforcementPhase(Hmap map, Player player, Stack<Card> cardsStack) {
 
+        System.out.println("----------Map before reinforce----------");
+        GameUtilities.gamePlayShowmap(map);
         System.out.println("-------Reinforcement Phase---------");
         Country countryToReinforce= GameUtilities.getCountryWithMaxArmies(player);
-        countryToReinforce.setArmy(player.getArmies());
+        countryToReinforce.setArmy(player.getArmies()+countryToReinforce.getArmy());
 
 
         System.out.println("Reinforced Country:"+countryToReinforce.getName()+" with total army:"+countryToReinforce.getArmy());
         System.out.println("------Reinforcement complete-------");
+        System.out.println("----------Map after reinforce----------");
+        GameUtilities.gamePlayShowmap(map);
         return true;
     }
 
     @Override
     public boolean attackPhase(Hmap map, Player player, Stack<Card> cardsStack) {
-
+        GameUtilities.gamePlayShowmap(map);
         Country countryToAttackWith = GameUtilities.getCountryWithMaxArmies(player);
 
         List<Country> countryList = countryToAttackWith.getAdjacentCountries();
@@ -77,14 +78,48 @@ public class Aggressive extends Observable implements Strategy {
 
     @Override
     public boolean fortificationPhase(Hmap map, Player player) {
-
+        GameUtilities.gamePlayShowmap(map);
         System.out.println("-----Fortifying---------");
 
-        List<Country> countryToFortify = player.getAssignedCountry();
+        List<Country> countryList = player.getAssignedCountry();
 
-        //To find country with greatest number of armoes and to reinforce with any of its neighbors
+        Collections.sort(countryList);
 
+        System.out.println(countryList);
+
+
+        //To find country with greatest number of armies and to reinforce with any of its neighbors
+        for(int i=0;i<countryList.size();i++){
+
+            if(countryList.get(i).getAdjacentCountries().size()>0){
+
+
+                for(int j=i+1;j<countryList.size();j++){
+
+                    if(GameUtilities.isCountryConnected(map,countryList.get(i),countryList.get(j))){
+
+                        System.out.println("Fortified country:"+countryList.get(i).getName()+" from "+countryList.get(j).getName()+" with armies:"+(countryList.get(j).getArmy()-1));
+                        countryList.get(i).setArmy(countryList.get(i).getArmy()+countryList.get(j).getArmy()-1);
+                        countryList.get(j).setArmy(1);
+                        return true;
+
+                    }
+                }
+
+//                List<Country> adjacentCountries = c.getAdjacentCountries();
+//                Collections.sort(adjacentCountries);
+//
+//                if(adjacentCountries.get(0).getArmy()==1){
+//
+//                }else{
+//                    System.out.println("Fortified country:"+c.getName()+" from "+adjacentCountries.get(0).getName()+" with armies:"+(adjacentCountries.get(0).getArmy()-1));
+//                    c.setArmy(c.getArmy()+adjacentCountries.get(0).getArmy()-1);
+//                    adjacentCountries.get(0).setArmy(1);
+//                    return true;
+//                }
+            }
+        }
         System.out.println("Done Fortification");
-        return false;
+        return true;
     }
 }

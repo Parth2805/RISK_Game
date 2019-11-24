@@ -280,14 +280,14 @@ public class GameUtilities {
 
     public static Country getCountryWithMaxArmies(Player currentPlayer){
 
-        Country country=null;
+        Country country = null;
         int max=0;
         for(Country c:currentPlayer.getAssignedCountry()){
 
             if(c.getArmy()>=max){
 
                 country=c;
-
+                max=country.getArmy();
             }
         }
 
@@ -303,7 +303,7 @@ public class GameUtilities {
             if(c.getArmy()<=min){
 
                 country=c;
-
+                min=country.getArmy();
             }
         }
 
