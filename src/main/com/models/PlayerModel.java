@@ -4,8 +4,11 @@ import java.util.*;
 
 import com.config.Commands;
 import com.entity.*;
+import com.maingame.CardExchangeView;
+import com.strategy.Human;
 import com.utilities.GameUtilities;
 import com.config.Config;
+import com.config.PlayerStrategy;
 
 /**
  * @author Mehul
@@ -90,7 +93,13 @@ public class PlayerModel {
             return false;
         }
 
-        newPlayer.setStrategy(GameUtilities.getStrategyObject(playerStrategy));
+        newPlayer.setPlayerStrategyName(playerStrategy);
+        
+        if (playerStrategy.equalsIgnoreCase(PlayerStrategy.PLAYER_STRATEGY_HUMAN))
+        	newPlayer.setStrategy(new Human(new CardExchangeView()));
+        else
+        	newPlayer.setStrategy(GameUtilities.getStrategyObject(playerStrategy));
+        
         playersList.add(newPlayer);
         System.out.println("Player: " + playerName + " is added in the game");
 
@@ -246,7 +255,7 @@ public class PlayerModel {
         int currentArmies = player.getArmies();
 
         if (currentArmies < numberOfArmies) {
-            System.out.println("You dont have enough army to reinforce: Your armies count = " + player.getArmies());
+            System.out.println("You don't have enough army to reinforce: Your armies count = " + player.getArmies());
             return false;
         }
 
@@ -418,20 +427,25 @@ public class PlayerModel {
         diceModel.rolldice();
         diceModel.getResultAfterRoll();
 
+        // Attack successful count
+        player.setnumOfAttacks(player.getnumOfAttacks() + 1);
+        
         // Change ownership of country
         if (defendCountry.getArmy() <= 0) {
         	
             GameUtilities.changeCountryOwnerShip(defendCountry, attackCountry);
             System.out.println(defenderPlayer + " has lost the country: " + defendCountry);
             
-            player.setnumOfAttacks(player.getnumOfAttacks() + 1);
+            player.setNumOfCountriesWon(player.getNumOfCountriesWon() + 1);
 
-        	if (player.getnumOfAttacks() == 1) {
+            // Player is awarded card only once in attack phase
+        	if (player.getNumOfCountriesWon() == 1) {
 	        	Card wonCard = cardStack.pop();
 	            attackCountry.getPlayer().setCardList(wonCard);
 	            System.out.println(player + " has won: " + wonCard);
         	}        	
             
+        	// Player does not need to move army when game is over
             if (!GameUtilities.isPlayerWonGame(player, map))
                 attackMove(attackCountry, defendCountry);
         }
@@ -616,45 +630,43 @@ public class PlayerModel {
 
     /**
      * This method check for possibility of attack
+     * 
      * @param currentPlayer Current Player name
      * @return true if attack is possible, false otherwise
      */
-    public boolean checkAttackPossible(Player currentPlayer) {
-
+    public boolean isAttackPossible(Player currentPlayer) {
         int count = 0;
         List<Country> countryList = new ArrayList<>();
+        
         for (Country c : currentPlayer.getAssignedCountry()) {
-
-            if (c.getArmy() == 1) {
+            if (c.getArmy() == 1)
                 count++;
-            }
-            if (c.getArmy() > 1) {
+            
+            if (c.getArmy() > 1)
                 countryList.add(c);
-            }
         }
         
         if (count == currentPlayer.getAssignedCountry().size()) {
             System.out.println("Player has all countries with 1 army ");
             return false;
         } else {
-            int countryWithSameOwnerShipAsPlayer = 0;
-            for (Country c : countryList) {
-
+           
+        	int countryWithSameOwnershipAsPlayer = 0;
+            
+        	for (Country c : countryList) {
                 List<Country> neighbors = c.getAdjacentCountries();
                 int neighborcount = 0;
+                
                 for (Country n : neighbors) {
-                    if (n.getPlayer().equals(currentPlayer)) {
+                    if (n.getPlayer().equals(currentPlayer))
                         neighborcount++;
-                    }
                 }
 
-                if (neighborcount == neighbors.size()) {
-                    countryWithSameOwnerShipAsPlayer++;
-                }
+                if (neighborcount == neighbors.size())
+                    countryWithSameOwnershipAsPlayer++;
             }
 
-            if (countryWithSameOwnerShipAsPlayer == countryList.size()) {
-
+            if (countryWithSameOwnershipAsPlayer == countryList.size()) {
                 System.out.println("Player has all neighboring country as his own");
                 return false;
             }

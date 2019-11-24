@@ -18,25 +18,36 @@ import com.entity.Player;
  * This class is handles the behavior of the card.
  *
  * @author Mehul
+ * @author Parth
  */
 public class CardModel {
 
+    private List<Card> listOfCards;
+    private static int armiesAwarded = 5;
 
-    private List<Card> cardForExchange;
-	public void setNumberOfTimesCardExchanged() {
-		cardExchanged += 5;
-	}
-	public int getCardExchanged() {
-		return cardExchanged;
-	}
-	private static int cardExchanged = 5;
     /**
+     * Increments the armies count which are assigned when cards are exchanged.
+     */
+	public void incrementArmiesAwardedCount() {
+		armiesAwarded += 5;
+	}
+	
+	/**
+     * Gets the armies awarded count.
+     *
+     * @return armiesAwarded armies count
+     */
+	public int getArmiesAwarded() {
+		return armiesAwarded;
+	}
+    
+	/**
      * Gets the cards to be exchanged.
      *
      * @return the cardsToBeExchange
      */
     public List<Card> getCardsToBeExchange() {
-        return cardForExchange;
+        return listOfCards;
     }
 
     /**
@@ -45,7 +56,7 @@ public class CardModel {
      * @param cardsToBeExchange the cardsToBeExchange to set
      */
     public void setCardsToBeExchange(List<Card> cardsToBeExchange) {
-        this.cardForExchange = cardsToBeExchange;
+        this.listOfCards = cardsToBeExchange;
     }
 
     /**
@@ -107,8 +118,8 @@ public class CardModel {
             	break;
         }
 
-        player.setArmies(player.getArmies() + getCardExchanged());
-        setNumberOfTimesCardExchanged();
+        player.setArmies(player.getArmies() + getArmiesAwarded());
+        incrementArmiesAwardedCount();
 
         for (Card card : cardlist) {
             // Removing the exchanged cards from players hand
@@ -119,12 +130,12 @@ public class CardModel {
     }
 
     /**
-    * validates card for exchange
-    * @param cardlist list of cards
-    * @return true if cards are valid for exchange, false otherwise 
-  	*
-    */
-    public boolean areCardsvalidForExchange(List<Card> cardlist) {
+     * This method validates card for exchange.
+     * 
+     * @param cardlist list of cards
+     * @return true if cards are valid for exchange, false otherwise
+     */
+    public boolean isCardsListValidForExchange(List<Card> cardlist) {
 
         if (cardlist.size() == 3) {
             int infantry = 0, cavalry = 0, artillery = 0;

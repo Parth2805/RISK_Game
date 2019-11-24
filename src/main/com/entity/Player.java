@@ -24,9 +24,13 @@ public class Player {
 
 	private List <Country> assignedCountry;
 	private List <Card> cardList;
-	private int numOfAttacks;
-	private Strategy strategy;
 	
+	private int numOfAttacks;
+	private int numOfCountriesWon;
+	
+	private Strategy strategy;
+	private String playerStrategy;
+
 	
 	/**
 	 * Player parameterized constructor.
@@ -41,12 +45,27 @@ public class Player {
 		this.cardList = new ArrayList<>();
 		this.numeberOfCardsExchanged = 0;
 		this.numOfAttacks = 0;
+		this.numOfCountriesWon = 0;
 	}
 	
-		
+	/**
+	 * Getter method for the player strategy name.
+	 * @return the strategy name
+	 */
+	public String getPlayerStrategyName() {
+		return playerStrategy;
+	}
+
+	/**
+	 * Setter method for the player strategy name.
+	 * @param strategy set strategy
+	 */
+	public void setPlayerStrategyName(String strategy) {
+		this.playerStrategy = strategy;
+	}	
 	
 	/**
-	 * Getter method for the player strategy.
+	 * Getter method for the player strategy object.
 	 * @return the strategy
 	 */
 	public Strategy getStrategy() {
@@ -54,8 +73,8 @@ public class Player {
 	}
 
 	/**
-	 * Setter method for the player strategy.
-	 * @param strategy set strategy
+	 * Setter method for the player strategy object.
+	 * @param strategy strategy object
 	 */
 	public void setStrategy(Strategy strategy) {
 		this.strategy = strategy;
@@ -78,6 +97,24 @@ public class Player {
 	}
 	
 	/**
+	 * Get the number of Countries Won.
+	 * 
+	 * @return number of Countries Won.
+	 */
+	public int getNumOfCountriesWon() {
+		return numOfCountriesWon;
+	}
+	
+	/**
+	 * Set number of Conquered Countries.
+	 * 
+	 * @param numConqueredCountries number of Conquered Countries.
+	 */
+	public void setNumOfCountriesWon(int numConqueredCountries) {
+		this.numOfCountriesWon = numConqueredCountries;
+	}
+	
+	/**
 	 * Get the number of attacks.
 	 * 
 	 * @return number of attacks
@@ -87,8 +124,9 @@ public class Player {
 	}
 	
 	/**
-	 * @param numAttack number of attacks.
+	 * Set the number of attacks
 	 * 
+	 * @param numAttack number of attacks.
 	 */
 	public void setnumOfAttacks(int numAttack) {
 		this.numOfAttacks = numAttack;
