@@ -518,7 +518,8 @@ public class GameController extends Observable {
 
 		case Commands.MAP_COMMMAND_ATTACK:
 
-			// Player may decide to attack or not to attack again. If attack not possible, attack automatically ends. 1
+			// Player may decide to attack or not to attack again. 
+			// If attack not possible, attack automatically ends.
 
 			if (words.length < 2) {
 				System.out.println("Invalid command, Try again !!!");
@@ -599,7 +600,7 @@ public class GameController extends Observable {
 			break;
 
 		default:
-			System.out.println("Invalid Input");
+			System.out.println("Invalid command, Try again !!!");
 			break;
 
 		}

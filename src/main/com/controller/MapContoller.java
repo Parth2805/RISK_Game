@@ -390,19 +390,10 @@ public class MapContoller {
 		
 		for (Continent c : map.getContinents()) {
 			System.out.println("--------------------------------");
-			System.out.println("Continent: " + c.getName() + " having following countries");
+			System.out.println(c);
 
 			for (Country con : c.getCountries()) {
-				System.out.print(con.getName() + ": ");
-				List<String> adjCountries = con.getNeighborCountries();
-
-				for (int i = 0; i < adjCountries.size(); i++) {
-					System.out.print(adjCountries.get(i));
-
-					if (i != adjCountries.size() - 1)
-						System.out.print(", ");
-				}
-				System.out.println();
+				System.out.println(con.getName() + ": " + con.getNeighborCountries());
 			}
 		}
 		System.out.println("--------------------------------");

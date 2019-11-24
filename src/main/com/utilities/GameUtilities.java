@@ -86,9 +86,9 @@ public class GameUtilities {
 
         for (Continent cont : map.getContinents()) {
             for (Country c : cont.getCountries()) {
-                System.out.println(c.getBelongToContinent().getName() + ": " + c.getName() + ": Army count: "
-                        + c.getArmy() + ", Player: " + c.getPlayer().getName() + ", Adjacent Countries: "
-                        + c.getAdjacentCountries());
+                System.out.println(c.getBelongToContinent().getName() + ": value: " + cont.getValue() + ": "
+                		+ c.getName() + ": Army count: " + c.getArmy() + ", Player: " + c.getPlayer().getName() 
+                		+ ", Adjacent Countries: " + c.getAdjacentCountries());
             }
         }
 

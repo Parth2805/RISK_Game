@@ -29,6 +29,11 @@ public class Human extends Observable implements Strategy {
 	CardModel cardModel;
 	Stack<Card> cardsStack;
 
+	/**
+	 * This is the parameterized constructor for Human class
+	 * 
+	 * @param cardExchange card Exchange view object
+	 */
 	public Human(CardExchangeView cardExchange) {
 		this.addObserver(cardExchange);
 		this.playerModel = new PlayerModel();
@@ -133,7 +138,7 @@ public class Human extends Observable implements Strategy {
 			}
 
 			if (numberOfArmies <= 0) {
-				System.out.println("Error: You have entered negative number of armies.");
+				System.out.println("Error: You should enter more than 0 armies to reinforce.");
 				return false;
 			}
 
@@ -144,7 +149,6 @@ public class Human extends Observable implements Strategy {
 
 			if (playerModel.reinforceArmiesForCurrentPlayer(player, countryName, numberOfArmies))
 				return true;
-
 			break;
 			
 		default:

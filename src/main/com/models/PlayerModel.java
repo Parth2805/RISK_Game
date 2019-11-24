@@ -625,45 +625,43 @@ public class PlayerModel {
 
     /**
      * This method check for possibility of attack
+     * 
      * @param currentPlayer Current Player name
      * @return true if attack is possible, false otherwise
      */
     public boolean checkAttackPossible(Player currentPlayer) {
-
         int count = 0;
         List<Country> countryList = new ArrayList<>();
+        
         for (Country c : currentPlayer.getAssignedCountry()) {
-
-            if (c.getArmy() == 1) {
+            if (c.getArmy() == 1)
                 count++;
-            }
-            if (c.getArmy() > 1) {
+            
+            if (c.getArmy() > 1)
                 countryList.add(c);
-            }
         }
         
         if (count == currentPlayer.getAssignedCountry().size()) {
             System.out.println("Player has all countries with 1 army ");
             return false;
         } else {
-            int countryWithSameOwnerShipAsPlayer = 0;
-            for (Country c : countryList) {
-
+           
+        	int countryWithSameOwnershipAsPlayer = 0;
+            
+        	for (Country c : countryList) {
                 List<Country> neighbors = c.getAdjacentCountries();
                 int neighborcount = 0;
+                
                 for (Country n : neighbors) {
-                    if (n.getPlayer().equals(currentPlayer)) {
+                    if (n.getPlayer().equals(currentPlayer))
                         neighborcount++;
-                    }
                 }
 
-                if (neighborcount == neighbors.size()) {
-                    countryWithSameOwnerShipAsPlayer++;
-                }
+                if (neighborcount == neighbors.size())
+                    countryWithSameOwnershipAsPlayer++;
             }
 
-            if (countryWithSameOwnerShipAsPlayer == countryList.size()) {
-
+            if (countryWithSameOwnershipAsPlayer == countryList.size()) {
                 System.out.println("Player has all neighboring country as his own");
                 return false;
             }
