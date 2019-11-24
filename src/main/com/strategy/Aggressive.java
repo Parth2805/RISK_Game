@@ -72,7 +72,7 @@ public class Aggressive extends Observable implements Strategy {
             }
         }
         System.out.println("Out of for loop:");
-        return false;
+        return true;
     }
 
     @Override
