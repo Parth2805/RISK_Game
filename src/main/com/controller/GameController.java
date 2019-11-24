@@ -539,7 +539,7 @@ public class GameController extends Observable {
 			notifyObservers("show-world-domination");
 		}
 		
-		// This is the case whereby manual attacks human player won the game
+		// This is the case where by manual attacks human player won the game
 		if (GameUtilities.isPlayerWonGame(getCurrentPlayer(), getMap())) {
 			System.out.println("Player: " + getCurrentPlayer().getName()+ " has won the game :)");
 			setChanged();
@@ -575,70 +575,19 @@ public class GameController extends Observable {
 		System.out.println("Current game phase: Gameplay fortify phase (fortify, showmap)");
 		System.out.println("Current Player: " + getCurrentPlayer().getName());
 
-		boolean isForifyDone = false;
-		String command = sc.nextLine();
-		String[] words = command.split(" ");
-		String commandType = words[0];
-
-		switch (commandType) {
-
-		case Commands.MAP_COMMAND_SHOWMAP:
-			GameUtilities.gamePlayShowmap(getMap());
-			break;
-
-		case Commands.MAP_COMMAND_FORTIFY:
-
-			if (words.length < 2) {
-				System.out.println("Invalid command length. Try again !!!");
-				return;
+		/* Call Strategy Pattern fortify method */
+		if (getCurrentPlayer().getStrategy().fortificationPhase(getMap(), getCurrentPlayer())) {
+			
+			// check all players have played
+			if (playerModel.isLastPlayer(getCurrentPlayer())) {
+				isReinfoceArmiesAssigned = false;
+				System.out.println("******* All players have played in their turn **********");
 			}
-
-			if (words[1].equalsIgnoreCase(Commands.MAP_COMMAND_FORTIFY_OPTION_NONE)) {
-				System.out.println(getCurrentPlayer() + " has chosen to skip fortify.");
-				isForifyDone = true;		
-			} else {
-
-				if (words.length < 4) {
-					System.out.println("Invalid command length. Try again !!!");
-					return;
-				}
-
-				int numArmies = 0;
-
-				try {
-					numArmies = Integer.parseInt(words[3]);
-				} catch (Exception e) {
-					System.out.println("Exception: " + e.toString());
-					return;
-				}
-
-				if (numArmies <= 0) {
-					System.out.println("Exception: Invalid number of armies");
-					return;
-				}
-
-				if (playerModel.fortifyCurrentPlayer(getMap(), getCurrentPlayer(), words[1], words[2], numArmies))
-					isForifyDone = true;
-			}
-
-			if (isForifyDone) {
-				
-				// check all players have played
-				if (playerModel.isLastPlayer(getCurrentPlayer())) {
-					isReinfoceArmiesAssigned = false;
-					System.out.println("******* All players have played in their turn **********");
-				}
-				
-				// Update View
-				setChanged();
-				notifyObservers("fortifydone");
-				changeCurrentPlayer();
-			}
-			break;
-
-		default:
-			System.out.println("Invalid command, Try again !!!");
-			break;
+			
+			// Update View
+			setChanged();
+			notifyObservers("fortifydone");
+			changeCurrentPlayer();
 		}
 	}
 

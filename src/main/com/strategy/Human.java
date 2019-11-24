@@ -120,7 +120,7 @@ public class Human extends Observable implements Strategy {
 
 			isShowMapCommand = false;
 			if (words.length < 3) {
-				System.out.println("Invalid command, Try again !!!");
+				System.out.println("Error: Invalid command, Try again !!!");
 				break;
 			}
 
@@ -150,7 +150,7 @@ public class Human extends Observable implements Strategy {
 			
 		default:
 			isShowMapCommand = false;
-			System.out.println("Invalid command, Try again !!!");
+			System.out.println("Error: Invalid command, Try again !!!");
 			break;
 		}
 
@@ -171,7 +171,7 @@ public class Human extends Observable implements Strategy {
 			// Player may decide to attack or not to attack again. 
 			// If attack not possible, attack automatically ends.
 			if (words.length < 2) {
-				System.out.println("Invalid command, Try again !!!");
+				System.out.println("Error: Invalid command, Try again !!!");
 				return false;
 			}
 			
@@ -181,7 +181,7 @@ public class Human extends Observable implements Strategy {
 			}
 			
 			if (words.length < 4) {
-				System.out.println("Invalid command, Try again !!!");
+				System.out.println("Error: Invalid command, Try again !!!");
 				return false;
 			}
 							
@@ -228,7 +228,7 @@ public class Human extends Observable implements Strategy {
 			break;
 
 		default:
-			System.out.println("Invalid command, Try again !!!");
+			System.out.println("Error: Invalid command, Try again !!!");
 			break;
 		}
 
@@ -237,7 +237,62 @@ public class Human extends Observable implements Strategy {
 
 	@Override
 	public boolean fortificationPhase(Hmap map, Player player) {
-		// TODO Auto-generated method stub
+
+		Scanner sc = new Scanner(System.in);
+		String command = sc.nextLine();
+		String[] words = command.split(" ");
+		String commandType = words[0];
+
+		switch (commandType) {
+
+		case Commands.MAP_COMMAND_SHOWMAP:
+			GameUtilities.gamePlayShowmap(map);
+			break;
+
+		case Commands.MAP_COMMAND_FORTIFY:
+
+			if (words.length < 2) {
+				System.out.println("Error: Invalid command length. Try again !!!");
+				return false;
+			}
+
+			// fortify -none command
+			if (words[1].equalsIgnoreCase(Commands.MAP_COMMAND_FORTIFY_OPTION_NONE)) {
+				System.out.println(getCurrentPlayer() + " has chosen to skip fortify.");
+				return true;		
+			} 
+			
+			if (words.length < 4) {
+				System.out.println("Error: Invalid command length. Try again !!!");
+				return false;
+			}
+
+			int numArmies = 0;
+
+			try {
+				numArmies = Integer.parseInt(words[3]);
+			} catch (Exception e) {
+				System.out.println("Exception: " + e.toString());
+				return false;
+			}
+
+			if (numArmies <= 0) {
+				System.out.println("Exception: Invalid number of armies. "
+						+ "Please choose more than 0 army");
+				return false;
+			}
+
+			if (playerModel.fortifyCurrentPlayer(map, player, words[1], 
+					words[2], numArmies)) {
+				return true;
+			}
+			break;
+
+		default:
+			System.out.println("Error: Invalid command, Try again !!!");
+			break;
+		}
+
 		return false;
 	}
 
