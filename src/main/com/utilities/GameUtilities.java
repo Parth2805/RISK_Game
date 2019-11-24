@@ -12,6 +12,7 @@ import com.entity.Country;
 import com.entity.Hmap;
 import com.entity.Player;
 import com.strategy.Aggressive;
+import com.strategy.Benevolent;
 import com.strategy.Human;
 import com.strategy.Strategy;
 
@@ -247,6 +248,7 @@ public class GameUtilities {
 		case PlayerStrategy.PLAYER_STRATEGY_AGGRESSIVE:
 		    return new Aggressive();
 		case PlayerStrategy.PLAYER_STRATEGY_BENELOENT:
+		    return new Benevolent();
 		case PlayerStrategy.PLAYER_STRATEGY_CHEATER:
 		case PlayerStrategy.PLAYER_STRATEGY_RANDOM:
 			break;
@@ -264,6 +266,22 @@ public class GameUtilities {
         for(Country c:currentPlayer.getAssignedCountry()){
 
             if(c.getArmy()>=max){
+
+                country=c;
+
+            }
+        }
+
+        return country;
+    }
+
+    public static Country getCountryWithMinArmies(Player player) {
+
+        Country country=null;
+        int min=1000000;
+        for(Country c:player.getAssignedCountry()){
+
+            if(c.getArmy()<=min){
 
                 country=c;
 
