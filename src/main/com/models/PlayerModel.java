@@ -75,7 +75,8 @@ public class PlayerModel {
     public boolean createPlayer(String playerName, String playerStrategy) {
 
         int id = playersList.size();
-
+        playerStrategy = playerStrategy.toLowerCase();
+        
         if (id >= 6) {
             System.out.println("Error: Maximum number of players = 6. Can't create more players");
             return false;
@@ -316,18 +317,7 @@ public class PlayerModel {
             return false;
         }
 
-        if (GameUtilities.isCountriesAdjacent(map, fromCountry, toCountry)) {
-
-            for (Continent cont : map.getContinents()) {
-                // Update Armies count for fortification
-                for (Country c : cont.getCountries()) {
-                    if (c.getName().equalsIgnoreCase(toCountry))
-                        c.setArmy(toCountryArmyCount + armiesCount);
-
-                    if (c.getName().equalsIgnoreCase(fromCountry))
-                        c.setArmy(fromCountryArmyCount - armiesCount);
-                }
-            }
+        if (GameUtilities.isCountryConnected(map, map.getCountryMap().get(fromCountry), map.getCountryMap().get(toCountry))) {
 
             map.getCountryMap().get(toCountry).setArmy(toCountryArmyCount + armiesCount);
             map.getCountryMap().get(fromCountry).setArmy(fromCountryArmyCount - armiesCount);
@@ -428,7 +418,7 @@ public class PlayerModel {
         diceModel.getResultAfterRoll();
 
         // Attack successful count
-        player.setnumOfAttacks(player.getnumOfAttacks() + 1);
+        player.setNumOfAttacks(player.getNumOfAttacks() + 1);
         
         // Change ownership of country
         if (defendCountry.getArmy() <= 0) {

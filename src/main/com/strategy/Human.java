@@ -258,7 +258,7 @@ public class Human extends Observable implements Strategy {
 
 			// fortify -none command
 			if (words[1].equalsIgnoreCase(Commands.MAP_COMMAND_FORTIFY_OPTION_NONE)) {
-				System.out.println(getCurrentPlayer() + " has chosen to skip fortify.");
+				System.out.println(player + " has chosen to skip fortify.");
 				return true;		
 			} 
 			

@@ -92,7 +92,7 @@ public class Main implements Observer {
 				break;
 				
 			case RISK_STATE_GAMEPLAY_FORTIFICATION_PHASE:
-				mainView.gameController.processGamePlayFortifyCommands(sc);
+				mainView.gameController.processGamePlayFortifyCommands();
 				break;
 
 			default:
