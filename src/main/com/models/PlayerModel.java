@@ -427,20 +427,25 @@ public class PlayerModel {
         diceModel.rolldice();
         diceModel.getResultAfterRoll();
 
+        // Attack successful count
+        player.setnumOfAttacks(player.getnumOfAttacks() + 1);
+        
         // Change ownership of country
         if (defendCountry.getArmy() <= 0) {
         	
             GameUtilities.changeCountryOwnerShip(defendCountry, attackCountry);
             System.out.println(defenderPlayer + " has lost the country: " + defendCountry);
             
-            player.setnumOfAttacks(player.getnumOfAttacks() + 1);
+            player.setNumOfCountriesWon(player.getNumOfCountriesWon() + 1);
 
-        	if (player.getnumOfAttacks() == 1) {
+            // Player is awarded card only once in attack phase
+        	if (player.getNumOfCountriesWon() == 1) {
 	        	Card wonCard = cardStack.pop();
 	            attackCountry.getPlayer().setCardList(wonCard);
 	            System.out.println(player + " has won: " + wonCard);
         	}        	
             
+        	// Player does not need to move army when game is over
             if (!GameUtilities.isPlayerWonGame(player, map))
                 attackMove(attackCountry, defendCountry);
         }
@@ -629,7 +634,7 @@ public class PlayerModel {
      * @param currentPlayer Current Player name
      * @return true if attack is possible, false otherwise
      */
-    public boolean checkAttackPossible(Player currentPlayer) {
+    public boolean isAttackPossible(Player currentPlayer) {
         int count = 0;
         List<Country> countryList = new ArrayList<>();
         

@@ -24,7 +24,10 @@ public class Player {
 
 	private List <Country> assignedCountry;
 	private List <Card> cardList;
+	
 	private int numOfAttacks;
+	private int numOfCountriesWon;
+	
 	private Strategy strategy;
 	private String playerStrategy;
 
@@ -42,6 +45,7 @@ public class Player {
 		this.cardList = new ArrayList<>();
 		this.numeberOfCardsExchanged = 0;
 		this.numOfAttacks = 0;
+		this.numOfCountriesWon = 0;
 	}
 	
 	/**
@@ -93,6 +97,24 @@ public class Player {
 	}
 	
 	/**
+	 * Get the number of Countries Won.
+	 * 
+	 * @return number of Countries Won.
+	 */
+	public int getNumOfCountriesWon() {
+		return numOfCountriesWon;
+	}
+	
+	/**
+	 * Set number of Conquered Countries.
+	 * 
+	 * @param numConqueredCountries number of Conquered Countries.
+	 */
+	public void setNumOfCountriesWon(int numConqueredCountries) {
+		this.numOfCountriesWon = numConqueredCountries;
+	}
+	
+	/**
 	 * Get the number of attacks.
 	 * 
 	 * @return number of attacks
@@ -102,8 +124,9 @@ public class Player {
 	}
 	
 	/**
-	 * @param numAttack number of attacks.
+	 * Set the number of attacks
 	 * 
+	 * @param numAttack number of attacks.
 	 */
 	public void setnumOfAttacks(int numAttack) {
 		this.numOfAttacks = numAttack;

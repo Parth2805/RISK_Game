@@ -1,14 +1,11 @@
 package com.strategy;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Observable;
 import java.util.Scanner;
 import java.util.Stack;
 
 import com.config.Commands;
 import com.entity.Card;
-import com.entity.Country;
 import com.entity.Hmap;
 import com.entity.Player;
 import com.maingame.CardExchangeView;
@@ -99,9 +96,9 @@ public class Human extends Observable implements Strategy {
 		} 
 		
 		System.out.println("Current game phase: Gameplay reinforcement phase (reinforce countryname num, showmap)");
-		System.out.println("Current Player: " + getCurrentPlayer().getName() + 
-				" (" + getCurrentPlayer().getPlayerStrategyName() + ")"  
-				+ ", Armies left for reinforcement = " + getCurrentPlayer().getArmies());
+		System.out.println("Current Player: " + player.getName() + 
+				" (" + player.getPlayerStrategyName() + ")"  
+				+ ", Armies left for reinforcement = " + player.getArmies());
 		
 		Scanner sc = new Scanner(System.in);
 		String command = sc.nextLine();
@@ -161,15 +158,85 @@ public class Human extends Observable implements Strategy {
 	}
 
 	@Override
-	public void attackPhase(ArrayList<Country> conList, ArrayList<Country> adjConList, PlayerModel playerModel,
-			List<Player> playerList, ArrayList<Country> conArList, ArrayList<Country> adjConArList) {
-		// TODO Auto-generated method stub
+	public boolean attackPhase(Hmap map, Player player, Stack<Card> cardsStack) {
+		
+		Scanner sc = new Scanner(System.in);
+		String command = sc.nextLine();
+		String words[] = command.split(" ");
 
+		switch (words[0]) {
+
+		case Commands.MAP_COMMMAND_ATTACK:
+
+			// Player may decide to attack or not to attack again. 
+			// If attack not possible, attack automatically ends.
+			if (words.length < 2) {
+				System.out.println("Invalid command, Try again !!!");
+				return false;
+			}
+			
+			if (words[1].equalsIgnoreCase(Commands.MAP_COMMAND_ATTACK_OPTION_NOATTACK)) {
+				System.out.println(player + " has chosen not to attack");
+				return true;
+			}
+			
+			if (words.length < 4) {
+				System.out.println("Invalid command, Try again !!!");
+				return false;
+			}
+							
+			// Attack with allout mode
+			if (words[3].equalsIgnoreCase(Commands.MAP_COMMAND_ATTACK_OPTION_ALLOUT)) {
+
+				String attackingCountry = words[1];
+				String defendingCountry = words[2];
+								
+				playerModel.allOutAttackCountry(map, player, 
+						attackingCountry, defendingCountry, cardsStack);
+			} else {
+
+				int numOfDice = 0;
+				String attackingCountry = words[1];
+				String defendingCountry = words[2];
+				
+				try {
+					numOfDice = Integer.parseInt(words[3]);
+				} catch (Exception e) {
+					System.out.println("Exception: " + e.toString());
+					return false;
+				}
+				
+				if (numOfDice <= 0) {
+					System.out.println("Error: Invalid number of dice of entered");
+					return false;
+				}
+
+				playerModel.attackCountry(map, player, attackingCountry, 
+						defendingCountry, numOfDice, 0, cardsStack);
+			}
+			
+			for (String w: words) {
+				if (w.equalsIgnoreCase(Commands.MAP_COMMAND_ATTACK_OPTION_NOATTACK)) {
+					System.out.println(player + " has chosen not to attack");
+					return true;
+				}
+			}			
+			break;
+
+		case Commands.MAP_COMMAND_SHOWMAP:
+			GameUtilities.gamePlayShowmap(map);
+			break;
+
+		default:
+			System.out.println("Invalid command, Try again !!!");
+			break;
+		}
+
+		return false;
 	}
 
 	@Override
-	public boolean fortificationPhase(ArrayList<Country> selectedCountry, ArrayList<Country> adjCountry,
-			Player currentPlayer, Hmap map, ArrayList<Country> countryArList, ArrayList<Country> adjCountryArList) {
+	public boolean fortificationPhase(Hmap map, Player player) {
 		// TODO Auto-generated method stub
 		return false;
 	}

@@ -462,7 +462,9 @@ public class GameController extends Observable {
 				
 		if (!isReinfoceArmiesAssigned) {
 		
+			getCurrentPlayer().setNumOfCountriesWon(0);
 			getCurrentPlayer().setnumOfAttacks(0);
+			
 			playerModel.assignReinforceArmiesToPlayers();
 			
 			// World domination view
@@ -480,7 +482,7 @@ public class GameController extends Observable {
 					+ ", Armies left for reinforcement = " + getCurrentPlayer().getArmies());
 		}
 		
-		/* Call to Strategy Pattern method */
+		/* Call Strategy Pattern reinforce method */
 		if (getCurrentPlayer().getStrategy().reinforcementPhase(
 				getMap(), getCurrentPlayer(), getCardsStack())) {
 			
@@ -488,7 +490,7 @@ public class GameController extends Observable {
 			setChanged();
 			notifyObservers("show-world-domination");
 			
-			// Update View
+			// Going to next phase
 			setChanged();
 			notifyObservers("reinforcedone");
 		}
@@ -499,110 +501,49 @@ public class GameController extends Observable {
 	 * 
 	 * @param sc scanner object
 	 */
-	public void processGamePlayAttackCommands(Scanner sc) {
+	public void processGamePlayAttackCommands() {
 
+		int previousAttackCount = getCurrentPlayer().getnumOfAttacks();
 		System.out.println("Current phase: Gameplay Attack phase (attack, defend, attackmove, showmap)");
 		System.out.println("Current Player: " + getCurrentPlayer().getName());
 
-		if (!playerModel.checkAttackPossible(getCurrentPlayer())){
+		if (!playerModel.isAttackPossible(getCurrentPlayer())){
 			System.out.println("Attack not possible for " + getCurrentPlayer());
 			setChanged();
 			notifyObservers("attackdone");
 			return;
 		}
 
-		String command = sc.nextLine();
-		String words[] = command.split(" ");
+		/* Call Strategy Pattern attack method */
+		if (getCurrentPlayer().getStrategy().attackPhase(
+				getMap(), getCurrentPlayer(), getCardsStack())) {
 
-		switch (words[0]) {
+			setChanged();
+			notifyObservers("show-world-domination");
 
-		case Commands.MAP_COMMMAND_ATTACK:
-
-			// Player may decide to attack or not to attack again. 
-			// If attack not possible, attack automatically ends.
-
-			if (words.length < 2) {
-				System.out.println("Invalid command, Try again !!!");
-				return;
-			}
-			
-			for (String w: words) {
-				if (w.equalsIgnoreCase(Commands.MAP_COMMAND_ATTACK_OPTION_NOATTACK)) {
-					System.out.println(getCurrentPlayer() + " has chosen not to attack");
-					// Going to next phase - Update View
-					setChanged();
-					notifyObservers("attackdone");
-					return;
-				}
-			}
-
-			if (words.length < 4) {
-				System.out.println("Invalid command, Try again !!!");
-				return;
-			}
-							
-			// Attack with allout mode
-			if (words[3].equalsIgnoreCase(Commands.MAP_COMMAND_ATTACK_OPTION_ALLOUT)) {
-
-				String attackingCountry = words[1];
-				String defendingCountry = words[2];
-								
-				if (!playerModel.allOutAttackCountry(getMap(), getCurrentPlayer(), 
-						attackingCountry, defendingCountry, stackOfCards)) {
-					return;
-				}
-				
-				// World domination view
+			if (GameUtilities.isPlayerWonGame(getCurrentPlayer(), getMap())) {
+				System.out.println("Player: " + getCurrentPlayer().getName()+ " has won the game :)");
 				setChanged();
-				notifyObservers("show-world-domination");
-				
-				if (GameUtilities.isPlayerWonGame(getCurrentPlayer(), rootMap)) {
-					System.out.println("Player: " + getCurrentPlayer().getName()+ " has won the game :)");
-					setChanged();
-					notifyObservers("gameover");
-				}
+				notifyObservers("gameover");
 			} else {
-
-				int numOfDice = 0;
-				String attackingCountry = words[1];
-				String defendingCountry = words[2];
-				
-				try {
-					numOfDice = Integer.parseInt(words[3]);
-				} catch (Exception e) {
-					System.out.println("Exception: " + e.toString());
-					return;
-				}
-				
-				if (numOfDice <= 0) {
-					System.out.println("Error: Invalid number of dice of entered");
-					return;
-				}
-
-				if (playerModel.attackCountry(getMap(), getCurrentPlayer(), attackingCountry, 
-						defendingCountry, numOfDice, 0, stackOfCards)) {
-					// World domination view
-					setChanged();
-					notifyObservers("show-world-domination");
-				}
-				
-				if (GameUtilities.isPlayerWonGame(getCurrentPlayer(), rootMap)) {
-					System.out.println("Player:" + getCurrentPlayer().getName() + 
-							" has won the game !!!");
-					setChanged();
-					notifyObservers("gameover");
-				}
+				// Going to next phase
+				setChanged();
+				notifyObservers("attackdone");
 			}
-			break;
-
-		case Commands.MAP_COMMAND_SHOWMAP:
-			GameUtilities.gamePlayShowmap(getMap());
-			break;
-
-		default:
-			System.out.println("Invalid command, Try again !!!");
-			break;
-
+			return;
+		}		
+		
+		// World domination view when attack was successful for human player
+		if (getCurrentPlayer().getnumOfAttacks() > previousAttackCount) {
+			setChanged();
+			notifyObservers("show-world-domination");
+		}
+		
+		// This is the case whereby manual attacks human player won the game
+		if (GameUtilities.isPlayerWonGame(getCurrentPlayer(), getMap())) {
+			System.out.println("Player: " + getCurrentPlayer().getName()+ " has won the game :)");
+			setChanged();
+			notifyObservers("gameover");
 		}
 	}
 
