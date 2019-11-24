@@ -255,4 +255,19 @@ public class GameUtilities {
     	
     	return null;
 	}
+    public static Country getCountryWithMaxArmies(Player currentPlayer){
+
+        Country country=null;
+        int max=0;
+        for(Country c:currentPlayer.getAssignedCountry()){
+
+            if(c.getArmy()>=max){
+
+                country=c;
+
+            }
+        }
+
+        return country;
+    }
 }
