@@ -2,15 +2,18 @@ package com.utilities;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.config.PlayerStrategy;
 import com.entity.Continent;
 import com.entity.Country;
 import com.entity.Hmap;
 import com.entity.Player;
+import com.strategy.Cheater;
 import com.strategy.Human;
 import com.strategy.Strategy;
 
@@ -245,7 +248,10 @@ public class GameUtilities {
 
 		case PlayerStrategy.PLAYER_STRATEGY_AGGRESSIVE:
 		case PlayerStrategy.PLAYER_STRATEGY_BENELOENT:
+		
 		case PlayerStrategy.PLAYER_STRATEGY_CHEATER:
+			return new Cheater();
+			
 		case PlayerStrategy.PLAYER_STRATEGY_RANDOM:
 			break;
 			
@@ -254,5 +260,53 @@ public class GameUtilities {
     	}
     	
     	return null;
+	}
+    
+    /**
+     * 
+     * @param map
+     * @param sourceCountry
+     * @param destCountry
+     * @return
+     */
+    public static boolean isCountryConnected(Hmap map, Country sourceCountry, Country destCountry) {
+    	
+    	// Initialize before BFS
+    	for (Country con: map.getCountries()) {
+    		con.setVisited(false);
+    	}
+    	
+    	LinkedList<Country> queue = new LinkedList<Country>();
+    	sourceCountry.setVisited(true);
+    	queue.add(sourceCountry);
+    	
+    	// Run BFS
+    	while (queue.size() != 0) {
+    		
+    		Country country = queue.poll();	
+    		for (Country nbrCountry: country.getAdjacentCountries()) {
+    			if (!nbrCountry.isVisited()) {
+    				nbrCountry.setVisited(true);
+    				queue.add(nbrCountry);
+    			}
+    		}
+    	}
+    	
+    	// Destination is connected from source
+    	if (destCountry.isVisited())
+    		return true;
+    	
+    	return false;
+    }
+    
+	/**
+	 * This method gives the defending countries for given country.
+	 * @param country Selected country
+	 * @return List of defending country.
+	 */
+	 public static List<Country> getDefendingCountries(Country country) {
+		List<Country> defCountryList = country.getAdjacentCountries().stream()
+				.filter(t -> (country.getPlayer() != t.getPlayer())).collect(Collectors.toList());
+		return defCountryList;
 	}
 }

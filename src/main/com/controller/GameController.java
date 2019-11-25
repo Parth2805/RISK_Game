@@ -463,7 +463,7 @@ public class GameController extends Observable {
 		if (!isReinfoceArmiesAssigned) {
 		
 			getCurrentPlayer().setNumOfCountriesWon(0);
-			getCurrentPlayer().setnumOfAttacks(0);
+			getCurrentPlayer().setNumOfAttacks(0);
 			
 			playerModel.assignReinforceArmiesToPlayers();
 			
@@ -503,9 +503,10 @@ public class GameController extends Observable {
 	 */
 	public void processGamePlayAttackCommands() {
 
-		int previousAttackCount = getCurrentPlayer().getnumOfAttacks();
+		int previousAttackCount = getCurrentPlayer().getNumOfAttacks();
 		System.out.println("Current phase: Gameplay Attack phase (attack, defend, attackmove, showmap)");
-		System.out.println("Current Player: " + getCurrentPlayer().getName());
+		System.out.println("Current Player: " + getCurrentPlayer().getName() + " (" 
+							+ getCurrentPlayer().getPlayerStrategyName() + ")");
 
 		if (!playerModel.isAttackPossible(getCurrentPlayer())){
 			System.out.println("Attack not possible for " + getCurrentPlayer());
@@ -534,7 +535,7 @@ public class GameController extends Observable {
 		}		
 		
 		// World domination view when attack was successful for human player
-		if (getCurrentPlayer().getnumOfAttacks() > previousAttackCount) {
+		if (getCurrentPlayer().getNumOfAttacks() > previousAttackCount) {
 			setChanged();
 			notifyObservers("show-world-domination");
 		}
@@ -552,7 +553,7 @@ public class GameController extends Observable {
 	 * 
 	 * @param sc scanner object
 	 */
-	public void processGamePlayFortifyCommands(Scanner sc) {
+	public void processGamePlayFortifyCommands() {
 		
 		if (getCurrentPlayer().getAssignedCountry().size() == 1) {
 			System.out.println(getCurrentPlayer() + " can't do fortify as you have "
@@ -573,7 +574,8 @@ public class GameController extends Observable {
 		}
 		
 		System.out.println("Current game phase: Gameplay fortify phase (fortify, showmap)");
-		System.out.println("Current Player: " + getCurrentPlayer().getName());
+		System.out.println("Current Player: " + getCurrentPlayer().getName() + " (" 
+				+ getCurrentPlayer().getPlayerStrategyName() + ")");
 
 		/* Call Strategy Pattern fortify method */
 		if (getCurrentPlayer().getStrategy().fortificationPhase(getMap(), getCurrentPlayer())) {
