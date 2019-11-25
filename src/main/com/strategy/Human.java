@@ -295,5 +295,4 @@ public class Human extends Observable implements Strategy {
 
 		return false;
 	}
-
 }

@@ -13,8 +13,12 @@ import com.entity.Continent;
 import com.entity.Country;
 import com.entity.Hmap;
 import com.entity.Player;
+import com.maingame.CardExchangeView;
 import com.strategy.Cheater;
+import com.strategy.Aggressive;
+import com.strategy.Benevolent;
 import com.strategy.Human;
+import com.strategy.RandomS;
 import com.strategy.Strategy;
 
 
@@ -245,60 +249,29 @@ public class GameUtilities {
     public static Strategy getStrategyObject(String playerStrategy) {
     	
     	switch (playerStrategy) {
-
-		case PlayerStrategy.PLAYER_STRATEGY_AGGRESSIVE:
-		case PlayerStrategy.PLAYER_STRATEGY_BENELOENT:
 		
+    	case PlayerStrategy.PLAYER_STRATEGY_HUMAN:
+    		return new Human(new CardExchangeView());
+    		
+		case PlayerStrategy.PLAYER_STRATEGY_AGGRESSIVE:
+		    return new Aggressive();
+		    
+		case PlayerStrategy.PLAYER_STRATEGY_BENELOENT:
+		    return new Benevolent();
+
 		case PlayerStrategy.PLAYER_STRATEGY_CHEATER:
 			return new Cheater();
 			
 		case PlayerStrategy.PLAYER_STRATEGY_RANDOM:
-			break;
+			return new RandomS();
 			
 		default:
 			break;
     	}
     	
     	return null;
-	}
-    
-    /**
-     * 
-     * @param map
-     * @param sourceCountry
-     * @param destCountry
-     * @return
-     */
-    public static boolean isCountryConnected(Hmap map, Country sourceCountry, Country destCountry) {
-    	
-    	// Initialize before BFS
-    	for (Country con: map.getCountries()) {
-    		con.setVisited(false);
-    	}
-    	
-    	LinkedList<Country> queue = new LinkedList<Country>();
-    	sourceCountry.setVisited(true);
-    	queue.add(sourceCountry);
-    	
-    	// Run BFS
-    	while (queue.size() != 0) {
-    		
-    		Country country = queue.poll();	
-    		for (Country nbrCountry: country.getAdjacentCountries()) {
-    			if (!nbrCountry.isVisited()) {
-    				nbrCountry.setVisited(true);
-    				queue.add(nbrCountry);
-    			}
-    		}
-    	}
-    	
-    	// Destination is connected from source
-    	if (destCountry.isVisited())
-    		return true;
-    	
-    	return false;
-    }
-    
+	}   
+     
 	/**
 	 * This method gives the defending countries for given country.
 	 * @param country Selected country
@@ -309,4 +282,81 @@ public class GameUtilities {
 				.filter(t -> (country.getPlayer() != t.getPlayer())).collect(Collectors.toList());
 		return defCountryList;
 	}
+
+	/**
+	 * 
+	 * @param currentPlayer
+	 * @return
+	 */
+	public static Country getCountryWithMaxArmies(Player currentPlayer) {
+
+		Country country = null;
+		int maxArmies = 0;
+
+		for (Country c : currentPlayer.getAssignedCountry()) {
+			if (c.getArmy() > maxArmies) {
+				country = c;
+				maxArmies = country.getArmy();
+			}
+		}
+		
+		return country;
+	}
+
+	/**
+	 * 
+	 * @param player
+	 * @return
+	 */
+    public static Country getCountryWithMinArmies(Player player) {
+
+		Country country = null;
+		int minArmies = 1000000;
+		
+		for (Country c : player.getAssignedCountry()) {
+			if (c.getArmy() < minArmies) {
+				country = c;
+				minArmies = country.getArmy();
+			}
+		}
+
+		return country;
+    }
+
+    /**
+     *
+     * @param map
+     * @param sourceCountry
+     * @param destCountry
+     * @return
+     */
+    public static boolean isCountryConnected(Hmap map, Country sourceCountry, Country destCountry) {
+
+        // Initialize before BFS
+        for (Country con: map.getCountries()) {
+            con.setVisited(false);
+        }
+
+        LinkedList<Country> queue = new LinkedList<Country>();
+        sourceCountry.setVisited(true);
+        queue.add(sourceCountry);
+
+        // Run BFS
+        while (queue.size() != 0) {
+
+            Country country = queue.poll();
+            for (Country nbrCountry: country.getAdjacentCountries()) {
+                if (!nbrCountry.isVisited()) {
+                    nbrCountry.setVisited(true);
+                    queue.add(nbrCountry);
+                }
+            }
+        }
+
+        // Check if destination is connected to source
+        if (destCountry.isVisited())
+            return true;
+
+        return false;
+    }
 }

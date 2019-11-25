@@ -7,7 +7,7 @@ import com.entity.Continent;
 import com.entity.Country;
 import com.entity.Player;
 
-public class Country {
+public class Country implements Comparable {
 
 	/**
 	 * This class defines properties of country like its coordinates, 
@@ -219,5 +219,19 @@ public class Country {
 		Country t = (Country) input_obj;
 		
 		return t.getName().equalsIgnoreCase(name);
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */	
+	@Override
+	public int compareTo(Object o) {
+		int destArmies = ((Country)o).getArmy();
+
+		/* For Ascending order*/
+		//return this.army-compareage;
+
+		/* For Descending order do like this */
+		return destArmies - this.army;
 	}
 }
