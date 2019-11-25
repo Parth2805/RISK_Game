@@ -450,14 +450,13 @@ public class PlayerModel {
 
     /**
      * This method implements attack move command
-     *  @param attackCountry name of the attacker country name
+     * @param attackCountry name of the attacker country name
      * @param defendCountry name of the defender country name
      * @param strategy
      */
     public void attackMove(Country attackCountry, Country defendCountry, Strategy strategy) {
 
-
-        if(strategy instanceof Human){
+        if (strategy instanceof Human) {
 
             while (true) {
                 System.out.println(defendCountry.getPlayer()+ " conquered the "
@@ -495,11 +494,9 @@ public class PlayerModel {
                 }
             }
 
-        }else{
-
-            attackCountry.setArmy(attackCountry.getArmy()-1);
-            defendCountry.setArmy(defendCountry.getArmy()+1);
-
+        } else {
+            attackCountry.setArmy(attackCountry.getArmy() - 1);
+            defendCountry.setArmy(defendCountry.getArmy() + 1);
         }
 
     }

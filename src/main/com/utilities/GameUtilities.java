@@ -283,36 +283,44 @@ public class GameUtilities {
 		return defCountryList;
 	}
 
-    public static Country getCountryWithMaxArmies(Player currentPlayer){
+	/**
+	 * 
+	 * @param currentPlayer
+	 * @return
+	 */
+	public static Country getCountryWithMaxArmies(Player currentPlayer) {
 
-        Country country = null;
-        int max=0;
-        for(Country c:currentPlayer.getAssignedCountry()){
+		Country country = null;
+		int maxArmies = 0;
 
-            if(c.getArmy()>=max){
+		for (Country c : currentPlayer.getAssignedCountry()) {
+			if (c.getArmy() > maxArmies) {
+				country = c;
+				maxArmies = country.getArmy();
+			}
+		}
+		
+		return country;
+	}
 
-                country=c;
-                max=country.getArmy();
-            }
-        }
-
-        return country;
-    }
-
+	/**
+	 * 
+	 * @param player
+	 * @return
+	 */
     public static Country getCountryWithMinArmies(Player player) {
 
-        Country country=null;
-        int min=1000000;
-        for(Country c:player.getAssignedCountry()){
+		Country country = null;
+		int minArmies = 1000000;
+		
+		for (Country c : player.getAssignedCountry()) {
+			if (c.getArmy() < minArmies) {
+				country = c;
+				minArmies = country.getArmy();
+			}
+		}
 
-            if(c.getArmy()<=min){
-
-                country=c;
-                min=country.getArmy();
-            }
-        }
-
-        return country;
+		return country;
     }
 
     /**
@@ -345,7 +353,7 @@ public class GameUtilities {
             }
         }
 
-        // Destination is connected from source
+        // Check if destination is connected to source
         if (destCountry.isVisited())
             return true;
 

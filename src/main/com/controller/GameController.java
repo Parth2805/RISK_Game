@@ -404,7 +404,8 @@ public class GameController extends Observable {
 	public void processGamePlayStartupCommands(Scanner sc) {
 
 		System.out.println("Current game phase: Gameplay startup phase (placearmy, placeall, showmap)");
-		System.out.println("Current Player: " + getCurrentPlayer().getName() + ", number of armies left = "
+		System.out.println("Current Player: " + getCurrentPlayer().getName() + " (" 
+				+ getCurrentPlayer().getPlayerStrategyName() + ")" + ", number of armies left = "
 				+ getCurrentPlayer().getArmies());
 
 		String command = sc.nextLine();

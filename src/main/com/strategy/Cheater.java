@@ -40,10 +40,12 @@ public class Cheater implements Strategy {
 		for (Country attackingCountry: playerCountries) {
 			
 			List<Country> defendingCountries = GameUtilities.getDefendingCountries(attackingCountry);
+			
 			for (Country defendCont: defendingCountries) {
 				
 				defendCont.setArmy((attackingCountry.getArmy() / 2) + 1);
 				attackingCountry.setArmy((attackingCountry.getArmy() / 2) + 1);
+				
 				System.out.println(attackingCountry.getName() + "(" + attackingCountry.getPlayer().getName() + ""
 						+ ") attacking on " + defendCont + "(" + defendCont.getPlayer().getName() + ")");
 				
@@ -51,6 +53,7 @@ public class Cheater implements Strategy {
 
 				System.out.println(defendCont.getName() + " is conquered by " + 
 									attackingCountry.getPlayer());
+				
 				player.setNumOfCountriesWon(player.getNumOfCountriesWon() + 1);
 				player.setNumOfAttacks(player.getNumOfAttacks() + 1);
 			}
@@ -75,5 +78,4 @@ public class Cheater implements Strategy {
 
 		return true;
 	}
-
 }
