@@ -30,11 +30,8 @@ public class GameController extends Observable {
 
 	Hmap rootMap;
 	MapAdapter mapAdapter;
-
 	String editFilePath = "";
-
-	boolean isReinfoceArmiesAssigned = false;
-
+	boolean isReinfoceArmiesAssigned;
 	PlayerModel playerModel;
 	CardModel cardModel;
 	Player currentPlayer;
@@ -48,8 +45,9 @@ public class GameController extends Observable {
 		this.rootMap = new Hmap();
 		this.addObserver(mainView);
 		this.stackOfCards = new Stack<Card>();
-	}
-	
+		this.isReinfoceArmiesAssigned = false;
+	}	
+		
 	/**
 	 * Get the Card model.
 	 * 
@@ -124,7 +122,7 @@ public class GameController extends Observable {
 		String[] words = command.split(" ");
 		String commandType = words[0], filePath = "";
 		ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-
+		
 		switch (commandType) {
 
 		case Commands.MAP_COMMAND_EDIT_CONTINENT:
