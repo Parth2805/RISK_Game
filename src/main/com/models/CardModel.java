@@ -2,9 +2,12 @@ package com.models;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.Stack;
+import java.util.stream.Collectors;
 
 import com.config.CardType;
 import com.config.Commands;
@@ -96,17 +99,17 @@ public class CardModel {
 
     /**
      * exchange of cards between players
-     * @param cardlist list of cards
+     * @param cardList list of cards
      * @param player current Player object 
      * @param cardStack current stack of cards
      * 
      */    
-    public void exchangeCards(Player player, List<Card> cardlist, Stack<Card> cardStack) {
+    public void exchangeCards(Player player, List<Card> cardList, Stack<Card> cardStack) {
 
     	Boolean isCardArmiesAssigned = false;
     	
         for (Country c : player.getAssignedCountry()) {
-	    	for (Card cardChosen: cardlist) {
+	    	for (Card cardChosen: cardList) {
                 if (c.getName().equalsIgnoreCase(cardChosen.getCountryToWhichCardBelong().getName())) {
             	   player.setArmies(player.getArmies() + 2);
                    isCardArmiesAssigned = true;
@@ -121,7 +124,7 @@ public class CardModel {
         player.setArmies(player.getArmies() + getArmiesAwarded());
         incrementArmiesAwardedCount();
 
-        for (Card card : cardlist) {
+        for (Card card : cardList) {
             // Removing the exchanged cards from players hand
             player.getCardList().remove(card);
         	// Adding cards back to deck
@@ -159,5 +162,81 @@ public class CardModel {
         }
         
         return false;
-    }   
+    }
+    
+	/**
+	 * This method checks for a combination of different cards.
+	 * 
+	 * @param cardsOfPlayer This represents the cards owned by the player.
+	 * @return Returns the combination of cards selected by the player for trade.
+	 */
+	public List<Card> getCardCombinations(Player player, List<Card> cardsOfPlayer) {
+		
+		System.out.println("---- Cards available with " + player + "  -----");
+		for (Card card : cardsOfPlayer) {
+			System.out.println(card);
+		}
+		System.out.println("------------------------------------------");
+
+		List<Integer> diffCardsIdx = new ArrayList<>();
+		HashMap<String, Integer> cardMap = new HashMap<>();
+		
+		// Create a hash-map of cards count
+		for (int i = 0; i < cardsOfPlayer.size(); i++) {
+			
+			Card card = cardsOfPlayer.get(i);
+			
+			if (cardMap.containsKey(card.getCardKind().toString())) {
+				cardMap.put(card.getCardKind().toString(), cardMap.get(card.getCardKind().toString()) + 1);
+			} else {
+				cardMap.put(card.getCardKind().toString(), 1);
+				diffCardsIdx.add(i);
+			}
+		}
+
+		for (Map.Entry<String, Integer> entry : cardMap.entrySet()) {
+			
+			// 3 same cards
+			if (entry.getValue() >= 3) {
+				
+				List<Card> selectedCards = cardsOfPlayer.stream().filter
+						(t -> t.getCardKind().toString().equals(
+							entry.getKey())).limit(3).collect(Collectors.toList());
+				System.out.println("Cards being exchanged: " + selectedCards);
+				return selectedCards;
+			}
+		}
+
+		// 3 different cards
+		if (diffCardsIdx.size() == 3) {
+			
+			List<Card> selectedCards = new ArrayList<>();
+			
+			for (int i = 0; i < 3; i++) {
+				selectedCards.add(cardsOfPlayer.get(diffCardsIdx.get(i)));
+			}
+			System.out.println("Cards being exchanged: " + selectedCards);
+			
+			return selectedCards;
+		}
+		
+		return null;
+	}
+
+	/**
+	 * 
+	 * @param player
+	 * @param cardStack
+	 */
+	public void tradeCardsIfPossible(Player player, Stack<Card> cardStack) {
+	
+		List<Card> cardsForTrade = null;
+		cardsForTrade = getCardCombinations(player, player.getCardList());
+		
+		if (null != cardsForTrade) {
+			
+			if (isCardsListValidForExchange(cardsForTrade))
+				exchangeCards(player, cardsForTrade, cardStack);
+		}
+	}
 }

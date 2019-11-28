@@ -119,7 +119,7 @@ public class Player {
 	 * 
 	 * @return number of attacks
 	 */
-	public int getnumOfAttacks() {
+	public int getNumOfAttacks() {
 		return numOfAttacks;
 	}
 	
@@ -128,7 +128,7 @@ public class Player {
 	 * 
 	 * @param numAttack number of attacks.
 	 */
-	public void setnumOfAttacks(int numAttack) {
+	public void setNumOfAttacks(int numAttack) {
 		this.numOfAttacks = numAttack;
 	}
 	
@@ -234,6 +234,6 @@ public class Player {
 	 */
 	@Override
 	public String toString() {
-		return "Player [name = " + name + "]";
+		return "Player [name = " + name + "(" + playerStrategy + ")" +"]";
 	}
 }

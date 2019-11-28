@@ -12,6 +12,18 @@ import java.io.FileWriter;
 public class Logger {
 
 	/**
+	 * Prints and Logs the message with the time-stamp in a log file.
+	 * 
+	 * @param fileName name of the file
+	 * @param logInfo log message
+	 */
+	public static void printAndLogMessage(String fileName, String logInfo) {
+		
+		System.out.println(logInfo);
+		LogMessage(fileName, logInfo);
+	}
+	
+	/**
 	 * Logs the message with the time-stamp in a log file.
 	 * 
 	 * @param fileName name of the file

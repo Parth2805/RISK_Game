@@ -221,15 +221,17 @@ public class Country implements Comparable {
 		return t.getName().equalsIgnoreCase(name);
 	}
 
-
-
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */	
 	@Override
 	public int compareTo(Object o) {
-		int compareage=((Country)o).getArmy();
+		int destArmies = ((Country)o).getArmy();
+
 		/* For Ascending order*/
-//		return this.army-compareage;
+		//return this.army-compareage;
 
 		/* For Descending order do like this */
-		return compareage-this.army;
+		return destArmies - this.army;
 	}
 }

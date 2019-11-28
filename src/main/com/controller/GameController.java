@@ -20,6 +20,7 @@ import com.models.PlayerModel;
 import com.strategy.Human;
 import com.utilities.GameUtilities;
 
+
 /**
  * This class reads, parses the command line string from user input.
  *
@@ -30,11 +31,8 @@ public class GameController extends Observable {
 
 	Hmap rootMap;
 	MapAdapter mapAdapter;
-
 	String editFilePath = "";
-
-	boolean isReinfoceArmiesAssigned = false;
-
+	boolean isReinfoceArmiesAssigned;
 	PlayerModel playerModel;
 	CardModel cardModel;
 	Player currentPlayer;
@@ -48,8 +46,9 @@ public class GameController extends Observable {
 		this.rootMap = new Hmap();
 		this.addObserver(mainView);
 		this.stackOfCards = new Stack<Card>();
-	}
-	
+		this.isReinfoceArmiesAssigned = false;
+	}	
+		
 	/**
 	 * Get the Card model.
 	 * 
@@ -124,7 +123,7 @@ public class GameController extends Observable {
 		String[] words = command.split(" ");
 		String commandType = words[0], filePath = "";
 		ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-
+		
 		switch (commandType) {
 
 		case Commands.MAP_COMMAND_EDIT_CONTINENT:
@@ -419,7 +418,8 @@ public class GameController extends Observable {
 //		}
 
 		System.out.println("Current game phase: Gameplay startup phase (placearmy, placeall, showmap)");
-		System.out.println("Current Player: " + getCurrentPlayer().getName() + ", number of armies left = "
+		System.out.println("Current Player: " + getCurrentPlayer().getName() + " (" 
+				+ getCurrentPlayer().getPlayerStrategyName() + ")" + ", number of armies left = "
 				+ getCurrentPlayer().getArmies());
 
 		String command = sc.nextLine();
@@ -479,7 +479,7 @@ public class GameController extends Observable {
 		if (!isReinfoceArmiesAssigned) {
 		
 			getCurrentPlayer().setNumOfCountriesWon(0);
-			getCurrentPlayer().setnumOfAttacks(0);
+			getCurrentPlayer().setNumOfAttacks(0);
 			
 			playerModel.assignReinforceArmiesToPlayers();
 			
@@ -519,9 +519,10 @@ public class GameController extends Observable {
 	 */
 	public void processGamePlayAttackCommands() {
 
-		int previousAttackCount = getCurrentPlayer().getnumOfAttacks();
+		int previousAttackCount = getCurrentPlayer().getNumOfAttacks();
 		System.out.println("Current phase: Gameplay Attack phase (attack, defend, attackmove, showmap)");
-		System.out.println("Current Player: " + getCurrentPlayer().getName());
+		System.out.println("Current Player: " + getCurrentPlayer().getName() + " (" 
+							+ getCurrentPlayer().getPlayerStrategyName() + ")");
 
 		if (!playerModel.isAttackPossible(getCurrentPlayer())){
 			System.out.println("Attack not possible for " + getCurrentPlayer());
@@ -549,7 +550,7 @@ public class GameController extends Observable {
 		}		
 		
 		// World domination view when attack was successful for human player
-		if (getCurrentPlayer().getnumOfAttacks() > previousAttackCount) {
+		if (getCurrentPlayer().getNumOfAttacks() > previousAttackCount) {
 			setChanged();
 			notifyObservers("show-world-domination");
 		}
@@ -567,7 +568,7 @@ public class GameController extends Observable {
 	 * 
 	 * @param sc scanner object
 	 */
-	public void processGamePlayFortifyCommands(Scanner sc) {
+	public void processGamePlayFortifyCommands() {
 		
 		if (getCurrentPlayer().getAssignedCountry().size() == 1) {
 			System.out.println(getCurrentPlayer() + " can't do fortify as you have "
@@ -588,7 +589,8 @@ public class GameController extends Observable {
 		}
 		
 		System.out.println("Current game phase: Gameplay fortify phase (fortify, showmap)");
-		System.out.println("Current Player: " + getCurrentPlayer().getName());
+		System.out.println("Current Player: " + getCurrentPlayer().getName() + " (" 
+				+ getCurrentPlayer().getPlayerStrategyName() + ")");
 
 		/* Call Strategy Pattern fortify method */
 		if (getCurrentPlayer().getStrategy().fortificationPhase(getMap(), getCurrentPlayer())) {

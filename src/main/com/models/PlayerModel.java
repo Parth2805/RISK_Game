@@ -4,12 +4,16 @@ import java.util.*;
 
 import com.config.Commands;
 import com.entity.*;
-import com.maingame.CardExchangeView;
+import com.strategy.Aggressive;
+import com.strategy.Benevolent;
+import com.strategy.Cheater;
 import com.strategy.Human;
+import com.strategy.Random;
 import com.strategy.Strategy;
 import com.utilities.GameUtilities;
 import com.config.Config;
 import com.config.PlayerStrategy;
+
 
 /**
  * @author Mehul
@@ -76,7 +80,8 @@ public class PlayerModel {
     public boolean createPlayer(String playerName, String playerStrategy) {
 
         int id = playersList.size();
-
+        playerStrategy = playerStrategy.toLowerCase();
+        
         if (id >= 6) {
             System.out.println("Error: Maximum number of players = 6. Can't create more players");
             return false;
@@ -94,12 +99,8 @@ public class PlayerModel {
             return false;
         }
 
-        newPlayer.setPlayerStrategyName(playerStrategy);
-        
-        if (playerStrategy.equalsIgnoreCase(PlayerStrategy.PLAYER_STRATEGY_HUMAN))
-        	newPlayer.setStrategy(new Human(new CardExchangeView()));
-        else
-        	newPlayer.setStrategy(GameUtilities.getStrategyObject(playerStrategy));
+        newPlayer.setPlayerStrategyName(playerStrategy);  
+        newPlayer.setStrategy(getStrategyObject(playerStrategy, getPlayersList()));
         
         playersList.add(newPlayer);
         System.out.println("Player: " + playerName + " is added in the game");
@@ -211,35 +212,27 @@ public class PlayerModel {
     public void populateCountries(Hmap map) {
 
         ArrayList<Country> countriesList = GameUtilities.getCountryListFromMap(map);
-        int playerNum = 0;
+        int playerIdx = 0;
         Player currentPlayer;
 
         while (countriesList.size() != 0) {
 
-            int chooseCountry = new Random().nextInt(countriesList.size());
-            Country countryAssigned = countriesList.get(chooseCountry);
+            int randomCountryIdx = GameUtilities.getRandomNumber(countriesList.size()) - 1;
+            Country countryChosen = countriesList.get(randomCountryIdx);
 
             // Get Player one by one from list and assign country
-            currentPlayer = getPlayersList().get(playerNum);
+            currentPlayer = getPlayersList().get(playerIdx);
 
             // Set player in assigned country in Map
-            for (Continent cont : map.getContinents()) {
-                for (Country c : cont.getCountries()) {
-                    if (c.getName().equalsIgnoreCase(countryAssigned.getName()))
-                        currentPlayer.setAssignedCountry(c);
+            for (Country c : map.getCountries()) {
+                if (c == countryChosen) {
+                    currentPlayer.setAssignedCountry(c);
+                    countryChosen.setPlayer(currentPlayer);
                 }
             }
 
-            playerNum = (playerNum + 1) % getPlayersList().size();
-            countriesList.remove(chooseCountry);
-
-            // Set player in assigned country in Map
-            for (Continent cont : map.getContinents()) {
-                for (Country c : cont.getCountries()) {
-                    if (c.getName().equalsIgnoreCase(countryAssigned.getName()))
-                        c.setPlayer(currentPlayer);
-                }
-            }
+            playerIdx = (playerIdx + 1) % getPlayersList().size();
+            countriesList.remove(randomCountryIdx);
         }
     }
 
@@ -318,17 +311,6 @@ public class PlayerModel {
         }
 
         if (GameUtilities.isCountryConnected(map, map.getCountryMap().get(fromCountry), map.getCountryMap().get(toCountry))) {
-
-//            for (Continent cont : map.getContinents()) {
-//                // Update Armies count for fortification
-//                for (Country c : cont.getCountries()) {
-//                    if (c.getName().equalsIgnoreCase(toCountry))
-//                        c.setArmy(toCountryArmyCount + armiesCount);
-//
-//                    if (c.getName().equalsIgnoreCase(fromCountry))
-//                        c.setArmy(fromCountryArmyCount - armiesCount);
-//                }
-//            }
 
             map.getCountryMap().get(toCountry).setArmy(toCountryArmyCount + armiesCount);
             map.getCountryMap().get(fromCountry).setArmy(fromCountryArmyCount - armiesCount);
@@ -429,7 +411,7 @@ public class PlayerModel {
         diceModel.getResultAfterRoll();
 
         // Attack successful count
-        player.setnumOfAttacks(player.getnumOfAttacks() + 1);
+        player.setNumOfAttacks(player.getNumOfAttacks() + 1);
         
         // Change ownership of country
         if (defendCountry.getArmy() <= 0) {
@@ -448,7 +430,7 @@ public class PlayerModel {
             
         	// Player does not need to move army when game is over
             if (!GameUtilities.isPlayerWonGame(player, map))
-                attackMove(attackCountry, defendCountry,player.getStrategy());
+                attackMove(attackCountry, defendCountry, player.getStrategy());
         }
 
         // Is game over for defender player?
@@ -464,14 +446,13 @@ public class PlayerModel {
 
     /**
      * This method implements attack move command
-     *  @param attackCountry name of the attacker country name
+     * @param attackCountry name of the attacker country name
      * @param defendCountry name of the defender country name
      * @param strategy
      */
     public void attackMove(Country attackCountry, Country defendCountry, Strategy strategy) {
 
-
-        if(strategy instanceof Human){
+        if (strategy instanceof Human) {
 
             while (true) {
                 System.out.println(defendCountry.getPlayer()+ " conquered the "
@@ -509,11 +490,9 @@ public class PlayerModel {
                 }
             }
 
-        }else{
-
-            attackCountry.setArmy(attackCountry.getArmy()-1);
-            defendCountry.setArmy(defendCountry.getArmy()+1);
-
+        } else {
+            attackCountry.setArmy(attackCountry.getArmy() - 1);
+            defendCountry.setArmy(defendCountry.getArmy() + 1);
         }
 
     }
@@ -647,43 +626,47 @@ public class PlayerModel {
      * @return true if attack is possible, false otherwise
      */
     public boolean isAttackPossible(Player currentPlayer) {
-        int count = 0;
-        List<Country> countryList = new ArrayList<>();
         
-            for (Country c : currentPlayer.getAssignedCountry()) {
-            if (c.getArmy() == 1)
-                count++;
-            
-            if (c.getArmy() > 1)
-                countryList.add(c);
-        }
-        
-        if (count == currentPlayer.getAssignedCountry().size()) {
-            System.out.println("Player has all countries with 1 army ");
-            return false;
-        } else {
-           
-        	int countryWithSameOwnershipAsPlayer = 0;
-            
-        	for (Country c : countryList) {
-                List<Country> neighbors = c.getAdjacentCountries();
-                int neighborcount = 0;
-                
-                for (Country n : neighbors) {
-                    if (n.getPlayer().equals(currentPlayer))
-                        neighborcount++;
-                }
+    	for (Country con : currentPlayer.getAssignedCountry()) {
+			if (con.getArmy() > 1 && 
+					GameUtilities.getDefendingCountries(con).size() > 0) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+    
+    /**
+     * @param playerStrategy player strategy string value
+     * @param playerList list of players
+     * 
+     * @return new Strategy object
+     */
+    public Strategy getStrategyObject(String playerStrategy, ArrayList<Player> playerList) {
+    	
+    	switch (playerStrategy) {
+		
+    	case PlayerStrategy.PLAYER_STRATEGY_HUMAN:
+    		return new Human();
+    		
+		case PlayerStrategy.PLAYER_STRATEGY_AGGRESSIVE:
+		    return new Aggressive();
+		    
+		case PlayerStrategy.PLAYER_STRATEGY_BENELOENT:
+		    return new Benevolent();
 
-                if (neighborcount == neighbors.size())
-                    countryWithSameOwnershipAsPlayer++;
-            }
+		case PlayerStrategy.PLAYER_STRATEGY_CHEATER:
+			return new Cheater(playerList);
+			
+		case PlayerStrategy.PLAYER_STRATEGY_RANDOM:
+			return new Random();
+			
+		default:
+			break;
+    	}
+    	
+    	return null;
+	}   
 
-            if (countryWithSameOwnershipAsPlayer == countryList.size()) {
-                System.out.println("Player has all neighboring country as his own");
-                return false;
-            }
-        }
-
-        return true;
-    }
 }

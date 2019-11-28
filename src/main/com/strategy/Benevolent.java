@@ -1,67 +1,76 @@
 package com.strategy;
 
-
 import com.entity.Card;
 import com.entity.Country;
 import com.entity.Hmap;
 import com.entity.Player;
-import com.models.CardModel;
-import com.models.PlayerModel;
 import com.utilities.GameUtilities;
+import com.utilities.Logger;
 
-import java.util.List;
-import java.util.Observable;
+import java.util.Collections;
 import java.util.Stack;
 
+
 /**
+ * This class implements Benevolent Strategy methods.
  * 
- * @author xxx
+ * @author Parth
+ * @author Mehul
  */
-public class Benevolent extends Observable implements Strategy  {
+public class Benevolent implements Strategy {
 
-    boolean isShowMapCommand = false;
-    PlayerModel playerModel;
-    //    Player currentPlayer;
-    CardModel cardModel;
-    Stack<Card> cardsStack;
+	@Override
+	public boolean reinforcementPhase(Hmap map, Player player, Stack<Card> cardsStack) {
 
-    public Benevolent() {
-//        this.addObserver(cardExchange);
-        this.playerModel = new PlayerModel();
-        this.cardsStack = new Stack<Card>();
-        this.cardModel = new CardModel();
-    }
+		int armies = player.getArmies();
+		Country countryToReinforce = GameUtilities.getWeakestCountry(player);
+		
+		if (countryToReinforce != null) {
+			countryToReinforce.setArmy(armies + countryToReinforce.getArmy());
+	        player.setArmies(0);
+	        Logger.printAndLogMessage("Benevolent", "Assigned "+ armies + 
+	        		" armies " + "to " + countryToReinforce.getName());
+		}
+		
+		return true;
+	}
 
-    @Override
-    public boolean reinforcementPhase(Hmap map, Player player, Stack<Card> cardsStack) {
+	@Override
+	public boolean attackPhase(Hmap map, Player player, Stack<Card> cardsStack) {
 
-        System.out.println("-------Reinforcement Phase---------");
-        Country countryToReinforce= GameUtilities.getCountryWithMinArmies(player);
-        countryToReinforce.setArmy(player.getArmies());
+		GameUtilities.gamePlayShowmap(map);
+		Logger.printAndLogMessage("Benevolent", player + " won't attack");
+		return true;
+	}
 
+	@Override
+	public boolean fortificationPhase(Hmap map, Player player) {
 
-        System.out.println("Reinforced Country:"+countryToReinforce.getName()+" with total army:"+countryToReinforce.getArmy());
-        System.out.println("------Reinforcement complete-------");
-        return true;
-    }
+		Country countryToProtect = GameUtilities.getWeakestCountry(player);
 
-    @Override
-    public boolean attackPhase(Hmap map, Player player, Stack<Card> cardsStack) {
-
-        System.out.println("Benevolent player wont attack");
-        return true;
-    }
-
-    @Override
-    public boolean fortificationPhase(Hmap map, Player player) {
-
-        System.out.println("-----Fortifying---------");
-
-        List<Country> countryToFortify = player.getAssignedCountry();
-
-        //To find country with greatest number of armoes and to reinforce with any of its neighbors
-
-        System.out.println("Done Fortification");
-        return false;
-    }
+		// Find strongest connected country and fortify armies from it
+		// to weakest country
+		Collections.sort(player.getAssignedCountry());
+		
+		for (Country c: player.getAssignedCountry()) {
+			if (countryToProtect != c) {
+				
+				if (GameUtilities.isCountryConnected(map, countryToProtect, c)) {
+	
+					int moveArmies = c.getArmy() - 1;
+					
+					Logger.printAndLogMessage("Benevolent", "Fortified country: " + countryToProtect.getName() + " from "
+							+ c.getName() + " with armies: " + moveArmies);
+					countryToProtect.setArmy(countryToProtect.getArmy() + moveArmies);
+					c.setArmy(1);
+					
+					GameUtilities.gamePlayShowmap(map);
+	
+					return true;
+				}
+			}
+		}
+		
+		return true;
+	}
 }

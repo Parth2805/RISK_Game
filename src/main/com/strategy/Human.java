@@ -28,11 +28,9 @@ public class Human extends Observable implements Strategy {
 
 	/**
 	 * This is the parameterized constructor for Human class
-	 * 
-	 * @param cardExchange card Exchange view object
 	 */
-	public Human(CardExchangeView cardExchange) {
-		this.addObserver(cardExchange);
+	public Human() {
+		this.addObserver(new CardExchangeView());
 		this.playerModel = new PlayerModel();
 		this.cardsStack = new Stack<Card>();
 		this.cardModel = new CardModel();
@@ -258,7 +256,7 @@ public class Human extends Observable implements Strategy {
 
 			// fortify -none command
 			if (words[1].equalsIgnoreCase(Commands.MAP_COMMAND_FORTIFY_OPTION_NONE)) {
-				System.out.println(getCurrentPlayer() + " has chosen to skip fortify.");
+				System.out.println(player + " has chosen to skip fortify.");
 				return true;		
 			} 
 			
@@ -295,5 +293,4 @@ public class Human extends Observable implements Strategy {
 
 		return false;
 	}
-
 }
