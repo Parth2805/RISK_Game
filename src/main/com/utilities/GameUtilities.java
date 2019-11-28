@@ -1,6 +1,7 @@
 package com.utilities;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,13 +14,6 @@ import com.entity.Continent;
 import com.entity.Country;
 import com.entity.Hmap;
 import com.entity.Player;
-import com.maingame.CardExchangeView;
-import com.strategy.Cheater;
-import com.strategy.Aggressive;
-import com.strategy.Benevolent;
-import com.strategy.Human;
-import com.strategy.RandomS;
-import com.strategy.Strategy;
 
 
 /**
@@ -57,7 +51,7 @@ public class GameUtilities {
      * @return random number from 1 to number, including number
      */
     public static int getRandomNumber(int number) {
-        return new Random().nextInt(number + 1);
+        return new Random().nextInt(number) + 1;
     }
 
     /**
@@ -89,17 +83,17 @@ public class GameUtilities {
      */
     public static void gamePlayShowmap(Hmap map) {
 
-        System.out.println("----------------------------------");
+        Logger.printAndLogMessage("GameUtilities", "----------------------------------");
 
         for (Continent cont : map.getContinents()) {
             for (Country c : cont.getCountries()) {
-                System.out.println(c.getBelongToContinent().getName() + ": value: " + cont.getValue() + ": "
+            	Logger.printAndLogMessage("GameUtilities", c.getBelongToContinent().getName() + ": value: " + cont.getValue() + ": "
                 		+ c.getName() + ": Army count: " + c.getArmy() + ", Player: " + c.getPlayer().getName() 
                 		+ ", Adjacent Countries: " + c.getAdjacentCountries());
             }
         }
 
-        System.out.println("----------------------------------");
+        Logger.printAndLogMessage("GameUtilities", "----------------------------------");
     }
     
     /**
@@ -239,38 +233,7 @@ public class GameUtilities {
     	}
 
     	return false;
-    }
-    
-    /**
-     * @param playerStrategy player strategy string value
-     * 
-     * @return new Strategy object
-     */
-    public static Strategy getStrategyObject(String playerStrategy) {
-    	
-    	switch (playerStrategy) {
-		
-    	case PlayerStrategy.PLAYER_STRATEGY_HUMAN:
-    		return new Human(new CardExchangeView());
-    		
-		case PlayerStrategy.PLAYER_STRATEGY_AGGRESSIVE:
-		    return new Aggressive();
-		    
-		case PlayerStrategy.PLAYER_STRATEGY_BENELOENT:
-		    return new Benevolent();
-
-		case PlayerStrategy.PLAYER_STRATEGY_CHEATER:
-			return new Cheater();
-			
-		case PlayerStrategy.PLAYER_STRATEGY_RANDOM:
-			return new RandomS();
-			
-		default:
-			break;
-    	}
-    	
-    	return null;
-	}   
+    }    
      
 	/**
 	 * This method gives the defending countries for given country.
@@ -288,19 +251,20 @@ public class GameUtilities {
 	 * @param currentPlayer
 	 * @return
 	 */
-	public static Country getCountryWithMaxArmies(Player currentPlayer) {
+	public static Country getStrongestCountry(Player currentPlayer) {
 
-		Country country = null;
-		int maxArmies = 0;
-
-		for (Country c : currentPlayer.getAssignedCountry()) {
-			if (c.getArmy() > maxArmies) {
-				country = c;
-				maxArmies = country.getArmy();
+	  	List<Country> countryList = currentPlayer.getAssignedCountry();
+		Collections.sort(countryList);
+		Country strongestCountry = countryList.get(0);
+			
+		for (Country c: countryList) {	
+			if (GameUtilities.getDefendingCountries(c).size() > 0) {
+				strongestCountry = c;
+				break;
 			}
-		}
-		
-		return country;
+		}  
+
+		return strongestCountry;
 	}
 
 	/**
@@ -308,19 +272,25 @@ public class GameUtilities {
 	 * @param player
 	 * @return
 	 */
-    public static Country getCountryWithMinArmies(Player player) {
+    public static Country getWeakestCountry(Player player) {
 
-		Country country = null;
-		int minArmies = 1000000;
+	  	List<Country> countryList = player.getAssignedCountry();
+		Collections.sort(countryList);
+		Collections.reverse(countryList);
+		Country weakestCountry = countryList.get(0);
 		
-		for (Country c : player.getAssignedCountry()) {
-			if (c.getArmy() < minArmies) {
-				country = c;
-				minArmies = country.getArmy();
+		for (Country c: countryList) {	
+			List<Country> enemyCountries = GameUtilities.getDefendingCountries(c);		
+			
+			for (Country ec: enemyCountries) {
+				// Enemy country with more than 1 army is likely to attack weaker country
+				if (ec.getArmy() > 1) {
+					return c;
+				}
 			}
-		}
+		}  
 
-		return country;
+		return weakestCountry;
     }
 
     /**
@@ -343,7 +313,6 @@ public class GameUtilities {
 
         // Run BFS
         while (queue.size() != 0) {
-
             Country country = queue.poll();
             for (Country nbrCountry: country.getAdjacentCountries()) {
                 if (!nbrCountry.isVisited()) {
@@ -359,4 +328,24 @@ public class GameUtilities {
 
         return false;
     }
-}
+    
+    /**
+     * 
+     * @param map
+     * @param player
+     * @param sourceCountry
+     * @return
+     */
+    public static ArrayList<Country> getConnectedCountries(Hmap map, Player player, Country sourceCountry) {
+    	ArrayList<Country> connectedCountries = new ArrayList<Country>();
+    	
+        for (Country nbrCountry: player.getAssignedCountry()) {
+        	if (nbrCountry != sourceCountry) {
+	     		if (isCountryConnected(map, sourceCountry, nbrCountry))
+	        		connectedCountries.add(nbrCountry);
+        	}
+        }
+        	
+    	return connectedCountries;
+    }
+ }
