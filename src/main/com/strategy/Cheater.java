@@ -10,6 +10,7 @@ import com.entity.Card;
 import com.entity.Country;
 import com.entity.Hmap;
 import com.entity.Player;
+import com.models.PlayerModel;
 import com.utilities.GameUtilities;
 
 
@@ -20,6 +21,17 @@ import com.utilities.GameUtilities;
  */
 public class Cheater implements Strategy {
 
+	ArrayList<Player> playerList;
+
+	/**
+	 * This is the parameterized constructor for Cheater class
+	 * 
+	 * @param playerModel player model object
+	 */
+	public Cheater(ArrayList<Player> playerList) {
+		this.playerList = playerList;
+	}
+	
 	@Override
 	public boolean reinforcementPhase(Hmap map, Player player, Stack<Card> cardsStack) {
 
@@ -49,10 +61,19 @@ public class Cheater implements Strategy {
 				System.out.println(attackingCountry.getName() + "(" + attackingCountry.getPlayer().getName() + ""
 						+ ") attacking on " + defendCont + "(" + defendCont.getPlayer().getName() + ")");
 				
+				Player defenderPlayer = defendCont.getPlayer();
 				GameUtilities.changeCountryOwnerShip(defendCont, attackingCountry);
 
 				System.out.println(defendCont.getName() + " is conquered by " + 
 									attackingCountry.getPlayer());
+				
+		        // Is game over for defender player?
+		        if (defenderPlayer.getAssignedCountry().size() == 0) {
+		            System.out.println("----------------------------------");
+		            System.out.println("Game over for " + defenderPlayer + " :(");
+		            System.out.println("----------------------------------");
+		            playerList.remove(defenderPlayer);
+		        }
 				
 				player.setNumOfCountriesWon(player.getNumOfCountriesWon() + 1);
 				player.setNumOfAttacks(player.getNumOfAttacks() + 1);
@@ -71,7 +92,7 @@ public class Cheater implements Strategy {
 
 			if (nbrCounList != null && nbrCounList.size() > 0) {
 				c.setArmy(c.getArmy() * 2);
-				System.out.println("Doubled the army on country: " + c.getName() + 
+				System.out.println("Fortify: Doubled the army on country: " + c.getName() + 
 						" (Armies count = " + c.getArmy() + ")");
 			}
 		}
