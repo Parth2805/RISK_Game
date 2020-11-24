@@ -146,7 +146,7 @@ public class PlayerModel {
             System.out.println("Placing armies for player: " + p.getName());
             while (p.getArmies() > 0) {
 
-                Country con = p.getAssignedCountry().get(GameUtilities.getRandomNumber(p.getAssignedCountry().size() - 1));
+                Country con = p.getAssignedCountry().get(GameUtilities.getRandomNumber(p.getAssignedCountry().size() )- 1);
                 con.setArmy(con.getArmy() + 1);
                 p.setArmies(p.getArmies() - 1);
             }

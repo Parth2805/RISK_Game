@@ -18,7 +18,6 @@ public class Logger {
 	 * @param logInfo log message
 	 */
 	public static void printAndLogMessage(String fileName, String logInfo) {
-		
 		System.out.println(logInfo);
 		LogMessage(fileName, logInfo);
 	}
